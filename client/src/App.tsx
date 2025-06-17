@@ -11,6 +11,10 @@ import TimeMachine from "@/pages/TimeMachine";
 import WalletAnalyzer from "@/pages/WalletAnalyzer";
 import Slots from "@/pages/Slots";
 import OOFDetective from "@/pages/OOFDetective";
+import OOFOrigins from "@/pages/OOFOrigins";
+import OOFLegends from "@/pages/OOFLegends";
+import OOFStaking from "@/pages/OOFStaking";
+import OOFBattleRoyale from "@/pages/OOFBattleRoyale";
 import NotFound from "@/pages/not-found";
 import Navigation from "@/components/Navigation";
 
@@ -39,6 +43,10 @@ function Router() {
             <Route path="/wallet-analyzer" component={WalletAnalyzer} />
             <Route path="/slots" component={Slots} />
             <Route path="/detective" component={OOFDetective} />
+            <Route path="/origins" component={OOFOrigins} />
+            <Route path="/legends" component={OOFLegends} />
+            <Route path="/staking" component={OOFStaking} />
+            <Route path="/battle-royale" component={OOFBattleRoyale} />
           </>
         )}
         <Route component={NotFound} />
