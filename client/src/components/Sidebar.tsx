@@ -82,7 +82,7 @@ export default function Sidebar({ className }: SidebarProps) {
       {/* User Profile */}
       {!isCollapsed && (
         <div className="p-4 border-b border-purple-700/50">
-          <div className="flex items-center space-x-3">
+          <Link href="/profile" className="flex items-center space-x-3 hover:bg-purple-700/30 rounded-lg p-2 -m-2 transition-colors">
             <div className="w-10 h-10 bg-purple-600 rounded-full flex items-center justify-center">
               <User className="h-5 w-5 text-white" />
             </div>
@@ -94,7 +94,7 @@ export default function Sidebar({ className }: SidebarProps) {
                 {(user as any)?.oofTokens || 0} OOF Tokens
               </p>
             </div>
-          </div>
+          </Link>
         </div>
       )}
 
