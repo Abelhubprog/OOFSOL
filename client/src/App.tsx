@@ -27,6 +27,7 @@ import Documentation from "@/pages/Documentation";
 import API from "@/pages/API";
 import Partnerships from "@/pages/Partnerships";
 import Support from "@/pages/Support";
+import OOFsCampaigns from "@/pages/OOFsCampaigns";
 import NotFound from "@/pages/not-found";
 import Navigation from "@/components/Navigation";
 import Sidebar from "@/components/Sidebar";
@@ -74,6 +75,7 @@ function Router() {
           <Route path="/api" component={API} />
           <Route path="/partnerships" component={Partnerships} />
           <Route path="/support" component={Support} />
+          <Route path="/campaigns" component={OOFsCampaigns} />
           <Route component={NotFound} />
         </Switch>
       </main>

@@ -1,0 +1,910 @@
+## Detailed Implementation Deep-Dive
+
+### Smart Contract Implementation (Solana/Anchor)
+
+```rust
+use anchor_lang::prelude::*;
+use anchor_spl::token::{self, Token, TokenAccount, Transfer};
+
+declare_id!("ViralBoostProgram111111111111111111111111111");
+
+#[program]
+pub mod viral_boost {
+    use super::*;
+
+    pub fn create_campaign(
+        ctx: Context<CreateCampaign>,
+        campaign_id: String,
+        total_budget: u64,
+        reward_per_action: u64,
+        max_participants: u16,
+        duration: i64,
+    ) -> Result<()> {
+        let campaign = &mut ctx.accounts.campaign;
+        let creator = &ctx.accounts.creator;
+        
+        // Transfer USDC from creator to campaign escrow
+        let transfer_ctx = CpiContext::new(
+            ctx.accounts.token_program.to_account_info(),
+            Transfer {
+                from: ctx.accounts.creator_token_account.to_account_info(),
+                to: ctx.accounts.campaign_escrow.to_account_info(),
+                authority: creator.to_account_info(),
+            },
+        );
+        token::transfer(transfer_ctx, total_budget)?;
+
+        campaign.creator = creator.key();
+        campaign.campaign_id = campaign_id;
+        campaign.total_budget = total_budget;
+        campaign.remaining_budget = total_budget;
+        campaign.reward_per_action = reward_per_action;
+        campaign.max_participants = max_participants;
+        campaign.participants_count = 0;
+        campaign.created_at = Clock::get()?.unix_timestamp;
+        campaign.ends_at = Clock::get()?.unix_timestamp + duration;
+        campaign.status = CampaignStatus::Active;
+
+        Ok(())
+    }
+
+    pub fn participate_in_campaign(
+        ctx: Context<ParticipateCampaign>,
+        proof_hash: String,
+    ) -> Result<()> {
+        let campaign = &mut ctx.accounts.campaign;
+        let participant = &ctx.accounts.participant;
+        let participation = &mut ctx.accounts.participation;
+
+        require!(
+            campaign.status == CampaignStatus::Active,
+            ErrorCode::CampaignInactive
+        );
+        
+        require!(
+            campaign.remaining_budget >= campaign.reward_per_action,
+            ErrorCode::InsufficientBudget
+        );
+
+        require!(
+            Clock::get()?.unix_timestamp < campaign.ends_at,
+            ErrorCode::CampaignExpired
+        );
+
+        // Store participation record
+        participation.campaign = campaign.key();
+        participation.participant = participant.key();
+        participation.proof_hash = proof_hash;
+        participation.status = ParticipationStatus::PendingVerification;
+        participation.submitted_at = Clock::get()?.unix_timestamp;
+
+        campaign.participants_count += 1;
+
+        Ok(())
+    }
+
+    pub fn verify_and_reward(
+        ctx: Context<VerifyAndReward>,
+        participation_key: Pubkey,
+        verified: bool,
+        oof_points_earned: u64,
+    ) -> Result<()> {
+        let campaign = &mut ctx.accounts.campaign;
+        let participation = &mut ctx.accounts.participation;
+        let user_stats = &mut ctx.accounts.user_stats;
+
+        require!(
+            ctx.accounts.oracle.key() == VERIFICATION_ORACLE_PUBKEY,
+            ErrorCode::UnauthorizedOracle
+        );
+
+        if verified {
+            // Transfer reward from escrow to participant
+            let seeds = &[
+                b"campaign",
+                campaign.campaign_id.as_bytes(),
+                &[campaign.bump],
+            ];
+            let signer = &[&seeds[..]];
+
+            let transfer_ctx = CpiContext::new_with_signer(
+                ctx.accounts.token_program.to_account_info(),
+                Transfer {
+                    from: ctx.accounts.campaign_escrow.to_account_info(),
+                    to: ctx.accounts.participant_token_account.to_account_info(),
+                    authority: campaign.to_account_info(),
+                },
+                signer,
+            );
+            token::transfer(transfer_ctx, campaign.reward_per_action)?;
+
+            campaign.remaining_budget -= campaign.reward_per_action;
+            participation.status = ParticipationStatus::Verified;
+            participation.rewarded_at = Some(Clock::get()?.unix_timestamp);
+
+            // Update user stats
+            user_stats.total_earned += campaign.reward_per_action;
+            user_stats.oof_points += oof_points_earned;
+            user_stats.campaigns_completed += 1;
+        } else {
+            participation.status = ParticipationStatus::Rejected;
+        }
+
+        Ok(())
+    }
+}
+
+#[derive(Accounts)]
+pub struct CreateCampaign<'info> {
+    #[account(
+        init,
+        payer = creator,
+        space = Campaign::LEN,
+        seeds = [b"campaign", campaign_id.as_bytes()],
+        bump
+    )]
+    pub campaign: Account<'info, Campaign>,
+    
+    #[account(mut)]
+    pub creator: Signer<'info>,
+    
+    #[account(mut)]
+    pub creator_token_account: Account<'info, TokenAccount>,
+    
+    #[account(mut)]
+    pub campaign_escrow: Account<'info, TokenAccount>,
+    
+    pub token_program: Program<'info, Token>,
+    pub system_program: Program<'info, System>,
+}
+
+#[account]
+pub struct Campaign {
+    pub creator: Pubkey,
+    pub campaign_id: String,
+    pub total_budget: u64,
+    pub remaining_budget: u64,
+    pub reward_per_action: u64,
+    pub max_participants: u16,
+    pub participants_count: u16,
+    pub status: CampaignStatus,
+    pub created_at: i64,
+    pub ends_at: i64,
+    pub bump: u8,
+}
+
+#[derive(AnchorSerialize, AnchorDeserialize, Clone, PartialEq)]
+pub enum CampaignStatus {
+    Active,
+    Paused,
+    Completed,
+    Cancelled,
+}
+```
+
+### Advanced UI Components
+
+**Campaign Creation Component**
+```tsx
+'use client';
+
+import { useState } from 'react';
+import { useWallet } from '@solana/wallet-adapter-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { 
+  TwitterIcon, 
+  TikTokIcon, 
+  FarcasterIcon, 
+  ArenaIcon 
+} from '@/components/icons';
+
+interface PlatformConfig {
+  id: 'twitter' | 'farcaster' | 'tiktok' | 'arena';
+  name: string;
+  icon: React.ComponentType;
+  actions: ActionType[];
+  verificationDelay: number; // minutes
+  costMultiplier: number;
+}
+
+const PLATFORMS: PlatformConfig[] = [
+  {
+    id: 'twitter',
+    name: 'X (Twitter)',
+    icon: TwitterIcon,
+    actions: ['like', 'repost', 'comment', 'follow'],
+    verificationDelay: 5,
+    costMultiplier: 1.0,
+  },
+  {
+    id: 'farcaster',
+    name: 'Farcaster',
+    icon: FarcasterIcon,
+    actions: ['like', 'recast', 'comment', 'follow'],
+    verificationDelay: 2,
+    costMultiplier: 1.2,
+  },
+  {
+    id: 'tiktok',
+    name: 'TikTok',
+    icon: TikTokIcon,
+    actions: ['like', 'share', 'comment', 'follow'],
+    verificationDelay: 15,
+    costMultiplier: 1.5,
+  },
+  {
+    id: 'arena',
+    name: 'Arena',
+    icon: ArenaIcon,
+    actions: ['like', 'collect', 'comment'],
+    verificationDelay: 3,
+    costMultiplier: 0.8,
+  },
+];
+
+export default function CreateCampaignPage() {
+  const { publicKey, connected } = useWallet();
+  const [step, setStep] = useState(1);
+  const [campaignData, setCampaignData] = useState({
+    platforms: [] as string[],
+    actions: {} as Record<string, string[]>,
+    contentUrls: {} as Record<string, string>,
+    budget: 10,
+    duration: 24, // hours
+    targetAudience: 'general',
+    verificationLevel: 'standard',
+  });
+
+  const calculateRewards = () => {
+    const totalActions = Object.values(campaignData.actions)
+      .flat().length;
+    const platformMultiplier = campaignData.platforms.reduce((acc, platform) => {
+      const config = PLATFORMS.find(p => p.id === platform);
+      return acc + (config?.costMultiplier || 1);
+    }, 0) / campaignData.platforms.length;
+    
+    const baseReward = (campaignData.budget * 0.95) / totalActions; // 5% platform fee
+    return (baseReward * platformMultiplier).toFixed(4);
+  };
+
+  const PlatformSelector = () => (
+    <motion.div 
+      className="space-y-6"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+    >
+      <div className="text-center mb-8">
+        <h2 className="text-3xl font-bold text-gray-900 mb-2">
+          Choose Your Platforms
+        </h2>
+        <p className="text-gray-600">
+          Select where you want to boost engagement
+        </p>
+      </div>
+
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        {PLATFORMS.map((platform) => {
+          const isSelected = campaignData.platforms.includes(platform.id);
+          const Icon = platform.icon;
+          
+          return (
+            <motion.button
+              key={platform.id}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => {
+                setCampaignData(prev => ({
+                  ...prev,
+                  platforms: isSelected 
+                    ? prev.platforms.filter(p => p !== platform.id)
+                    : [...prev.platforms, platform.id]
+                }));
+              }}
+              className={`
+                p-6 rounded-2xl border-2 transition-all duration-200
+                ${isSelected 
+                  ? 'border-blue-500 bg-blue-50 shadow-lg' 
+                  : 'border-gray-200 hover:border-gray-300 bg-white'
+                }
+              `}
+            >
+              <div className="flex flex-col items-center space-y-3">
+                <div className={`
+                  p-3 rounded-xl
+                  ${isSelected ? 'bg-blue-100' : 'bg-gray-100'}
+                `}>
+                  <Icon className="w-8 h-8" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-gray-900">
+                    {platform.name}
+                  </h3>
+                  <p className="text-sm text-gray-500">
+                    ~{platform.verificationDelay}min verify
+                  </p>
+                </div>
+                {isSelected && (
+                  <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center"
+                  >
+                    <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  </motion.div>
+                )}
+              </div>
+            </motion.button>
+          );
+        })}
+      </div>
+    </motion.div>
+  );
+
+  const BudgetAndRewards = () => (
+    <motion.div 
+      className="space-y-8"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+    >
+      <div className="text-center">
+        <h2 className="text-3xl font-bold text-gray-900 mb-2">
+          Set Your Budget
+        </h2>
+        <p className="text-gray-600">
+          More budget = more participants = more engagement
+        </p>
+      </div>
+
+      <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-8 rounded-2xl">
+        <div className="grid md:grid-cols-2 gap-8">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-4">
+              Campaign Budget (USDC)
+            </label>
+            <div className="relative">
+              <input
+                type="range"
+                min="10"
+                max="1000"
+                step="5"
+                value={campaignData.budget}
+                onChange={(e) => setCampaignData(prev => ({
+                  ...prev,
+                  budget: parseInt(e.target.value)
+                }))}
+                className="w-full h-3 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
+              />
+              <div className="flex justify-between text-sm text-gray-500 mt-2">
+                <span>$10</span>
+                <span className="font-semibold text-2xl text-gray-900">
+                  ${campaignData.budget}
+                </span>
+                <span>$1000+</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <div className="bg-white p-6 rounded-xl shadow-sm">
+              <h3 className="font-semibold text-gray-900 mb-4">
+                Reward Breakdown
+              </h3>
+              <div className="space-y-2 text-sm">
+                <div className="flex justify-between">
+                  <span>Reward per action:</span>
+                  <span className="font-semibold">${calculateRewards()}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Platform fee (5%):</span>
+                  <span>${(campaignData.budget * 0.05).toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Setup fee:</span>
+                  <span>$2.00</span>
+                </div>
+                <hr className="my-2" />
+                <div className="flex justify-between font-semibold">
+                  <span>Total cost:</span>
+                  <span>${(campaignData.budget + 2).toFixed(2)}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </motion.div>
+  );
+
+  return (
+    <div className="min-h-screen bg-gray-50 py-12">
+      <div className="max-w-4xl mx-auto px-4">
+        {/* Progress Bar */}
+        <div className="mb-12">
+          <div className="flex items-center justify-between mb-4">
+            {[1, 2, 3, 4].map((stepNum) => (
+              <div 
+                key={stepNum}
+                className={`
+                  w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold
+                  ${step >= stepNum 
+                    ? 'bg-blue-500 text-white' 
+                    : 'bg-gray-200 text-gray-600'
+                  }
+                `}
+              >
+                {stepNum}
+              </div>
+            ))}
+          </div>
+          <div className="w-full bg-gray-200 rounded-full h-2">
+            <motion.div 
+              className="bg-blue-500 h-2 rounded-full"
+              initial={{ width: '25%' }}
+              animate={{ width: `${(step / 4) * 100}%` }}
+              transition={{ duration: 0.3 }}
+            />
+          </div>
+        </div>
+
+        {/* Step Content */}
+        <AnimatePresence mode="wait">
+          {step === 1 && <PlatformSelector />}
+          {step === 2 && <BudgetAndRewards />}
+          {/* Add steps 3 and 4 components here */}
+        </AnimatePresence>
+
+        {/* Navigation */}
+        <div className="flex justify-between mt-12">
+          <button
+            onClick={() => setStep(Math.max(1, step - 1))}
+            disabled={step === 1}
+            className="px-6 py-3 text-gray-600 disabled:opacity-50"
+          >
+            Previous
+          </button>
+          <button
+            onClick={() => setStep(Math.min(4, step + 1))}
+            disabled={step === 4}
+            className="px-8 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50"
+          >
+            {step === 4 ? 'Launch Campaign' : 'Next'}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+```
+
+### Verification System Architecture
+
+```typescript
+// verification/VerificationOracle.ts
+import { TwitterApi } from 'twitter-api-v2';
+import { FarcasterClient } from '@farcaster/client';
+import { Redis } from 'ioredis';
+
+interface VerificationRequest {
+  participationId: string;
+  platform: string;
+  action: string;
+  targetUrl: string;
+  userIdentifier: string;
+  proofData: any;
+  submittedAt: Date;
+}
+
+interface VerificationResult {
+  verified: boolean;
+  confidence: number; // 0-100
+  oofPointsEarned: number;
+  failReason?: string;
+  verificationMethod: string[];
+}
+
+export class VerificationOracle {
+  private redis: Redis;
+  private twitterClient: TwitterApi;
+  private farcasterClient: FarcasterClient;
+  private verificationQueue: Queue;
+
+  constructor() {
+    this.redis = new Redis(process.env.REDIS_URL);
+    this.twitterClient = new TwitterApi(process.env.TWITTER_BEARER_TOKEN);
+    this.setupVerificationQueue();
+  }
+
+  async verifyAction(request: VerificationRequest): Promise<VerificationResult> {
+    const verificationMethods: string[] = [];
+    let confidence = 0;
+    let verified = false;
+
+    try {
+      // Primary API Verification
+      const apiResult = await this.verifyViaAPI(request);
+      if (apiResult.success) {
+        verified = true;
+        confidence += 60;
+        verificationMethods.push('api');
+      }
+
+      // Secondary Verification Methods
+      if (!verified || confidence < 70) {
+        const socialProofResult = await this.verifySocialProof(request);
+        if (socialProofResult.success) {
+          verified = true;
+          confidence += 25;
+          verificationMethods.push('social_proof');
+        }
+      }
+
+      // Behavioral Analysis
+      const behaviorScore = await this.analyzeBehavior(request.userIdentifier);
+      confidence += behaviorScore * 15; // Max 15 points
+
+      // Community Validation (for edge cases)
+      if (confidence < 80 && verified) {
+        await this.queueCommunityValidation(request);
+        verificationMethods.push('pending_community');
+      }
+
+      const oofPointsEarned = this.calculateOOFPoints(
+        request.platform,
+        request.action,
+        confidence,
+        behaviorScore
+      );
+
+      return {
+        verified: verified && confidence >= 60,
+        confidence,
+        oofPointsEarned,
+        verificationMethod: verificationMethods,
+      };
+
+    } catch (error) {
+      return {
+        verified: false,
+        confidence: 0,
+        oofPointsEarned: 0,
+        failReason: error.message,
+        verificationMethod: ['error'],
+      };
+    }
+  }
+
+  private async verifyViaAPI(request: VerificationRequest): Promise<{success: boolean, data?: any}> {
+    switch (request.platform) {
+      case 'twitter':
+        return this.verifyTwitterAction(request);
+      case 'farcaster':
+        return this.verifyFarcasterAction(request);
+      case 'tiktok':
+        return this.verifyTikTokAction(request);
+      case 'arena':
+        return this.verifyArenaAction(request);
+      default:
+        throw new Error(`Unsupported platform: ${request.platform}`);
+    }
+  }
+
+  private async verifyTwitterAction(request: VerificationRequest): Promise<{success: boolean, data?: any}> {
+    const tweetId = this.extractTweetId(request.targetUrl);
+    
+    try {
+      switch (request.action) {
+        case 'like':
+          const likers = await this.twitterClient.v2.tweetLikedBy(tweetId);
+          return {
+            success: likers.data?.some(user => 
+              user.username.toLowerCase() === request.userIdentifier.toLowerCase()
+            ) || false
+          };
+          
+        case 'repost':
+          const retweets = await this.twitterClient.v2.tweetRetweetedBy(tweetId);
+          return {
+            success: retweets.data?.some(user => 
+              user.username.toLowerCase() === request.userIdentifier.toLowerCase()
+            ) || false
+          };
+          
+        case 'comment':
+          // Check recent replies to the tweet
+          const replies = await this.twitterClient.v2.search(`to:${request.userIdentifier} conversation_id:${tweetId}`);
+          return {
+            success: replies.data?.data?.length > 0 || false
+          };
+          
+        default:
+          return { success: false };
+      }
+    } catch (error) {
+      if (error.code === 429) {
+        // Rate limited - queue for later verification
+        await this.queueForRetry(request, 'rate_limit');
+        return { success: false };
+      }
+      throw error;
+    }
+  }
+
+  private async analyzeBehavior(userIdentifier: string): Promise<number> {
+    const userKey = `user_behavior:${userIdentifier}`;
+    const behaviorData = await this.redis.hgetall(userKey);
+    
+    let score = 0.5; // Base score
+    
+    // Account age factor
+    if (behaviorData.accountAge) {
+      const ageInDays = (Date.now() - parseInt(behaviorData.accountAge)) / (1000 * 60 * 60 * 24);
+      score += Math.min(ageInDays / 365, 0.3); // Max 0.3 for old accounts
+    }
+    
+    // Participation history
+    if (behaviorData.participationCount) {
+      const participations = parseInt(behaviorData.participationCount);
+      score += Math.min(participations / 100, 0.2); // Max 0.2 for participation history
+    }
+    
+    // Verification success rate
+    if (behaviorData.verificationSuccessRate) {
+      const successRate = parseFloat(behaviorData.verificationSuccessRate);
+      score = score * successRate; // Penalize poor success rate
+    }
+    
+    return Math.min(score, 1.0);
+  }
+
+  private calculateOOFPoints(
+    platform: string,
+    action: string,
+    confidence: number,
+    behaviorScore: number
+  ): number {
+    const basePoints = {
+      like: 10,
+      repost: 25,
+      comment: 40,
+      follow: 20,
+      share: 30,
+    };
+    
+    const platformMultiplier = {
+      twitter: 1.0,
+      farcaster: 1.2,
+      tiktok: 1.5,
+      arena: 0.8,
+    };
+    
+    const points = (basePoints[action] || 10) * 
+                   (platformMultiplier[platform] || 1.0) * 
+                   (confidence / 100) * 
+                   (0.5 + behaviorScore * 0.5); // Behavior bonus
+    
+    return Math.round(points);
+  }
+
+  private async queueCommunityValidation(request: VerificationRequest) {
+    await this.verificationQueue.add('community_validation', {
+      ...request,
+      validationDeadline: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24 hours
+    });
+  }
+}
+
+// verification/CommunityValidator.ts
+export class CommunityValidator {
+  async submitValidation(
+    participationId: string,
+    validatorWallet: string,
+    isValid: boolean,
+    evidence?: string
+  ) {
+    // Community members can validate edge cases
+    // Validators earn OOF points for accurate validations
+    // Implement reputation system for validators
+  }
+}
+```
+
+### Database Schema with Prisma
+
+```prisma
+// prisma/schema.prisma
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                String    @id @default(cuid())
+  walletAddress     String    @unique
+  username          String?
+  email             String?
+  oofPoints         Int       @default(0)
+  totalEarned       Decimal   @default(0) @db.Decimal(18, 6)
+  campaignsCreated  Int       @default(0)
+  campaignsJoined   Int       @default(0)
+  successRate       Float     @default(0)
+  reputation        Int       @default(100)
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  lastActiveAt      DateTime  @default(now())
+  
+  // Relations
+  campaigns         Campaign[]
+  participations    Participation[]
+  socialAccounts    SocialAccount[]
+  validations       CommunityValidation[]
+  
+  @@map("users")
+}
+
+model Campaign {
+  id                String           @id @default(cuid())
+  creatorId         String
+  title             String
+  description       String?
+  platforms         Platform[]
+  totalBudget       Decimal          @db.Decimal(18, 6)
+  remainingBudget   Decimal          @db.Decimal(18, 6)
+  rewardPerAction   Decimal          @db.Decimal(18, 6)
+  maxParticipants   Int?
+  currentParticipants Int            @default(0)
+  status            CampaignStatus   @default(ACTIVE)
+  verificationLevel VerificationLevel @default(STANDARD)
+  targetAudience    Json?
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+  startsAt          DateTime         @default(now())
+  endsAt            DateTime
+  
+  // Solana specific
+  contractAddress   String?
+  escrowAddress     String?
+  
+  // Relations
+  creator           User             @relation(fields: [creatorId], references: [id])
+  actions           CampaignAction[]
+  participations    Participation[]
+  analytics         CampaignAnalytics?
+  
+  @@map("campaigns")
+}
+
+model CampaignAction {
+  id          String      @id @default(cuid())
+  campaignId  String
+  platform    Platform
+  actionType  ActionType
+  targetUrl   String
+  description String?
+  
+  campaign    Campaign    @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  
+  @@map("campaign_actions")
+}
+
+model Participation {
+  id              String               @id @default(cuid())
+  campaignId      String
+  participantId   String
+  platform        Platform
+  actionType      ActionType
+  status          ParticipationStatus  @default(PENDING_VERIFICATION)
+  proofData       Json?
+  proofHash       String?
+  verificationData Json?
+  oofPointsEarned Int                 @default(0)
+  rewardAmount    Decimal?            @db.Decimal(18, 6)
+  submittedAt     DateTime            @default(now())
+  verifiedAt      DateTime?
+  rewardedAt      DateTime?
+  
+  // Relations
+  campaign        Campaign            @relation(fields: [campaignId], references: [id])
+  participant     User                @relation(fields: [participantId], references: [id])
+  validations     CommunityValidation[]
+  
+  @@unique([campaignId, participantId, platform, actionType])
+  @@map("participations")
+}
+
+model SocialAccount {
+  id          String   @id @default(cuid())
+  userId      String
+  platform    Platform
+  username    String
+  accountId   String?
+  verified    Boolean  @default(false)
+  metadata    Json?
+  connectedAt DateTime @default(now())
+  
+  user        User     @relation(fields: [userId], references: [id])
+  
+  @@unique([userId, platform])
+  @@map("social_accounts")
+}
+
+model CommunityValidation {
+  id              String    @id @default(cuid())
+  participationId String
+  validatorId     String
+  isValid         Boolean
+  evidence        String?
+  confidence      Int       // 1-100
+  submittedAt     DateTime  @default(now())
+  
+  participation   Participation @relation(fields: [participationId], references: [id])
+  validator       User          @relation(fields: [validatorId], references: [id])
+  
+  @@unique([participationId, validatorId])
+  @@map("community_validations")
+}
+
+model CampaignAnalytics {
+  id                    String   @id @default(cuid())
+  campaignId            String   @unique
+  totalViews            Int      @default(0)
+  totalParticipations   Int      @default(0)
+  totalVerified         Int      @default(0)
+  totalRejected         Int      @default(0)
+  averageVerificationTime Int    @default(0) // minutes
+  platformBreakdown     Json?
+  dailyStats            Json?
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+  
+  campaign              Campaign @relation(fields: [campaignId], references: [id])
+  
+  @@map("campaign_analytics")
+}
+
+enum Platform {
+  TWITTER
+  FARCASTER
+  TIKTOK
+  ARENA
+}
+
+enum ActionType {
+  LIKE
+  REPOST
+  COMMENT
+  FOLLOW
+  SHARE
+  COLLECT
+  RECAST
+}
+
+enum CampaignStatus {
+  DRAFT
+  ACTIVE
+  PAUSED
+  COMPLETED
+  CANCELLED
+}
+
+enum ParticipationStatus {
+  PENDING_VERIFICATION
+  VERIFIED
+  REJECTED
+  COMMUNITY_REVIEW
+}
+
+enum VerificationLevel {
+  BASIC
+  STANDARD
+  STRICT
+  COMMUNITY
+}
+```
+
+Would you like me to continue with the API routes implementation, real-time notifications system, or the analytics dashboard components?

@@ -286,3 +286,79 @@ export const insertSlotSpinSchema = createInsertSchema(slotSpins).omit({
   id: true,
   createdAt: true,
 });
+
+// Campaign System Tables
+export const campaigns = pgTable("campaigns", {
+  id: text("id").primaryKey(),
+  creatorId: text("creator_id").notNull(),
+  name: text("name").notNull(),
+  description: text("description").notNull(),
+  platforms: text("platforms").array().notNull(), // ['twitter', 'farcaster', 'tiktok', 'arena']
+  budget: decimal("budget", { precision: 10, scale: 2 }).notNull(),
+  spentBudget: decimal("spent_budget", { precision: 10, scale: 2 }).default("0").notNull(),
+  rewardPerAction: decimal("reward_per_action", { precision: 10, scale: 4 }).notNull(),
+  maxParticipants: integer("max_participants").default(1000).notNull(),
+  participants: integer("participants").default(0).notNull(),
+  status: text("status").notNull().default("draft"), // draft, active, paused, completed, cancelled
+  verificationLevel: text("verification_level").notNull().default("standard"), // basic, standard, premium
+  contentUrls: jsonb("content_urls").notNull(), // { platform: url }
+  targetActions: jsonb("target_actions").notNull(), // [{ platform, type, targetUrl, reward }]
+  analytics: jsonb("analytics").default({}).notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  endsAt: timestamp("ends_at").notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const campaignParticipations = pgTable("campaign_participations", {
+  id: text("id").primaryKey(),
+  campaignId: text("campaign_id").notNull().references(() => campaigns.id),
+  participantWallet: text("participant_wallet").notNull(),
+  participantUserId: text("participant_user_id"),
+  actionsCompleted: jsonb("actions_completed").notNull(), // [{ platform, type, proofUrl, verified }]
+  totalReward: decimal("total_reward", { precision: 10, scale: 4 }).default("0").notNull(),
+  oofPointsEarned: integer("oof_points_earned").default(0).notNull(),
+  status: text("status").notNull().default("pending"), // pending, verified, rejected, paid
+  proofData: jsonb("proof_data").notNull(), // verification proofs
+  submittedAt: timestamp("submitted_at").defaultNow().notNull(),
+  verifiedAt: timestamp("verified_at"),
+  paidAt: timestamp("paid_at"),
+});
+
+export const campaignVerifications = pgTable("campaign_verifications", {
+  id: text("id").primaryKey(),
+  participationId: text("participation_id").notNull().references(() => campaignParticipations.id),
+  platform: text("platform").notNull(),
+  actionType: text("action_type").notNull(),
+  targetUrl: text("target_url").notNull(),
+  proofUrl: text("proof_url"),
+  verificationMethod: text("verification_method").notNull(), // api, manual, community
+  verified: boolean("verified").default(false).notNull(),
+  verifiedBy: text("verified_by"), // oracle address or user id
+  verificationData: jsonb("verification_data"), // additional verification data
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  verifiedAt: timestamp("verified_at"),
+});
+
+// Campaign type exports
+export type Campaign = typeof campaigns.$inferSelect;
+export type InsertCampaign = typeof campaigns.$inferInsert;
+export type CampaignParticipation = typeof campaignParticipations.$inferSelect;
+export type InsertCampaignParticipation = typeof campaignParticipations.$inferInsert;
+export type CampaignVerification = typeof campaignVerifications.$inferSelect;
+export type InsertCampaignVerification = typeof campaignVerifications.$inferInsert;
+
+// Campaign Zod schemas
+export const insertCampaignSchema = createInsertSchema(campaigns).omit({
+  createdAt: true,
+  updatedAt: true,
+  spentBudget: true,
+  participants: true,
+});
+
+export const insertCampaignParticipationSchema = createInsertSchema(campaignParticipations).omit({
+  submittedAt: true,
+  verifiedAt: true,
+  paidAt: true,
+  totalReward: true,
+  oofPointsEarned: true,
+});

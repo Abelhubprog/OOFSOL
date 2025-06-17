@@ -567,6 +567,287 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Campaigns API Routes
+  app.get('/api/campaigns', async (req, res) => {
+    try {
+      // Mock campaign data for development
+      const mockCampaigns = [
+        {
+          id: 'camp_001',
+          name: 'OOF Token Launch Campaign',
+          description: 'Help us spread the word about OOF Token across social media platforms',
+          platforms: ['twitter', 'farcaster'],
+          budget: 500,
+          spentBudget: 125.50,
+          rewardPerAction: 2.50,
+          targetActions: [
+            { platform: 'twitter', type: 'like', targetUrl: 'https://twitter.com/ooftoken/status/123', reward: 0.50 },
+            { platform: 'twitter', type: 'repost', targetUrl: 'https://twitter.com/ooftoken/status/123', reward: 1.00 },
+            { platform: 'farcaster', type: 'like', targetUrl: 'https://warpcast.com/ooftoken/123', reward: 0.75 },
+            { platform: 'farcaster', type: 'recast', targetUrl: 'https://warpcast.com/ooftoken/123', reward: 1.25 }
+          ],
+          status: 'active',
+          participants: 50,
+          maxParticipants: 200,
+          createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+          endsAt: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toISOString(),
+          verificationLevel: 'standard',
+          contentUrls: {
+            twitter: 'https://twitter.com/ooftoken/status/123',
+            farcaster: 'https://warpcast.com/ooftoken/123'
+          },
+          analytics: {
+            totalEngagements: 245,
+            uniqueParticipants: 50,
+            conversionRate: 25.2,
+            averageReward: 2.51,
+            platformBreakdown: { twitter: 145, farcaster: 100 }
+          }
+        },
+        {
+          id: 'camp_002',
+          name: 'Community Growth Initiative',
+          description: 'Growing our community across multiple platforms with engaging content',
+          platforms: ['twitter', 'arena'],
+          budget: 250,
+          spentBudget: 75.25,
+          rewardPerAction: 1.50,
+          targetActions: [
+            { platform: 'twitter', type: 'follow', targetUrl: 'https://twitter.com/ooftoken', reward: 2.00 },
+            { platform: 'arena', type: 'like', targetUrl: 'https://arena.social/ooftoken/123', reward: 1.00 }
+          ],
+          status: 'active',
+          participants: 30,
+          maxParticipants: 150,
+          createdAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
+          endsAt: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString(),
+          verificationLevel: 'basic',
+          contentUrls: {
+            twitter: 'https://twitter.com/ooftoken',
+            arena: 'https://arena.social/ooftoken/123'
+          },
+          analytics: {
+            totalEngagements: 85,
+            uniqueParticipants: 30,
+            conversionRate: 20.1,
+            averageReward: 1.50,
+            platformBreakdown: { twitter: 60, arena: 25 }
+          }
+        }
+      ];
+
+      res.json(mockCampaigns);
+    } catch (error) {
+      console.error("Error fetching campaigns:", error);
+      res.status(500).json({ message: "Failed to fetch campaigns" });
+    }
+  });
+
+  app.post('/api/campaigns', async (req, res) => {
+    try {
+      const {
+        name,
+        description,
+        platforms,
+        budget,
+        duration,
+        contentUrls,
+        targetActions,
+        verificationLevel
+      } = req.body;
+
+      if (!name || !description || !platforms?.length || !budget || budget < 10) {
+        return res.status(400).json({ message: "Missing required fields or budget too low" });
+      }
+
+      // Generate campaign ID
+      const campaignId = `camp_${Date.now()}`;
+      
+      // Calculate reward per action
+      const totalActions = targetActions?.length || 1;
+      const rewardPerAction = (budget * 0.95) / totalActions; // 5% platform fee
+
+      // Calculate end date
+      const endsAt = new Date(Date.now() + (duration * 60 * 60 * 1000)); // duration in hours
+
+      const newCampaign = {
+        id: campaignId,
+        creatorId: req.user?.id || 'anonymous',
+        name,
+        description,
+        platforms,
+        budget: parseFloat(budget),
+        spentBudget: 0,
+        rewardPerAction: parseFloat(rewardPerAction.toFixed(4)),
+        targetActions: targetActions || [],
+        status: 'active',
+        participants: 0,
+        maxParticipants: 1000,
+        createdAt: new Date().toISOString(),
+        endsAt: endsAt.toISOString(),
+        verificationLevel: verificationLevel || 'standard',
+        contentUrls: contentUrls || {},
+        analytics: {
+          totalEngagements: 0,
+          uniqueParticipants: 0,
+          conversionRate: 0,
+          averageReward: rewardPerAction,
+          platformBreakdown: {}
+        }
+      };
+
+      console.log(`Campaign created: ${campaignId}`, newCampaign);
+
+      res.json({
+        message: "Campaign created successfully",
+        campaign: newCampaign
+      });
+    } catch (error) {
+      console.error("Error creating campaign:", error);
+      res.status(500).json({ message: "Failed to create campaign" });
+    }
+  });
+
+  app.get('/api/campaigns/participations', async (req, res) => {
+    try {
+      // Mock participation data for development
+      const mockParticipations = [
+        {
+          id: 'part_001',
+          campaignId: 'camp_001',
+          participantWallet: '7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRueJuD5up',
+          actionsCompleted: [
+            { platform: 'twitter', type: 'like', proofUrl: 'https://twitter.com/user/status/456', verified: true },
+            { platform: 'twitter', type: 'repost', proofUrl: 'https://twitter.com/user/status/456', verified: true }
+          ],
+          totalReward: 1.50,
+          oofPointsEarned: 25,
+          status: 'verified',
+          submittedAt: new Date(Date.now() - 1 * 60 * 60 * 1000).toISOString(),
+          verifiedAt: new Date(Date.now() - 30 * 60 * 1000).toISOString()
+        }
+      ];
+
+      res.json(mockParticipations);
+    } catch (error) {
+      console.error("Error fetching participations:", error);
+      res.status(500).json({ message: "Failed to fetch participations" });
+    }
+  });
+
+  app.post('/api/campaigns/:campaignId/participate', async (req, res) => {
+    try {
+      const { campaignId } = req.params;
+      const { actionsCompleted, proofData } = req.body;
+
+      if (!actionsCompleted?.length || !proofData) {
+        return res.status(400).json({ message: "Missing required participation data" });
+      }
+
+      // Generate participation ID
+      const participationId = `part_${Date.now()}`;
+
+      const participation = {
+        id: participationId,
+        campaignId,
+        participantWallet: req.user?.walletAddress || 'anonymous_wallet',
+        participantUserId: req.user?.id,
+        actionsCompleted,
+        totalReward: 0,
+        oofPointsEarned: 0,
+        status: 'pending',
+        proofData,
+        submittedAt: new Date().toISOString()
+      };
+
+      console.log(`Participation submitted: ${participationId}`, participation);
+
+      res.json({
+        message: "Participation submitted successfully",
+        participation,
+        estimatedVerificationTime: "5-15 minutes"
+      });
+    } catch (error) {
+      console.error("Error submitting participation:", error);
+      res.status(500).json({ message: "Failed to submit participation" });
+    }
+  });
+
+  app.post('/api/campaigns/:campaignId/verify', async (req, res) => {
+    try {
+      const { campaignId } = req.params;
+      const { participationId, verificationResults } = req.body;
+
+      if (!participationId || !verificationResults) {
+        return res.status(400).json({ message: "Missing verification data" });
+      }
+
+      // Calculate rewards based on verification results
+      let totalReward = 0;
+      let oofPointsEarned = 0;
+
+      for (const result of verificationResults) {
+        if (result.verified) {
+          totalReward += parseFloat(result.reward || 0);
+          oofPointsEarned += parseInt(result.oofPoints || 10);
+        }
+      }
+
+      console.log(`Verification completed for ${participationId}:`, {
+        totalReward,
+        oofPointsEarned,
+        verificationResults
+      });
+
+      res.json({
+        message: "Verification completed",
+        participationId,
+        totalReward,
+        oofPointsEarned,
+        status: totalReward > 0 ? 'verified' : 'rejected'
+      });
+    } catch (error) {
+      console.error("Error processing verification:", error);
+      res.status(500).json({ message: "Failed to process verification" });
+    }
+  });
+
+  app.get('/api/campaigns/:campaignId/analytics', async (req, res) => {
+    try {
+      const { campaignId } = req.params;
+
+      // Mock analytics data
+      const analytics = {
+        campaignId,
+        totalEngagements: 245,
+        uniqueParticipants: 50,
+        conversionRate: 25.2,
+        averageReward: 2.51,
+        platformBreakdown: {
+          twitter: { engagements: 145, participants: 30 },
+          farcaster: { engagements: 100, participants: 25 }
+        },
+        actionBreakdown: {
+          like: { count: 120, totalReward: 60.00 },
+          repost: { count: 80, totalReward: 80.00 },
+          comment: { count: 45, totalReward: 90.00 }
+        },
+        timelineData: [
+          { date: '2024-01-15', engagements: 25, rewards: 62.50 },
+          { date: '2024-01-16', engagements: 45, rewards: 112.50 },
+          { date: '2024-01-17', engagements: 60, rewards: 150.00 },
+          { date: '2024-01-18', engagements: 55, rewards: 137.50 },
+          { date: '2024-01-19', engagements: 60, rewards: 150.00 }
+        ]
+      };
+
+      res.json(analytics);
+    } catch (error) {
+      console.error("Error fetching campaign analytics:", error);
+      res.status(500).json({ message: "Failed to fetch campaign analytics" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }
