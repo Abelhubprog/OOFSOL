@@ -1,14 +1,13 @@
 import { useState } from 'react';
 import { useAuth } from "@/hooks/useAuth";
-import { useSolana } from "@/hooks/useSolana";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { useMutation } from "@tanstack/react-query";
-import { Search, TrendingDown, Clock, AlertTriangle } from "lucide-react";
-import { PublicKey } from '@solana/web3.js';
+import { apiRequest } from "@/lib/queryClient";
+import { Search, TrendingDown, Clock, AlertTriangle, Wallet } from "lucide-react";
 
 interface MissedOpportunity {
   id: number;
@@ -249,6 +248,16 @@ export default function WalletAnalyzer() {
           </Card>
         )}
       </div>
+       <div className="container mx-auto px-4 py-8">
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold mb-2">Wallet Analyzer</h1>
+        <p className="text-muted-foreground">
+          Powered by Solana App Kit - Connect your wallet to explore advanced features
+        </p>
+      </div>
+
+      <SolanaAppKitDemo />
+    </div>
     </div>
   );
 }

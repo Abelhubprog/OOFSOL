@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
-
+import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 import { 
   BarChart3, 
   Target, 
