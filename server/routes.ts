@@ -325,6 +325,120 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Token Advertising API Routes
+  app.get('/api/token-ads/current', async (req, res) => {
+    try {
+      const ads = await storage.getActiveTokenAds();
+      // Add time remaining for each ad
+      const now = Date.now();
+      const adsWithTimeRemaining = ads.map(ad => ({
+        ...ad,
+        timeRemaining: Math.max(0, new Date(ad.endTime).getTime() - now)
+      }));
+      res.json(adsWithTimeRemaining);
+    } catch (error) {
+      console.error("Error fetching active token ads:", error);
+      res.status(500).json({ message: "Failed to fetch token ads" });
+    }
+  });
+
+  app.post('/api/token-ads/submit', async (req, res) => {
+    try {
+      const {
+        tokenAddress,
+        tokenName,
+        tokenSymbol,
+        buyLink,
+        description,
+        telegram,
+        twitter,
+        website,
+        slotNumber,
+        adminWallet
+      } = req.body;
+
+      if (!tokenAddress || !tokenName || !tokenSymbol || !buyLink || !slotNumber) {
+        return res.status(400).json({ message: "Missing required fields" });
+      }
+
+      // Calculate slot timing
+      const now = new Date();
+      const SLOT_DURATION = 30 * 60 * 1000; // 30 minutes
+      const cycleNumber = Math.floor(now.getTime() / (SLOT_DURATION * 6));
+      const startTime = new Date(now.getTime() + 60000); // Start 1 minute from now
+      const endTime = new Date(startTime.getTime() + SLOT_DURATION);
+
+      // Create the ad entry (pending payment verification)
+      const adData = {
+        tokenAddress,
+        tokenName,
+        tokenSymbol,
+        advertiserWallet: adminWallet || 'PENDING',
+        buyLink,
+        description: description || '',
+        telegram: telegram || null,
+        twitter: twitter || null,
+        website: website || null,
+        paymentTxId: 'PENDING',
+        paymentAmount: '10.00',
+        paymentTokenSymbol: 'USD',
+        slotNumber: parseInt(slotNumber),
+        cycleNumber,
+        startTime,
+        endTime,
+        verified: false,
+        isActive: false // Will be activated after payment confirmation
+      };
+
+      const createdAd = await storage.createTokenAd(adData);
+      res.json({ 
+        message: "Ad listing submitted successfully. Payment verification pending.",
+        adId: createdAd.id,
+        paymentInstructions: {
+          amount: "$10 USD equivalent",
+          wallet: adminWallet,
+          note: "Send payment confirmation to activate your listing"
+        }
+      });
+    } catch (error) {
+      console.error("Error submitting token ad:", error);
+      res.status(500).json({ message: "Failed to submit token ad" });
+    }
+  });
+
+  app.post('/api/token-ads/track', async (req, res) => {
+    try {
+      const { adId, interactionType } = req.body;
+
+      if (!adId || !interactionType) {
+        return res.status(400).json({ message: "Missing required fields" });
+      }
+
+      const interaction = await storage.trackAdInteraction({
+        adId: parseInt(adId),
+        interactionType,
+        userWallet: null, // Could be populated with user wallet if available
+        metadata: {}
+      });
+
+      res.json(interaction);
+    } catch (error) {
+      console.error("Error tracking ad interaction:", error);
+      res.status(500).json({ message: "Failed to track interaction" });
+    }
+  });
+
+  app.get('/api/token-ads/:id/stats', async (req, res) => {
+    try {
+      const adId = parseInt(req.params.id);
+      const stats = await storage.getAdStats(adId);
+      res.json(stats);
+    } catch (error) {
+      console.error("Error fetching ad stats:", error);
+      res.status(500).json({ message: "Failed to fetch ad stats" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }

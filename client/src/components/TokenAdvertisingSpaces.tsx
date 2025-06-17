@@ -104,10 +104,16 @@ export default function TokenAdvertisingSpaces() {
   // Submit listing mutation
   const submitListingMutation = useMutation({
     mutationFn: async (data: FormData) => {
-      return apiRequest('/api/token-ads/submit', {
-        method: 'POST',
-        body: data,
+      const formDataObj: any = {};
+      data.forEach((value, key) => {
+        formDataObj[key] = value;
       });
+      
+      return fetch('/api/token-ads/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formDataObj),
+      }).then(res => res.json());
     },
     onSuccess: () => {
       toast({
@@ -140,11 +146,11 @@ export default function TokenAdvertisingSpaces() {
   // Track ad interaction
   const trackInteraction = useMutation({
     mutationFn: async ({ adId, type }: { adId: number; type: 'view' | 'click' }) => {
-      return apiRequest('/api/token-ads/track', {
+      return fetch('/api/token-ads/track', {
         method: 'POST',
-        body: JSON.stringify({ adId, interactionType: type }),
         headers: { 'Content-Type': 'application/json' },
-      });
+        body: JSON.stringify({ adId, interactionType: type }),
+      }).then(res => res.json());
     },
   });
 
@@ -155,7 +161,7 @@ export default function TokenAdvertisingSpaces() {
   };
 
   const handleSlotClick = (slotIndex: number) => {
-    const ad = activeAds.find((ad: TokenAd) => ad.slotNumber === slotIndex);
+    const ad = Array.isArray(activeAds) ? activeAds.find((ad: any) => ad.slotNumber === slotIndex) : null;
     
     if (ad) {
       // Track click and redirect to buy link
