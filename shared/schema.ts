@@ -8,7 +8,8 @@ import {
   integer,
   decimal,
   boolean,
-  serial
+  serial,
+  bigint
 } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
@@ -178,6 +179,69 @@ export const tokenAlerts = pgTable("token_alerts", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
+// Token advertising listings
+export const tokenAds = pgTable("token_ads", {
+  id: serial("id").primaryKey(),
+  tokenAddress: varchar("token_address").notNull(),
+  tokenName: varchar("token_name").notNull(),
+  tokenSymbol: varchar("token_symbol").notNull(),
+  advertiserWallet: varchar("advertiser_wallet").notNull(),
+  buyLink: text("buy_link").notNull(),
+  mediaUrl: text("media_url"),
+  mediaType: varchar("media_type").default("image"), // image, video, gif
+  telegram: varchar("telegram"),
+  twitter: varchar("twitter"),
+  website: varchar("website"),
+  description: text("description"),
+  paymentTxId: varchar("payment_tx_id").notNull(),
+  paymentAmount: decimal("payment_amount", { precision: 20, scale: 8 }).notNull(),
+  paymentTokenSymbol: varchar("payment_token_symbol").notNull(),
+  slotNumber: integer("slot_number").notNull(), // 0-5 for 6 slots
+  cycleNumber: bigint("cycle_number", { mode: "number" }).notNull(),
+  startTime: timestamp("start_time").notNull(),
+  endTime: timestamp("end_time").notNull(),
+  views: integer("views").default(0),
+  clicks: integer("clicks").default(0),
+  isActive: boolean("is_active").default(true),
+  verified: boolean("verified").default(false),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Ad interaction tracking
+export const adInteractions = pgTable("ad_interactions", {
+  id: serial("id").primaryKey(),
+  adId: integer("ad_id").notNull().references(() => tokenAds.id),
+  userWallet: varchar("user_wallet"),
+  interactionType: varchar("interaction_type").notNull(), // view, click, purchase
+  metadata: jsonb("metadata"), // Additional interaction data
+  timestamp: timestamp("timestamp").defaultNow(),
+});
+
+// Revenue sharing pools
+export const revenuePools = pgTable("revenue_pools", {
+  id: serial("id").primaryKey(),
+  cycleNumber: bigint("cycle_number", { mode: "number" }).notNull(),
+  totalRevenue: decimal("total_revenue", { precision: 20, scale: 8 }).default("0"),
+  totalPurchases: decimal("total_purchases", { precision: 20, scale: 8 }).default("0"),
+  participantCount: integer("participant_count").default(0),
+  distributed: boolean("distributed").default(false),
+  distributedAt: timestamp("distributed_at"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// User purchases for revenue sharing
+export const userPurchases = pgTable("user_purchases", {
+  id: serial("id").primaryKey(),
+  userWallet: varchar("user_wallet").notNull(),
+  tokenAddress: varchar("token_address").notNull(),
+  purchaseAmount: decimal("purchase_amount", { precision: 20, scale: 8 }).notNull(),
+  cycleNumber: bigint("cycle_number", { mode: "number" }).notNull(),
+  txId: varchar("tx_id").notNull(),
+  revenueShare: decimal("revenue_share", { precision: 20, scale: 8 }).default("0"),
+  claimed: boolean("claimed").default(false),
+  timestamp: timestamp("timestamp").defaultNow(),
+});
+
 // Schema types
 export type UpsertUser = typeof users.$inferInsert;
 export type User = typeof users.$inferSelect;
@@ -191,6 +255,14 @@ export type SlotSpin = typeof slotSpins.$inferSelect;
 export type InsertSlotSpin = typeof slotSpins.$inferInsert;
 export type UserAchievement = typeof userAchievements.$inferSelect;
 export type InsertUserAchievement = typeof userAchievements.$inferInsert;
+export type TokenAd = typeof tokenAds.$inferSelect;
+export type InsertTokenAd = typeof tokenAds.$inferInsert;
+export type AdInteraction = typeof adInteractions.$inferSelect;
+export type InsertAdInteraction = typeof adInteractions.$inferInsert;
+export type RevenuePool = typeof revenuePools.$inferSelect;
+export type InsertRevenuePool = typeof revenuePools.$inferInsert;
+export type UserPurchase = typeof userPurchases.$inferSelect;
+export type InsertUserPurchase = typeof userPurchases.$inferInsert;
 
 // Zod schemas
 export const insertTokenSchema = createInsertSchema(tokens).omit({
