@@ -15,7 +15,8 @@ import {
   BookOpen,
   Crown,
   Coins,
-  Zap
+  Zap,
+  Gift
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -40,6 +41,7 @@ export default function Navigation() {
     { path: "/staking", label: "Staking", icon: Coins },
     { path: "/battle-royale", label: "Battle", icon: Zap },
     { path: "/reality-bender", label: "Reality", icon: Sparkles },
+    { path: "/airdrop", label: "Airdrop", icon: Sparkles },
   ];
 
   const isActive = (path: string) => {

@@ -16,6 +16,8 @@ import OOFLegends from "@/pages/OOFLegends";
 import OOFStaking from "@/pages/OOFStaking";
 import OOFBattleRoyale from "@/pages/OOFBattleRoyale";
 import OOFRealityBender from "@/pages/OOFRealityBender";
+import OOFAirdrop from "@/pages/OOFAirdrop";
+import OOFSocial from "@/pages/OOFSocial";
 import NotFound from "@/pages/not-found";
 import Navigation from "@/components/Navigation";
 
@@ -49,6 +51,7 @@ function Router() {
             <Route path="/staking" component={OOFStaking} />
             <Route path="/battle-royale" component={OOFBattleRoyale} />
             <Route path="/reality-bender" component={OOFRealityBender} />
+            <Route path="/airdrop" component={OOFAirdrop} />
           </>
         )}
         <Route component={NotFound} />
