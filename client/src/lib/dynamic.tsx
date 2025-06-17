@@ -3,19 +3,13 @@ import { EthereumWalletConnectors } from '@dynamic-labs/ethereum';
 import { SolanaWalletConnectors } from '@dynamic-labs/solana';
 
 const DynamicProvider = ({ children }: { children: React.ReactNode }) => {
-  const environmentId = import.meta.env.VITE_DYNAMIC_ENVIRONMENT_ID;
-  
-  // If no environment ID is provided, render children without Dynamic wrapper
-  if (!environmentId) {
-    console.warn('VITE_DYNAMIC_ENVIRONMENT_ID not found. Wallet features will be limited.');
-    return <>{children}</>;
-  }
+  const environmentId = "0a73d89a-ab65-4323-b27c-9173ae561989";
 
   return (
     <DynamicContextProvider
       settings={{
         environmentId,
-        walletConnectors: [EthereumWalletConnectors, SolanaWalletConnectors],
+        walletConnectors: [SolanaWalletConnectors],
         appName: 'OOF',
         cssOverrides: `
           .dynamic-widget-card {

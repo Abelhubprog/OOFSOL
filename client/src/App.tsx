@@ -28,6 +28,7 @@ import Sidebar from "@/components/Sidebar";
 import BottomSlider from "@/components/BottomSlider";
 
 
+
 function Router() {
   const { isAuthenticated, isLoading } = useAuth();
 
