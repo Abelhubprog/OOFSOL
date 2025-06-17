@@ -80,7 +80,7 @@ export default function Dashboard() {
         </div>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6 mb-6 sm:mb-8">
           {mockStats.map((token, index) => (
             <Card key={index} className="bg-purple-800/30 border-purple-700 glass-card">
               <CardContent className="p-6">

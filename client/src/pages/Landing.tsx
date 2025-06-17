@@ -27,20 +27,17 @@ export default function Landing() {
     <div className="min-h-screen bg-gradient-to-br from-purple-900 via-purple-800 to-purple-900 text-white">
       {/* Navigation */}
       <nav className="fixed top-0 w-full z-50 bg-purple-900/80 backdrop-blur-lg border-b border-purple-700">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <div className="flex items-center space-x-4">
-              <div className="text-2xl font-bold gradient-text">OOF</div>
-              <span className="text-purple-300 text-sm">The Meme Coin for Missed Opportunities</span>
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-14 sm:h-16">
+            <div className="flex items-center space-x-2 sm:space-x-4">
+              <div className="text-xl sm:text-2xl font-bold gradient-text">OOF</div>
+              <span className="text-purple-300 text-xs sm:text-sm hidden sm:inline">The Meme Coin for Missed Opportunities</span>
             </div>
-            <div className="hidden md:flex items-center space-x-6">
-              <a href="#dashboard" className="text-purple-200 hover:text-white transition-colors">Dashboard</a>
-              <a href="#slots" className="text-purple-200 hover:text-white transition-colors">Slots</a>
-              <a href="#arena" className="text-purple-200 hover:text-white transition-colors">Arena</a>
-              <a href="#time-machine" className="text-purple-200 hover:text-white transition-colors">Time Machine</a>
+            <div className="flex items-center space-x-3 sm:space-x-6">
               <Button 
                 onClick={handleLogin}
-                className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
+                size="sm"
+                className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-xs sm:text-sm px-3 sm:px-4"
               >
                 Connect Wallet
               </Button>
@@ -50,16 +47,16 @@ export default function Landing() {
       </nav>
 
       {/* Hero Section */}
-      <section className="pt-24 pb-12 px-4">
+      <section className="pt-16 sm:pt-20 lg:pt-24 pb-8 sm:pb-12 px-3 sm:px-4">
         <div className="max-w-6xl mx-auto text-center">
-          <div className="mb-8">
-            <h1 className="text-6xl md:text-8xl font-black mb-4">
+          <div className="mb-6 sm:mb-8">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-8xl font-black mb-3 sm:mb-4">
               <span className="gradient-text">OOF</span>
             </h1>
-            <p className="text-xl md:text-2xl text-purple-200 mb-6">
+            <p className="text-lg sm:text-xl lg:text-2xl text-purple-200 mb-4 sm:mb-6 px-2">
               The Meme Coin for Life's Missed Opportunities 🤦‍♂️
             </p>
-            <p className="text-lg text-purple-300 max-w-3xl mx-auto mb-8">
+            <p className="text-sm sm:text-base lg:text-lg text-purple-300 max-w-3xl mx-auto mb-6 sm:mb-8 px-4 leading-relaxed">
               Turn your crypto regrets into rewards. Track missed gains, predict the next moon, and earn $OOF tokens for your trading insights!
             </p>
           </div>
