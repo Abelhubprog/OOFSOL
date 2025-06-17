@@ -53,8 +53,8 @@ export default function Navigation() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-4">
-            <div className="text-2xl font-bold gradient-text">OOF</div>
-            <span className="text-purple-300 text-sm hidden sm:inline">
+            <div className="text-2xl font-bold text-white animate-pulse-purple">OOF</div>
+            <span className="text-purple-100 text-sm hidden sm:inline">
               The Meme Coin for Missed Opportunities
             </span>
           </Link>
@@ -67,10 +67,10 @@ export default function Navigation() {
                 <Link
                   key={item.path}
                   href={item.path}
-                  className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-colors ${
+                  className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-all duration-300 ${
                     isActive(item.path)
-                      ? "bg-purple-700 text-white"
-                      : "text-purple-200 hover:text-white hover:bg-purple-800"
+                      ? "bg-white/20 text-white oof-glow"
+                      : "text-purple-100 hover:text-white hover:bg-white/10 oof-glow"
                   }`}
                 >
                   <Icon className="w-4 h-4" />
