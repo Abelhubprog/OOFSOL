@@ -265,7 +265,7 @@ export default function TokenAdvertisingSpaces() {
         {/* Advertising Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
           {Array.from({ length: 6 }).map((_, index) => {
-            const ad = activeAds.find((ad: TokenAd) => ad.slotNumber === index);
+            const ad = Array.isArray(activeAds) ? activeAds.find((ad: any) => ad.slotNumber === index) : null;
             
             return (
               <Card 
