@@ -122,6 +122,62 @@ export const userAchievements = pgTable("user_achievements", {
   unlockedAt: timestamp("unlocked_at").defaultNow(),
 });
 
+// NFT Collections for rare slot moments
+export const nftMoments = pgTable("nft_moments", {
+  id: serial("id").primaryKey(),
+  userId: varchar("user_id").notNull().references(() => users.id),
+  tokenId: varchar("token_id").unique().notNull(),
+  momentName: varchar("moment_name").notNull(),
+  momentDescription: text("moment_description"),
+  rarity: varchar("rarity").notNull(), // legendary, epic, rare, uncommon, common
+  mintDate: timestamp("mint_date").defaultNow(),
+  slotResult: jsonb("slot_result"), // Store the winning combination
+  imageUrl: varchar("image_url"),
+  metadataUrl: varchar("metadata_url"),
+});
+
+// Detective reports for community validation
+export const detectiveReports = pgTable("detective_reports", {
+  id: serial("id").primaryKey(),
+  userId: varchar("user_id").notNull().references(() => users.id),
+  tokenAddress: varchar("token_address").notNull(),
+  reportType: varchar("report_type").notNull(), // safe, warning, rug, honeypot
+  description: text("description"),
+  confidence: integer("confidence").default(50), // 0-100
+  upvotes: integer("upvotes").default(0),
+  downvotes: integer("downvotes").default(0),
+  verified: boolean("verified").default(false),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Time machine simulations history
+export const timeMachineRuns = pgTable("time_machine_runs", {
+  id: serial("id").primaryKey(),
+  userId: varchar("user_id").notNull().references(() => users.id),
+  tokenSymbol: varchar("token_symbol").notNull(),
+  investmentAmount: decimal("investment_amount", { precision: 20, scale: 2 }),
+  startDate: timestamp("start_date"),
+  endDate: timestamp("end_date"),
+  missedGains: decimal("missed_gains", { precision: 20, scale: 2 }),
+  oofPotential: decimal("oof_potential", { precision: 20, scale: 2 }),
+  multiplier: decimal("multiplier", { precision: 10, scale: 2 }),
+  shared: boolean("shared").default(false),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Real-time token monitoring alerts
+export const tokenAlerts = pgTable("token_alerts", {
+  id: serial("id").primaryKey(),
+  userId: varchar("user_id").notNull().references(() => users.id),
+  tokenAddress: varchar("token_address").notNull(),
+  alertType: varchar("alert_type").notNull(), // price, volume, whale_movement, rug_detected
+  condition: jsonb("condition"), // Store alert conditions
+  isActive: boolean("is_active").default(true),
+  triggered: boolean("triggered").default(false),
+  triggeredAt: timestamp("triggered_at"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
 // Schema types
 export type UpsertUser = typeof users.$inferInsert;
 export type User = typeof users.$inferSelect;
