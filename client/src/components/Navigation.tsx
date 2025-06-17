@@ -48,7 +48,7 @@ export default function Navigation() {
   };
 
   return (
-    <nav className="fixed top-0 w-full z-50 bg-purple-900/90 backdrop-blur-lg border-b border-purple-700">
+    <nav className="fixed top-0 w-full z-50 oof-gradient backdrop-blur-lg border-b border-purple-500/30 oof-shadow">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}

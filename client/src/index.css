@@ -3,60 +3,68 @@
 @tailwind utilities;
 
 :root {
-  --background: hsl(0, 0%, 100%);
-  --foreground: hsl(20, 14.3%, 4.1%);
-  --muted: hsl(60, 4.8%, 95.9%);
-  --muted-foreground: hsl(25, 5.3%, 44.7%);
-  --popover: hsl(0, 0%, 100%);
-  --popover-foreground: hsl(20, 14.3%, 4.1%);
+  /* OOF Purple Theme - Light Mode */
+  --background: hsl(270, 100%, 98%);
+  --foreground: hsl(272, 54%, 15%);
+  --muted: hsl(269, 100%, 95%);
+  --muted-foreground: hsl(272, 20%, 45%);
+  --popover: hsl(270, 100%, 98%);
+  --popover-foreground: hsl(272, 54%, 15%);
   --card: hsl(0, 0%, 100%);
-  --card-foreground: hsl(20, 14.3%, 4.1%);
-  --border: hsl(20, 5.9%, 90%);
-  --input: hsl(20, 5.9%, 90%);
+  --card-foreground: hsl(272, 54%, 15%);
+  --border: hsl(269, 100%, 92%);
+  --input: hsl(269, 100%, 92%);
   --primary: hsl(271, 81%, 56%);
-  --primary-foreground: hsl(0, 0%, 98%);
-  --secondary: hsl(60, 4.8%, 95.9%);
-  --secondary-foreground: hsl(24, 9.8%, 10%);
-  --accent: hsl(60, 4.8%, 95.9%);
-  --accent-foreground: hsl(24, 9.8%, 10%);
-  --destructive: hsl(0, 84.2%, 60.2%);
-  --destructive-foreground: hsl(60, 9.1%, 97.8%);
+  --primary-foreground: hsl(0, 0%, 100%);
+  --secondary: hsl(269, 100%, 95%);
+  --secondary-foreground: hsl(272, 54%, 15%);
+  --accent: hsl(269, 100%, 92%);
+  --accent-foreground: hsl(272, 54%, 15%);
+  --destructive: hsl(0, 84%, 60%);
+  --destructive-foreground: hsl(0, 0%, 100%);
   --ring: hsl(271, 81%, 56%);
-  --radius: 0.5rem;
+  --radius: 0.75rem;
   
-  /* OOF Purple Theme Colors */
+  /* OOF Purple Theme Extended Colors */
   --purple-50: hsl(270, 100%, 98%);
   --purple-100: hsl(269, 100%, 95%);
   --purple-200: hsl(269, 100%, 92%);
   --purple-300: hsl(269, 97%, 85%);
   --purple-400: hsl(270, 95%, 75%);
   --purple-500: hsl(271, 81%, 56%);
-  --purple-600: hsl(271, 81%, 56%);
-  --purple-700: hsl(272, 72%, 47%);
+  --purple-600: hsl(271, 81%, 50%);
+  --purple-700: hsl(272, 72%, 40%);
   --purple-800: hsl(272, 47%, 21%);
   --purple-900: hsl(273, 54%, 15%);
+  
+  /* Success/Error Colors */
+  --success: hsl(142, 76%, 36%);
+  --success-foreground: hsl(0, 0%, 100%);
+  --warning: hsl(38, 92%, 50%);
+  --warning-foreground: hsl(0, 0%, 100%);
 }
 
 .dark {
-  --background: hsl(272, 47%, 21%);
-  --foreground: hsl(0, 0%, 98%);
+  /* OOF Purple Theme - Dark Mode */
+  --background: hsl(273, 54%, 15%);
+  --foreground: hsl(270, 100%, 98%);
   --muted: hsl(272, 47%, 21%);
-  --muted-foreground: hsl(215, 20.2%, 65.1%);
+  --muted-foreground: hsl(272, 20%, 65%);
   --popover: hsl(272, 47%, 21%);
-  --popover-foreground: hsl(0, 0%, 98%);
+  --popover-foreground: hsl(270, 100%, 98%);
   --card: hsl(272, 47%, 21%);
-  --card-foreground: hsl(0, 0%, 98%);
-  --border: hsl(272, 47%, 21%);
-  --input: hsl(272, 47%, 21%);
-  --primary: hsl(271, 81%, 56%);
-  --primary-foreground: hsl(0, 0%, 98%);
-  --secondary: hsl(272, 47%, 21%);
-  --secondary-foreground: hsl(0, 0%, 98%);
-  --accent: hsl(272, 47%, 21%);
-  --accent-foreground: hsl(0, 0%, 98%);
-  --destructive: hsl(0, 62.8%, 30.6%);
-  --destructive-foreground: hsl(0, 0%, 98%);
-  --ring: hsl(271, 81%, 56%);
+  --card-foreground: hsl(270, 100%, 98%);
+  --border: hsl(272, 47%, 25%);
+  --input: hsl(272, 47%, 25%);
+  --primary: hsl(271, 81%, 60%);
+  --primary-foreground: hsl(273, 54%, 15%);
+  --secondary: hsl(272, 47%, 25%);
+  --secondary-foreground: hsl(270, 100%, 98%);
+  --accent: hsl(272, 47%, 25%);
+  --accent-foreground: hsl(270, 100%, 98%);
+  --destructive: hsl(0, 84%, 60%);
+  --destructive-foreground: hsl(270, 100%, 98%);
+  --ring: hsl(271, 81%, 60%);
 }
 
 @layer base {
@@ -71,18 +79,66 @@
 }
 
 @layer utilities {
+  /* OOF Purple Gradient Text */
   .gradient-text {
-    background: linear-gradient(90deg, hsl(271, 81%, 56%), hsl(330, 81%, 60%));
+    background: linear-gradient(135deg, hsl(271, 81%, 56%) 0%, hsl(280, 100%, 70%) 50%, hsl(330, 81%, 60%) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
   
-  .glass-card {
-    backdrop-filter: blur(10px);
-    background: rgba(255, 255, 255, 0.1);
+  /* OOF Purple Gradient Backgrounds */
+  .oof-gradient {
+    background: linear-gradient(135deg, hsl(271, 81%, 56%) 0%, hsl(280, 100%, 70%) 100%);
   }
   
+  .oof-gradient-soft {
+    background: linear-gradient(135deg, hsl(269, 100%, 95%) 0%, hsl(271, 81%, 56%) 100%);
+  }
+  
+  .oof-gradient-dark {
+    background: linear-gradient(135deg, hsl(272, 47%, 21%) 0%, hsl(271, 81%, 56%) 100%);
+  }
+  
+  /* Glass Card Effects */
+  .glass-card {
+    backdrop-filter: blur(16px) saturate(180%);
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  
+  .glass-card-purple {
+    backdrop-filter: blur(16px) saturate(180%);
+    background: hsla(271, 81%, 56%, 0.1);
+    border: 1px solid hsla(271, 81%, 56%, 0.2);
+  }
+  
+  /* OOF Specific Effects */
+  .oof-shadow {
+    box-shadow: 0 20px 25px -5px hsla(271, 81%, 56%, 0.1), 
+                0 10px 10px -5px hsla(271, 81%, 56%, 0.04);
+  }
+  
+  .oof-shadow-lg {
+    box-shadow: 0 25px 50px -12px hsla(271, 81%, 56%, 0.25);
+  }
+  
+  .oof-glow:hover {
+    box-shadow: 0 0 30px hsla(271, 81%, 56%, 0.4);
+    transition: box-shadow 0.3s ease;
+  }
+  
+  .oof-border {
+    border: 2px solid hsl(271, 81%, 56%);
+  }
+  
+  .oof-border-gradient {
+    border: 2px solid transparent;
+    background: linear-gradient(white, white) padding-box,
+                linear-gradient(135deg, hsl(271, 81%, 56%), hsl(280, 100%, 70%)) border-box;
+  }
+  
+  /* Animations */
   .coin-flip {
     animation: coinFlip 2s ease-in-out infinite;
   }
@@ -95,8 +151,20 @@
     animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   }
   
+  .animate-pulse-purple {
+    animation: pulsePurple 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+  
   .animate-spin-slow {
     animation: spin 3s linear infinite;
+  }
+  
+  .animate-bounce-slow {
+    animation: bounceSlow 3s ease-in-out infinite;
+  }
+  
+  .animate-glow {
+    animation: glow 2s ease-in-out infinite alternate;
   }
 }
 
@@ -108,4 +176,50 @@
 @keyframes float {
   0%, 100% { transform: translateY(0px); }
   50% { transform: translateY(-10px); }
+}
+
+@keyframes pulsePurple {
+  0%, 100% { 
+    opacity: 1;
+    box-shadow: 0 0 20px hsla(271, 81%, 56%, 0.3);
+  }
+  50% { 
+    opacity: 0.8;
+    box-shadow: 0 0 30px hsla(271, 81%, 56%, 0.5);
+  }
+}
+
+@keyframes bounceSlow {
+  0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+  40% { transform: translateY(-10px); }
+  60% { transform: translateY(-5px); }
+}
+
+@keyframes glow {
+  from {
+    box-shadow: 0 0 20px hsla(271, 81%, 56%, 0.2);
+  }
+  to {
+    box-shadow: 0 0 30px hsla(271, 81%, 56%, 0.4);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.animate-shimmer {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    hsla(271, 81%, 56%, 0.2),
+    transparent
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
 }
