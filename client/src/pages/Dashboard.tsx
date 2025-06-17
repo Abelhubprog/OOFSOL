@@ -83,13 +83,13 @@ export default function Dashboard() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6 mb-6 sm:mb-8">
           {mockStats.map((token, index) => (
             <Card key={index} className="bg-purple-800/30 border-purple-700 glass-card">
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center space-x-3">
-                    <div className="text-2xl">{token.icon}</div>
+              <CardContent className="p-3 sm:p-4 lg:p-6">
+                <div className="flex items-center justify-between mb-3 sm:mb-4">
+                  <div className="flex items-center space-x-2 sm:space-x-3">
+                    <div className="text-xl sm:text-2xl">{token.icon}</div>
                     <div>
-                      <div className="font-bold text-white">{token.symbol}</div>
-                      <div className="text-sm text-purple-300">{token.name}</div>
+                      <div className="font-bold text-white text-sm sm:text-base">{token.symbol}</div>
+                      <div className="text-xs sm:text-sm text-purple-300">{token.name}</div>
                     </div>
                   </div>
                   <Badge 
