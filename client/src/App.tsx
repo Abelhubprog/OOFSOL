@@ -21,6 +21,7 @@ import OOFAirdrop from "@/pages/OOFAirdrop";
 import OOFSocial from "@/pages/OOFSocial";
 import NotFound from "@/pages/not-found";
 import Navigation from "@/components/Navigation";
+import Sidebar from "@/components/Sidebar";
 
 
 function Router() {
@@ -34,33 +35,34 @@ function Router() {
     );
   }
 
+  if (!isAuthenticated) {
+    return <Route path="/" component={Landing} />;
+  }
+
   return (
-    <>
-      {isAuthenticated && <Navigation />}
-      <Switch>
-        {!isAuthenticated ? (
-          <Route path="/" component={Landing} />
-        ) : (
-          <>
-            <Route path="/" component={Dashboard} />
-            <Route path="/arena" component={TradersArena} />
-            <Route path="/time-machine" component={TimeMachine} />
-            <Route path="/wallet-analyzer" component={WalletAnalyzer} />
-            <Route path="/slots" component={Slots} />
-            <Route path="/detective" component={OOFDetective} />
-            <Route path="/detective-ai" component={OOFDetectiveAdvanced} />
-            <Route path="/origins" component={OOFOrigins} />
-            <Route path="/legends" component={OOFLegends} />
-            <Route path="/staking" component={OOFStaking} />
-            <Route path="/battle-royale" component={OOFBattleRoyale} />
-            <Route path="/reality-bender" component={OOFRealityBender} />
-            <Route path="/airdrop" component={OOFAirdrop} />
-            <Route path="/social" component={OOFSocial} />
-          </>
-        )}
-        <Route component={NotFound} />
-      </Switch>
-    </>
+    <div className="flex min-h-screen bg-gradient-to-br from-purple-900 via-purple-800 to-purple-900">
+      <Sidebar />
+      <main className="flex-1 ml-64 p-6 overflow-auto">
+        <Switch>
+          <Route path="/" component={Dashboard} />
+          <Route path="/tokens" component={TradersArena} />
+          <Route path="/time-machine" component={TimeMachine} />
+          <Route path="/wallet-analyzer" component={WalletAnalyzer} />
+          <Route path="/slots" component={Slots} />
+          <Route path="/detective" component={OOFDetective} />
+          <Route path="/detective-advanced" component={OOFDetectiveAdvanced} />
+          <Route path="/origins" component={OOFOrigins} />
+          <Route path="/legends" component={OOFLegends} />
+          <Route path="/staking" component={OOFStaking} />
+          <Route path="/battle-royale" component={OOFBattleRoyale} />
+          <Route path="/reality-bender" component={OOFRealityBender} />
+          <Route path="/airdrop" component={OOFAirdrop} />
+          <Route path="/social" component={OOFSocial} />
+          <Route path="/traders-arena" component={TradersArena} />
+          <Route component={NotFound} />
+        </Switch>
+      </main>
+    </div>
   );
 }
 

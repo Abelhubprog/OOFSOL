@@ -1,0 +1,146 @@
+import { useState } from 'react';
+import { Link, useLocation } from 'wouter';
+import { 
+  ChevronLeft, 
+  ChevronRight, 
+  Home, 
+  TrendingUp, 
+  Shield, 
+  Calendar, 
+  Gamepad2, 
+  Banknote, 
+  Clock, 
+  BarChart3, 
+  Sparkles, 
+  Zap,
+  User,
+  LogOut
+} from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
+import { useAuth } from '@/hooks/useAuth';
+
+interface SidebarProps {
+  className?: string;
+}
+
+const navigationItems = [
+  { path: '/', icon: Home, label: 'Dashboard', color: 'text-purple-400' },
+  { path: '/tokens', icon: TrendingUp, label: 'Token Explorer', color: 'text-green-400' },
+  { path: '/detective', icon: Shield, label: 'OOF Detective', color: 'text-red-400' },
+  { path: '/detective-advanced', icon: Sparkles, label: 'Advanced AI', color: 'text-blue-400' },
+  { path: '/origins', icon: Calendar, label: 'OOF Origins', color: 'text-yellow-400' },
+  { path: '/battle-royale', icon: Gamepad2, label: 'Battle Royale', color: 'text-orange-400' },
+  { path: '/staking', icon: Banknote, label: 'OOF Staking', color: 'text-pink-400' },
+  { path: '/time-machine', icon: Clock, label: 'Time Machine', color: 'text-cyan-400' },
+  { path: '/traders-arena', icon: BarChart3, label: 'Traders Arena', color: 'text-indigo-400' },
+  { path: '/wallet-analyzer', icon: Zap, label: 'Wallet Analyzer', color: 'text-emerald-400' },
+];
+
+export default function Sidebar({ className }: SidebarProps) {
+  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [location] = useLocation();
+  const { user, isAuthenticated } = useAuth();
+
+  if (!isAuthenticated) {
+    return null;
+  }
+
+  return (
+    <div 
+      className={cn(
+        "fixed left-0 top-0 z-40 h-screen bg-gradient-to-b from-purple-900 via-purple-800 to-purple-900 border-r border-purple-700/50 transition-all duration-300 ease-in-out",
+        isCollapsed ? "w-16" : "w-64",
+        className
+      )}
+    >
+      {/* Header */}
+      <div className="flex items-center justify-between p-4 border-b border-purple-700/50">
+        {!isCollapsed && (
+          <div className="flex items-center space-x-2">
+            <div className="w-8 h-8 bg-gradient-to-br from-purple-400 to-purple-600 rounded-lg flex items-center justify-center">
+              <span className="text-white font-bold text-sm">OOF</span>
+            </div>
+            <span className="text-white font-semibold text-lg">Platform</span>
+          </div>
+        )}
+        
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => setIsCollapsed(!isCollapsed)}
+          className="text-purple-300 hover:text-white hover:bg-purple-700/50"
+        >
+          {isCollapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
+        </Button>
+      </div>
+
+      {/* User Profile */}
+      {!isCollapsed && (
+        <div className="p-4 border-b border-purple-700/50">
+          <div className="flex items-center space-x-3">
+            <div className="w-10 h-10 bg-purple-600 rounded-full flex items-center justify-center">
+              <User className="h-5 w-5 text-white" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-white font-medium text-sm truncate">
+                {(user as any)?.firstName || 'User'}
+              </p>
+              <p className="text-purple-300 text-xs truncate">
+                {(user as any)?.oofTokens || 0} OOF Tokens
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Navigation */}
+      <nav className="flex-1 px-2 py-4 space-y-1 overflow-y-auto">
+        {navigationItems.map((item) => {
+          const isActive = location === item.path;
+          const Icon = item.icon;
+          
+          return (
+            <Link key={item.path} href={item.path}>
+              <div
+                className={cn(
+                  "flex items-center px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-purple-700/50 group",
+                  isActive 
+                    ? "bg-purple-700/70 text-white shadow-lg" 
+                    : "text-purple-200 hover:text-white"
+                )}
+              >
+                <Icon 
+                  className={cn(
+                    "h-5 w-5 transition-colors duration-200",
+                    isActive ? "text-white" : item.color,
+                    "group-hover:text-white"
+                  )}
+                />
+                {!isCollapsed && (
+                  <span className="ml-3 truncate">{item.label}</span>
+                )}
+              </div>
+            </Link>
+          );
+        })}
+      </nav>
+
+      {/* Footer */}
+      <div className="p-4 border-t border-purple-700/50">
+        <Button
+          variant="ghost"
+          size="sm"
+          className={cn(
+            "w-full justify-start text-purple-300 hover:text-white hover:bg-purple-700/50",
+            isCollapsed && "px-3"
+          )}
+          onClick={() => window.location.href = '/api/logout'}
+        >
+          <LogOut className="h-4 w-4" />
+          {!isCollapsed && <span className="ml-3">Sign Out</span>}
+        </Button>
+      </div>
+    </div>
+  );
+}
