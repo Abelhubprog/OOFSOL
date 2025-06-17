@@ -8,6 +8,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useMutation } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { Search, TrendingDown, Clock, AlertTriangle, Wallet } from "lucide-react";
+import { isUnauthorizedError } from "@/lib/authUtils";
 
 interface MissedOpportunity {
   id: number;
@@ -24,7 +25,7 @@ export default function WalletAnalyzer() {
   const [walletAddress, setWalletAddress] = useState("");
   const [opportunities, setOpportunities] = useState<MissedOpportunity[]>([]);
   const { toast } = useToast();
-  const { publicKey, connect, disconnect, connected } = useSolana();
+
 
   const analyzeWalletMutation = useMutation({
     mutationFn: async (address: string) => {
@@ -61,12 +62,9 @@ export default function WalletAnalyzer() {
   });
 
   const handleAnalyze = () => {
-      let address = walletAddress;
-      if (!walletAddress.trim() && publicKey) {
-          address = publicKey.toString();
-      }
+    const address = walletAddress.trim();
 
-    if (!address.trim()) {
+    if (!address) {
       toast({
         title: "Missing Wallet Address",
         description: "Please enter a valid Solana wallet address.",
@@ -127,11 +125,6 @@ export default function WalletAnalyzer() {
               <div className="text-center py-4">
                 <div className="text-purple-300">🔍 Scanning blockchain for your biggest OOFs...</div>
               </div>
-            )}
-             {!connected ? (
-                <Button onClick={connect}>Connect Wallet</Button>
-            ) : (
-                <Button onClick={disconnect}>Disconnect Wallet</Button>
             )}
           </CardContent>
         </Card>
@@ -248,16 +241,6 @@ export default function WalletAnalyzer() {
           </Card>
         )}
       </div>
-       <div className="container mx-auto px-4 py-8">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2">Wallet Analyzer</h1>
-        <p className="text-muted-foreground">
-          Powered by Solana App Kit - Connect your wallet to explore advanced features
-        </p>
-      </div>
-
-      <SolanaAppKitDemo />
-    </div>
     </div>
   );
 }

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
-import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
+
 import { 
   BarChart3, 
   Target, 
@@ -90,7 +90,7 @@ export default function Navigation() {
 
           {/* User Menu */}
           <div className="hidden md:flex items-center space-x-4">
-          <WalletMultiButton className="!bg-gradient-to-r !from-purple-600 !to-purple-700 hover:!from-purple-700 hover:!to-purple-800 !rounded-md !text-sm !font-medium" />
+
             <div className="flex items-center space-x-2 text-purple-200">
               <div className="text-sm">
                 <div className="font-medium">{user?.firstName || "User"}</div>
