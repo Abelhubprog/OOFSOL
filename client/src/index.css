@@ -1,0 +1,111 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: hsl(0, 0%, 100%);
+  --foreground: hsl(20, 14.3%, 4.1%);
+  --muted: hsl(60, 4.8%, 95.9%);
+  --muted-foreground: hsl(25, 5.3%, 44.7%);
+  --popover: hsl(0, 0%, 100%);
+  --popover-foreground: hsl(20, 14.3%, 4.1%);
+  --card: hsl(0, 0%, 100%);
+  --card-foreground: hsl(20, 14.3%, 4.1%);
+  --border: hsl(20, 5.9%, 90%);
+  --input: hsl(20, 5.9%, 90%);
+  --primary: hsl(271, 81%, 56%);
+  --primary-foreground: hsl(0, 0%, 98%);
+  --secondary: hsl(60, 4.8%, 95.9%);
+  --secondary-foreground: hsl(24, 9.8%, 10%);
+  --accent: hsl(60, 4.8%, 95.9%);
+  --accent-foreground: hsl(24, 9.8%, 10%);
+  --destructive: hsl(0, 84.2%, 60.2%);
+  --destructive-foreground: hsl(60, 9.1%, 97.8%);
+  --ring: hsl(271, 81%, 56%);
+  --radius: 0.5rem;
+  
+  /* OOF Purple Theme Colors */
+  --purple-50: hsl(270, 100%, 98%);
+  --purple-100: hsl(269, 100%, 95%);
+  --purple-200: hsl(269, 100%, 92%);
+  --purple-300: hsl(269, 97%, 85%);
+  --purple-400: hsl(270, 95%, 75%);
+  --purple-500: hsl(271, 81%, 56%);
+  --purple-600: hsl(271, 81%, 56%);
+  --purple-700: hsl(272, 72%, 47%);
+  --purple-800: hsl(272, 47%, 21%);
+  --purple-900: hsl(273, 54%, 15%);
+}
+
+.dark {
+  --background: hsl(272, 47%, 21%);
+  --foreground: hsl(0, 0%, 98%);
+  --muted: hsl(272, 47%, 21%);
+  --muted-foreground: hsl(215, 20.2%, 65.1%);
+  --popover: hsl(272, 47%, 21%);
+  --popover-foreground: hsl(0, 0%, 98%);
+  --card: hsl(272, 47%, 21%);
+  --card-foreground: hsl(0, 0%, 98%);
+  --border: hsl(272, 47%, 21%);
+  --input: hsl(272, 47%, 21%);
+  --primary: hsl(271, 81%, 56%);
+  --primary-foreground: hsl(0, 0%, 98%);
+  --secondary: hsl(272, 47%, 21%);
+  --secondary-foreground: hsl(0, 0%, 98%);
+  --accent: hsl(272, 47%, 21%);
+  --accent-foreground: hsl(0, 0%, 98%);
+  --destructive: hsl(0, 62.8%, 30.6%);
+  --destructive-foreground: hsl(0, 0%, 98%);
+  --ring: hsl(271, 81%, 56%);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply font-sans antialiased bg-background text-foreground;
+    font-family: 'Inter', sans-serif;
+  }
+}
+
+@layer utilities {
+  .gradient-text {
+    background: linear-gradient(90deg, hsl(271, 81%, 56%), hsl(330, 81%, 60%));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  .glass-card {
+    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.1);
+  }
+  
+  .coin-flip {
+    animation: coinFlip 2s ease-in-out infinite;
+  }
+  
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+  
+  .animate-pulse-slow {
+    animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+  
+  .animate-spin-slow {
+    animation: spin 3s linear infinite;
+  }
+}
+
+@keyframes coinFlip {
+  0%, 100% { transform: rotateY(0deg); }
+  50% { transform: rotateY(180deg); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
