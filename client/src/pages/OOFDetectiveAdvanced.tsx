@@ -88,7 +88,7 @@ export default function OOFDetectiveAdvanced() {
         body: JSON.stringify({ tokenAddress })
       });
     },
-    onSuccess: (data) => {
+    onSuccess: (data: TokenAnalysis) => {
       setSelectedToken(data);
     }
   });
@@ -398,29 +398,29 @@ export default function OOFDetectiveAdvanced() {
                     <div className="space-y-4">
                       <div className="text-center">
                         <div className="text-3xl font-bold text-purple-900 mb-1">
-                          {(accuracy.accuracy * 100).toFixed(1)}%
+                          {((accuracy as any).accuracy * 100).toFixed(1)}%
                         </div>
                         <div className="text-purple-600 text-sm">Accuracy Rate</div>
                       </div>
                       
                       <div className="grid grid-cols-2 gap-4 text-sm">
                         <div className="text-center p-2 bg-purple-50 rounded">
-                          <div className="font-bold text-purple-900">{accuracy.totalPredictions}</div>
+                          <div className="font-bold text-purple-900">{(accuracy as any).totalPredictions}</div>
                           <div className="text-purple-600">Total Predictions</div>
                         </div>
                         <div className="text-center p-2 bg-purple-50 rounded">
-                          <div className="font-bold text-green-600">{accuracy.correctPredictions}</div>
+                          <div className="font-bold text-green-600">{(accuracy as any).correctPredictions}</div>
                           <div className="text-purple-600">Correct</div>
                         </div>
                       </div>
 
                       <div className="grid grid-cols-2 gap-4 text-sm">
                         <div className="text-center p-2 bg-red-50 rounded">
-                          <div className="font-bold text-red-600">{accuracy.falsePositives}</div>
+                          <div className="font-bold text-red-600">{(accuracy as any).falsePositives}</div>
                           <div className="text-purple-600">False Positives</div>
                         </div>
                         <div className="text-center p-2 bg-orange-50 rounded">
-                          <div className="font-bold text-orange-600">{accuracy.falseNegatives}</div>
+                          <div className="font-bold text-orange-600">{(accuracy as any).falseNegatives}</div>
                           <div className="text-purple-600">False Negatives</div>
                         </div>
                       </div>
@@ -483,7 +483,7 @@ export default function OOFDetectiveAdvanced() {
                   </div>
                 ) : (
                   <div className="space-y-4">
-                    {alerts.map((alert: any) => (
+                    {(alerts as any[]).map((alert: any) => (
                       <div key={alert.id} className={`border-l-4 p-4 rounded-r-lg ${getAlertSeverityColor(alert.severity)}`}>
                         <div className="flex justify-between items-start mb-2">
                           <div>

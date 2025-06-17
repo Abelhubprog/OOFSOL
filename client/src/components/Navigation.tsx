@@ -17,7 +17,8 @@ import {
   Coins,
   Zap,
   Gift,
-  Users
+  Users,
+  Brain
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -37,6 +38,7 @@ export default function Navigation() {
     { path: "/wallet-analyzer", label: "Analyzer", icon: Search },
     { path: "/slots", label: "Slots", icon: Sparkles },
     { path: "/detective", label: "Detective", icon: Shield },
+    { path: "/detective-ai", label: "AI Detective", icon: Brain },
     { path: "/origins", label: "Origins", icon: BookOpen },
     { path: "/legends", label: "Legends", icon: Crown },
     { path: "/staking", label: "Staking", icon: Coins },
