@@ -57,12 +57,12 @@ export default function Navigation() {
 
   return (
     <nav className="fixed top-0 w-full z-50 oof-gradient backdrop-blur-lg border-b border-purple-500/30 oof-shadow">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-14 sm:h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-4">
-            <div className="text-2xl font-bold text-white animate-pulse-purple">OOF</div>
-            <span className="text-purple-100 text-sm hidden sm:inline">
+            <div className="text-xl sm:text-2xl font-bold text-white animate-pulse-purple">OOF</div>
+            <span className="text-purple-100 text-xs sm:text-sm hidden md:inline">
               The Meme Coin for Missed Opportunities
             </span>
           </Link>
