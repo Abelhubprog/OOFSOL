@@ -39,16 +39,13 @@ function Router() {
     );
   }
 
-  if (!isAuthenticated) {
-    return <Route path="/" component={Landing} />;
-  }
-
   return (
     <div className="flex min-h-screen bg-gradient-to-br from-purple-900 via-purple-800 to-purple-900">
       <Sidebar />
       <main className="flex-1 lg:ml-64 p-3 sm:p-6 pb-20 overflow-auto">
         <Switch>
-          <Route path="/" component={Dashboard} />
+          <Route path="/" component={Landing} />
+          <Route path="/dashboard" component={Dashboard} />
           <Route path="/tokens" component={TradersArena} />
           <Route path="/moments" component={OOFMoments} />
           <Route path="/multiverse" component={OOFMultiverse} />

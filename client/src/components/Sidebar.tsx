@@ -16,7 +16,8 @@ import {
   User,
   LogOut,
   Star,
-  Gem
+  Gem,
+  LayoutDashboard
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -27,12 +28,13 @@ interface SidebarProps {
 }
 
 const navigationItems = [
-  { path: '/', icon: Home, label: 'Dashboard', color: 'text-purple-400' },
+  { path: '/', icon: Home, label: 'Home', color: 'text-purple-400' },
+  { path: '/dashboard', icon: LayoutDashboard, label: 'Dashboard', color: 'text-blue-400' },
   { path: '/tokens', icon: TrendingUp, label: 'Token Explorer', color: 'text-green-400' },
   { path: '/moments', icon: Star, label: 'OOF Moments', color: 'text-yellow-400' },
   { path: '/multiverse', icon: Sparkles, label: 'OOF Multiverse', color: 'text-pink-400' },
   { path: '/detective', icon: Shield, label: 'OOF Detective', color: 'text-red-400' },
-  { path: '/detective-advanced', icon: Zap, label: 'Advanced AI', color: 'text-blue-400' },
+  { path: '/detective-advanced', icon: Zap, label: 'Advanced AI', color: 'text-cyan-400' },
   { path: '/origins', icon: Calendar, label: 'OOF Origins', color: 'text-amber-400' },
   { path: '/battle-royale', icon: Gamepad2, label: 'Battle Royale', color: 'text-orange-400' },
   { path: '/staking', icon: Banknote, label: 'OOF Staking', color: 'text-purple-400' },
