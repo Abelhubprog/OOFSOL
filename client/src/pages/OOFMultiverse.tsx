@@ -136,7 +136,15 @@ interface OOFCard {
 }
 
 const OOFMultiverse = () => {
-  const { primaryWallet } = useDynamicContext();
+  let primaryWallet = null;
+  
+  try {
+    const dynamicContext = useDynamicContext();
+    primaryWallet = dynamicContext?.primaryWallet;
+  } catch (error) {
+    // Dynamic context not available - wallet features will be limited
+    console.warn('Dynamic context not available');
+  }
   const [walletState, setWalletState] = useState({
     connected: false,
     address: '',

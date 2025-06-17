@@ -21,9 +21,11 @@ import OOFAirdrop from "@/pages/OOFAirdrop";
 import OOFSocial from "@/pages/OOFSocial";
 import OOFMoments from "@/pages/OOFMoments";
 import OOFMultiverse from "@/pages/OOFMultiverse";
+import Profile from "@/pages/Profile";
 import NotFound from "@/pages/not-found";
 import Navigation from "@/components/Navigation";
 import Sidebar from "@/components/Sidebar";
+import BottomSlider from "@/components/BottomSlider";
 
 
 function Router() {
@@ -50,6 +52,7 @@ function Router() {
           <Route path="/tokens" component={TradersArena} />
           <Route path="/moments" component={OOFMoments} />
           <Route path="/multiverse" component={OOFMultiverse} />
+          <Route path="/profile" component={Profile} />
           <Route path="/time-machine" component={TimeMachine} />
           <Route path="/wallet-analyzer" component={WalletAnalyzer} />
           <Route path="/slots" component={Slots} />
