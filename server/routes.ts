@@ -253,7 +253,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
       for (const opportunity of sampleOpportunities) {
         const created = await storage.createMissedOpportunity({
           userId,
-          ...opportunity,
+          tokenName: opportunity.tokenName,
+          tokenSymbol: opportunity.tokenSymbol,
+          tokenAddress: opportunity.tokenAddress,
+          description: opportunity.description,
+          oofFactor: opportunity.oofFactor,
+          sellDate: opportunity.sellDate,
+          peakDate: opportunity.peakDate,
+          missedGains: opportunity.missedGains.toString(),
         });
         opportunities.push(created);
       }

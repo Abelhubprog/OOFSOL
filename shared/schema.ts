@@ -94,7 +94,7 @@ export const missedOpportunities = pgTable("missed_opportunities", {
   transactionHash: varchar("transaction_hash"),
   soldPrice: decimal("sold_price", { precision: 20, scale: 10 }),
   peakPrice: decimal("peak_price", { precision: 20, scale: 10 }),
-  missedGains: decimal("missed_gains", { precision: 20, scale: 2 }),
+  missedGains: varchar("missed_gains"),
   amount: decimal("amount", { precision: 20, scale: 2 }),
   sellDate: timestamp("sell_date"),
   peakDate: timestamp("peak_date"),
