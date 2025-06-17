@@ -3,6 +3,7 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { setupAuth, isAuthenticated } from "./replitAuth";
 import { solanaService } from "./services/solanaService";
+import { rugDetectionService } from "./services/rugDetectionService";
 import { insertPredictionSchema, insertMissedOpportunitySchema, insertSlotSpinSchema } from "@shared/schema";
 import { z } from "zod";
 
@@ -261,6 +262,59 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error analyzing wallet:", error);
       res.status(500).json({ message: "Failed to analyze wallet" });
+    }
+  });
+
+  // Rug Detection AI endpoints
+  app.post("/api/rug-detection/analyze", isAuthenticated, async (req, res) => {
+    try {
+      const { tokenAddress } = req.body;
+      
+      if (!tokenAddress) {
+        return res.status(400).json({ message: "Token address is required" });
+      }
+
+      const analysis = await rugDetectionService.analyzeToken(tokenAddress);
+      res.json(analysis);
+    } catch (error) {
+      console.error("Error analyzing token:", error);
+      res.status(500).json({ message: "Failed to analyze token" });
+    }
+  });
+
+  app.get("/api/rug-detection/alerts", isAuthenticated, async (req, res) => {
+    try {
+      const alerts = await rugDetectionService.getRealTimeAlerts();
+      res.json(alerts);
+    } catch (error) {
+      console.error("Error fetching alerts:", error);
+      res.status(500).json({ message: "Failed to fetch alerts" });
+    }
+  });
+
+  app.get("/api/rug-detection/accuracy", isAuthenticated, async (req, res) => {
+    try {
+      const accuracy = await rugDetectionService.getHistoricalAccuracy();
+      res.json(accuracy);
+    } catch (error) {
+      console.error("Error fetching accuracy:", error);
+      res.status(500).json({ message: "Failed to fetch accuracy metrics" });
+    }
+  });
+
+  app.post("/api/rug-detection/train", isAuthenticated, async (req, res) => {
+    try {
+      const { newData } = req.body;
+      
+      if (!newData || !Array.isArray(newData)) {
+        return res.status(400).json({ message: "Training data array is required" });
+      }
+
+      await rugDetectionService.trainModel(newData);
+      res.json({ message: "Model training completed successfully" });
+    } catch (error) {
+      console.error("Error training model:", error);
+      res.status(500).json({ message: "Failed to train model" });
     }
   });
 
