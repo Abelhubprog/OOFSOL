@@ -19,6 +19,7 @@ import OOFBattleRoyale from "@/pages/OOFBattleRoyale";
 import OOFRealityBender from "@/pages/OOFRealityBender";
 import OOFAirdrop from "@/pages/OOFAirdrop";
 import OOFSocial from "@/pages/OOFSocial";
+import OOFMoments from "@/pages/OOFMoments";
 import NotFound from "@/pages/not-found";
 import Navigation from "@/components/Navigation";
 import Sidebar from "@/components/Sidebar";
@@ -46,6 +47,7 @@ function Router() {
         <Switch>
           <Route path="/" component={Dashboard} />
           <Route path="/tokens" component={TradersArena} />
+          <Route path="/moments" component={OOFMoments} />
           <Route path="/time-machine" component={TimeMachine} />
           <Route path="/wallet-analyzer" component={WalletAnalyzer} />
           <Route path="/slots" component={Slots} />

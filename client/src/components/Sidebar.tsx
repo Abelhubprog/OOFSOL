@@ -14,7 +14,8 @@ import {
   Sparkles, 
   Zap,
   User,
-  LogOut
+  LogOut,
+  Star
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -27,9 +28,10 @@ interface SidebarProps {
 const navigationItems = [
   { path: '/', icon: Home, label: 'Dashboard', color: 'text-purple-400' },
   { path: '/tokens', icon: TrendingUp, label: 'Token Explorer', color: 'text-green-400' },
+  { path: '/moments', icon: Star, label: 'OOF Moments', color: 'text-yellow-400' },
   { path: '/detective', icon: Shield, label: 'OOF Detective', color: 'text-red-400' },
   { path: '/detective-advanced', icon: Sparkles, label: 'Advanced AI', color: 'text-blue-400' },
-  { path: '/origins', icon: Calendar, label: 'OOF Origins', color: 'text-yellow-400' },
+  { path: '/origins', icon: Calendar, label: 'OOF Origins', color: 'text-amber-400' },
   { path: '/battle-royale', icon: Gamepad2, label: 'Battle Royale', color: 'text-orange-400' },
   { path: '/staking', icon: Banknote, label: 'OOF Staking', color: 'text-pink-400' },
   { path: '/time-machine', icon: Clock, label: 'Time Machine', color: 'text-cyan-400' },
