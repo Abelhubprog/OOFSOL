@@ -15,7 +15,8 @@ import {
   Zap,
   User,
   LogOut,
-  Star
+  Star,
+  Gem
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -29,14 +30,15 @@ const navigationItems = [
   { path: '/', icon: Home, label: 'Dashboard', color: 'text-purple-400' },
   { path: '/tokens', icon: TrendingUp, label: 'Token Explorer', color: 'text-green-400' },
   { path: '/moments', icon: Star, label: 'OOF Moments', color: 'text-yellow-400' },
+  { path: '/multiverse', icon: Sparkles, label: 'OOF Multiverse', color: 'text-pink-400' },
   { path: '/detective', icon: Shield, label: 'OOF Detective', color: 'text-red-400' },
-  { path: '/detective-advanced', icon: Sparkles, label: 'Advanced AI', color: 'text-blue-400' },
+  { path: '/detective-advanced', icon: Zap, label: 'Advanced AI', color: 'text-blue-400' },
   { path: '/origins', icon: Calendar, label: 'OOF Origins', color: 'text-amber-400' },
   { path: '/battle-royale', icon: Gamepad2, label: 'Battle Royale', color: 'text-orange-400' },
-  { path: '/staking', icon: Banknote, label: 'OOF Staking', color: 'text-pink-400' },
+  { path: '/staking', icon: Banknote, label: 'OOF Staking', color: 'text-purple-400' },
   { path: '/time-machine', icon: Clock, label: 'Time Machine', color: 'text-cyan-400' },
   { path: '/traders-arena', icon: BarChart3, label: 'Traders Arena', color: 'text-indigo-400' },
-  { path: '/wallet-analyzer', icon: Zap, label: 'Wallet Analyzer', color: 'text-emerald-400' },
+  { path: '/wallet-analyzer', icon: Gem, label: 'Wallet Analyzer', color: 'text-emerald-400' },
 ];
 
 export default function Sidebar({ className }: SidebarProps) {

@@ -20,6 +20,7 @@ import OOFRealityBender from "@/pages/OOFRealityBender";
 import OOFAirdrop from "@/pages/OOFAirdrop";
 import OOFSocial from "@/pages/OOFSocial";
 import OOFMoments from "@/pages/OOFMoments";
+import OOFMultiverse from "@/pages/OOFMultiverse";
 import NotFound from "@/pages/not-found";
 import Navigation from "@/components/Navigation";
 import Sidebar from "@/components/Sidebar";
