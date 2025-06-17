@@ -42,7 +42,7 @@ function Router() {
   return (
     <div className="flex min-h-screen bg-gradient-to-br from-purple-900 via-purple-800 to-purple-900">
       <Sidebar />
-      <main className="flex-1 ml-64 p-6 overflow-auto">
+      <main className="flex-1 lg:ml-64 p-3 sm:p-6 overflow-auto">
         <Switch>
           <Route path="/" component={Dashboard} />
           <Route path="/tokens" component={TradersArena} />
@@ -68,17 +68,12 @@ function Router() {
 
 function App() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-purple-100 to-purple-200">
-      <QueryClientProvider client={queryClient}>
-        <TooltipProvider>
-          <Navigation />
-          <main className="pt-16">
-            <Router />
-          </main>
-          <Toaster />
-        </TooltipProvider>
-      </QueryClientProvider>
-    </div>
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <Router />
+        <Toaster />
+      </TooltipProvider>
+    </QueryClientProvider>
   );
 }
 
