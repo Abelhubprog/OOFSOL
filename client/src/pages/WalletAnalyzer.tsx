@@ -1,13 +1,14 @@
-import { useState } from "react";
-import { useMutation } from "@tanstack/react-query";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useState } from 'react';
+import { useAuth } from "@/hooks/useAuth";
+import { useSolana } from "@/hooks/useSolana";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
-import { apiRequest } from "@/lib/queryClient";
-import { isUnauthorizedError } from "@/lib/authUtils";
-import { Search, Download, Share2, Sparkles } from "lucide-react";
+import { useMutation } from "@tanstack/react-query";
+import { Search, TrendingDown, Clock, AlertTriangle } from "lucide-react";
+import { PublicKey } from '@solana/web3.js';
 
 interface MissedOpportunity {
   id: number;
@@ -24,6 +25,7 @@ export default function WalletAnalyzer() {
   const [walletAddress, setWalletAddress] = useState("");
   const [opportunities, setOpportunities] = useState<MissedOpportunity[]>([]);
   const { toast } = useToast();
+  const { publicKey, connect, disconnect, connected } = useSolana();
 
   const analyzeWalletMutation = useMutation({
     mutationFn: async (address: string) => {
@@ -60,7 +62,12 @@ export default function WalletAnalyzer() {
   });
 
   const handleAnalyze = () => {
-    if (!walletAddress.trim()) {
+      let address = walletAddress;
+      if (!walletAddress.trim() && publicKey) {
+          address = publicKey.toString();
+      }
+
+    if (!address.trim()) {
       toast({
         title: "Missing Wallet Address",
         description: "Please enter a valid Solana wallet address.",
@@ -68,7 +75,7 @@ export default function WalletAnalyzer() {
       });
       return;
     }
-    analyzeWalletMutation.mutate(walletAddress);
+    analyzeWalletMutation.mutate(address);
   };
 
   const getOofFactorColor = (factor: number) => {
@@ -121,6 +128,11 @@ export default function WalletAnalyzer() {
               <div className="text-center py-4">
                 <div className="text-purple-300">🔍 Scanning blockchain for your biggest OOFs...</div>
               </div>
+            )}
+             {!connected ? (
+                <Button onClick={connect}>Connect Wallet</Button>
+            ) : (
+                <Button onClick={disconnect}>Disconnect Wallet</Button>
             )}
           </CardContent>
         </Card>
@@ -192,7 +204,7 @@ export default function WalletAnalyzer() {
                       size="sm"
                       className="bg-purple-600 hover:bg-purple-700 text-white"
                     >
-                      <Sparkles className="w-4 h-4 mr-2" />
+                      <TrendingDown className="w-4 h-4 mr-2" />
                       Mint OOF NFT
                     </Button>
                     <Button 
@@ -200,7 +212,7 @@ export default function WalletAnalyzer() {
                       variant="outline"
                       className="border-red-300 text-red-700 hover:bg-red-50"
                     >
-                      <Share2 className="w-4 h-4 mr-2" />
+                      <Clock className="w-4 h-4 mr-2" />
                       Share OOF
                     </Button>
                   </div>
@@ -211,7 +223,7 @@ export default function WalletAnalyzer() {
             {/* Share All Results */}
             <div className="text-center pt-6">
               <Button className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 font-bold px-8 py-4">
-                <Share2 className="w-5 h-5 mr-2" />
+                <AlertTriangle className="w-5 h-5 mr-2" />
                 Share My Complete OOF Story 📱
               </Button>
               <div className="mt-4 text-sm text-purple-300">
