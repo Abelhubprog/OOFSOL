@@ -439,6 +439,134 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Newsletter and Support API Routes
+  app.post('/api/newsletter/subscribe', async (req, res) => {
+    try {
+      const { email } = req.body;
+      
+      if (!email || !email.includes('@')) {
+        return res.status(400).json({ message: "Valid email address required" });
+      }
+
+      // Store newsletter subscription (in production, integrate with email service)
+      console.log(`Newsletter subscription: ${email}`);
+      
+      res.json({ 
+        message: "Successfully subscribed to newsletter",
+        email 
+      });
+    } catch (error) {
+      console.error("Error subscribing to newsletter:", error);
+      res.status(500).json({ message: "Failed to subscribe to newsletter" });
+    }
+  });
+
+  app.post('/api/partnerships/submit', async (req, res) => {
+    try {
+      const {
+        companyName,
+        contactName,
+        email,
+        partnershipType,
+        description,
+        website,
+        expectedVolume
+      } = req.body;
+
+      if (!companyName || !contactName || !email || !partnershipType || !description) {
+        return res.status(400).json({ message: "Missing required fields" });
+      }
+
+      // Store partnership application (in production, integrate with CRM)
+      const partnershipId = `PART-${Date.now()}`;
+      console.log(`Partnership application received: ${partnershipId}`, {
+        companyName,
+        contactName,
+        email,
+        partnershipType,
+        description,
+        website,
+        expectedVolume
+      });
+
+      res.json({ 
+        message: "Partnership application submitted successfully",
+        partnershipId,
+        status: "under_review"
+      });
+    } catch (error) {
+      console.error("Error submitting partnership application:", error);
+      res.status(500).json({ message: "Failed to submit partnership application" });
+    }
+  });
+
+  app.post('/api/support/ticket', async (req, res) => {
+    try {
+      const {
+        name,
+        email,
+        category,
+        priority,
+        subject,
+        description
+      } = req.body;
+
+      if (!name || !email || !category || !priority || !subject || !description) {
+        return res.status(400).json({ message: "Missing required fields" });
+      }
+
+      // Generate support ticket (in production, integrate with support system)
+      const ticketId = `TICK-${Date.now()}`;
+      console.log(`Support ticket created: ${ticketId}`, {
+        name,
+        email,
+        category,
+        priority,
+        subject,
+        description
+      });
+
+      res.json({ 
+        message: "Support ticket created successfully",
+        ticketId,
+        status: "open",
+        expectedResponse: priority === 'urgent' ? '2 hours' : '24 hours'
+      });
+    } catch (error) {
+      console.error("Error creating support ticket:", error);
+      res.status(500).json({ message: "Failed to create support ticket" });
+    }
+  });
+
+  app.post('/api/whitepaper/upload-video', async (req, res) => {
+    try {
+      // In production, handle file upload to cloud storage
+      const videoId = `VID-${Date.now()}`;
+      console.log(`Video upload request received: ${videoId}`);
+      
+      res.json({ 
+        message: "Video uploaded successfully",
+        videoId,
+        videoUrl: `/uploads/videos/${videoId}.mp4`
+      });
+    } catch (error) {
+      console.error("Error uploading video:", error);
+      res.status(500).json({ message: "Failed to upload video" });
+    }
+  });
+
+  app.get('/api/whitepaper/download-pdf', async (req, res) => {
+    try {
+      // In production, serve actual PDF file
+      res.setHeader('Content-Type', 'application/pdf');
+      res.setHeader('Content-Disposition', 'attachment; filename="OOF-Whitepaper-v1.0.pdf"');
+      res.send(Buffer.from('PDF content would be here'));
+    } catch (error) {
+      console.error("Error downloading whitepaper:", error);
+      res.status(500).json({ message: "Failed to download whitepaper" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }

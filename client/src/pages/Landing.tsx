@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import OOFCounter from "@/components/OOFCounter";
 import TokenAdvertisingSpaces from "@/components/TokenAdvertisingSpaces";
+import Footer from "@/components/Footer";
 
 export default function Landing() {
   const handleLogin = () => {
