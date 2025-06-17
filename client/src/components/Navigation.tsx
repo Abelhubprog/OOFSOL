@@ -47,6 +47,7 @@ export default function Navigation() {
     { path: "/reality-bender", label: "Reality", icon: Sparkles },
     { path: "/airdrop", label: "Airdrop", icon: Sparkles },
     { path: "/social", label: "Social", icon: User },
+    { path: "/campaigns", label: "Campaigns", icon: Target },
   ];
 
   const isActive = (path: string) => {
