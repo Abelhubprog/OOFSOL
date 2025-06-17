@@ -1,0 +1,356 @@
+import React, { useState, useEffect } from 'react';
+import {
+  Trophy, Star, ArrowUpCircle, ArrowDownCircle, Users,
+  BarChart2, MessageCircle, Share2, Heart, Crown, Sparkles
+} from 'lucide-react';
+
+const OOFLegendsEnhanced = () => {
+  const [selectedOG, setSelectedOG] = useState(null);
+  const [chartTimeframe, setChartTimeframe] = useState('1H');
+  const [tradingView, setTradingView] = useState('chart');
+  const [showFrameGenerator, setShowFrameGenerator] = useState(false);
+
+  // Trading Interface State
+  const [tradingState, setTradingState] = useState({
+    selectedToken: null,
+    amount: '',
+    slippage: 1,
+    gasOption: 'normal',
+    recentTrades: []
+  });
+
+  // Sample OG Profile
+  const ogProfile = {
+    id: "sol-wizard",
+    name: "Sol Wizard",
+    handle: "@SolWizard",
+    avatar: "🧙‍♂️",
+    background: "bg-gradient-to-br from-purple-500 to-blue-600",
+    role: "Memecoin Oracle",
+    stats: {
+      accuracy: 92,
+      followers: "125K",
+      totalCalls: 234,
+      successfulCalls: [
+        { coin: "BONK", return: "120x", date: "Dec 2023" },
+        { coin: "MYRO", return: "50x", date: "Feb 2024" },
+        { coin: "WIF", return: "40x", date: "Mar 2024" }
+      ]
+    },
+    recentActivity: [
+      {
+        type: "call",
+        coin: "BOOK",
+        action: "Buy",
+        price: "$0.00234",
+        target: "$0.01",
+        timestamp: "2h ago"
+      }
+    ],
+    badges: [
+      { name: "BONK Prophet", level: "Legendary" },
+      { name: "Early Caller", level: "Mythic" },
+      { name: "Community Leader", level: "Epic" }
+    ],
+    socialScore: 95,
+    tradingMetrics: {
+      avgReturn: "45x",
+      winRate: "87%",
+      timeHorizon: "2-5 days"
+    }
+  };
+
+  // Token Market Data
+  const tokenData = {
+    BOOK: {
+      price: 0.00234,
+      change24h: 45.67,
+      marketCap: "15M",
+      volume24h: "2.5M",
+      ogBackers: ["Sol Wizard", "Meme Queen"],
+      chart: {
+        timeframes: {
+          "1H": [/* price data */],
+          "4H": [/* price data */],
+          "1D": [/* price data */]
+        }
+      },
+      orderbook: {
+        bids: [
+          { price: 0.00233, size: 1000000 },
+          { price: 0.00232, size: 2000000 }
+        ],
+        asks: [
+          { price: 0.00235, size: 1500000 },
+          { price: 0.00236, size: 1800000 }
+        ]
+      }
+    }
+  };
+
+  // Profile Frame Generator
+  const FrameGenerator = ({ profile, onDownload, onShare }) => (
+    <div className="bg-white rounded-xl p-6 shadow-lg">
+      <h2 className="text-xl font-bold text-purple-900 mb-4">Generate Profile Frame</h2>
+      
+      <div className="space-y-4">
+        {/* Frame Preview */}
+        <div className={`${profile.background} rounded-xl p-6 text-white`}>
+          <div className="flex items-center space-x-4 mb-4">
+            <span className="text-4xl">{profile.avatar}</span>
+            <div>
+              <h3 className="font-bold text-xl">{profile.name}</h3>
+              <p className="text-white text-opacity-80">{profile.handle}</p>
+            </div>
+          </div>
+          
+          {/* Key Stats */}
+          <div className="grid grid-cols-3 gap-4 mb-4">
+            <div className="bg-white bg-opacity-20 rounded-lg p-3">
+              <div className="text-sm text-opacity-80">Accuracy</div>
+              <div className="font-bold">{profile.stats.accuracy}%</div>
+            </div>
+            <div className="bg-white bg-opacity-20 rounded-lg p-3">
+              <div className="text-sm text-opacity-80">Calls</div>
+              <div className="font-bold">{profile.stats.totalCalls}</div>
+            </div>
+            <div className="bg-white bg-opacity-20 rounded-lg p-3">
+              <div className="text-sm text-opacity-80">Avg Return</div>
+              <div className="font-bold">{profile.tradingMetrics.avgReturn}</div>
+            </div>
+          </div>
+
+          {/* Recent Success */}
+          <div className="bg-white bg-opacity-20 rounded-lg p-4">
+            <div className="text-sm mb-2">Recent Success</div>
+            {profile.stats.successfulCalls.slice(0, 2).map((call, index) => (
+              <div key={index} className="flex justify-between items-center mb-2">
+                <span>${call.coin}</span>
+                <span>{call.return}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Frame Controls */}
+        <div className="flex space-x-4">
+          <button
+            onClick={onDownload}
+            className="flex-1 bg-purple-600 text-white px-4 py-2 rounded-lg
+                     hover:bg-purple-700 transition-colors flex items-center
+                     justify-center space-x-2"
+          >
+            <ArrowDownCircle size={18} />
+            <span>Download Frame</span>
+          </button>
+          <button
+            onClick={onShare}
+            className="flex-1 bg-blue-500 text-white px-4 py-2 rounded-lg
+                     hover:bg-blue-600 transition-colors flex items-center
+                     justify-center space-x-2"
+          >
+            <Share2 size={18} />
+            <span>Share Frame</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+
+  // Trading Interface
+  const TradingInterface = ({ token }) => (
+    <div className="bg-white rounded-xl shadow-lg p-6">
+      <div className="flex justify-between items-start mb-6">
+        <div>
+          <h2 className="text-2xl font-bold text-purple-900">
+            ${token} Trading
+          </h2>
+          <p className="text-purple-600">
+            Current Price: ${tokenData[token].price}
+          </p>
+        </div>
+        <div className="flex space-x-2">
+          {['1H', '4H', '1D'].map(tf => (
+            <button
+              key={tf}
+              onClick={() => setChartTimeframe(tf)}
+              className={`px-3 py-1 rounded-lg transition-colors
+                ${chartTimeframe === tf
+                  ? 'bg-purple-600 text-white'
+                  : 'bg-purple-100 text-purple-600'}`}
+            >
+              {tf}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 gap-6">
+        {/* Order Form */}
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Amount (SOL)
+            </label>
+            <input
+              type="number"
+              value={tradingState.amount}
+              onChange={(e) => setTradingState({
+                ...tradingState,
+                amount: e.target.value
+              })}
+              className="w-full p-3 border rounded-lg focus:ring-2 
+                       focus:ring-purple-500 outline-none"
+              placeholder="0.0"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Slippage Tolerance
+            </label>
+            <div className="flex space-x-2">
+              {[0.5, 1, 2, 5].map(slip => (
+                <button
+                  key={slip}
+                  onClick={() => setTradingState({
+                    ...tradingState,
+                    slippage: slip
+                  })}
+                  className={`flex-1 py-2 rounded-lg transition-colors
+                    ${tradingState.slippage === slip
+                      ? 'bg-purple-600 text-white'
+                      : 'bg-purple-100 text-purple-600'}`}
+                >
+                  {slip}%
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Gas Option
+            </label>
+            <div className="flex space-x-2">
+              {['slow', 'normal', 'fast'].map(speed => (
+                <button
+                  key={speed}
+                  onClick={() => setTradingState({
+                    ...tradingState,
+                    gasOption: speed
+                  })}
+                  className={`flex-1 py-2 rounded-lg capitalize transition-colors
+                    ${tradingState.gasOption === speed
+                      ? 'bg-purple-600 text-white'
+                      : 'bg-purple-100 text-purple-600'}`}
+                >
+                  {speed}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <button className="bg-green-600 text-white px-4 py-3 rounded-lg
+                           hover:bg-green-700 transition-colors">
+              Buy {token}
+            </button>
+            <button className="bg-red-600 text-white px-4 py-3 rounded-lg
+                           hover:bg-red-700 transition-colors">
+              Sell {token}
+            </button>
+          </div>
+        </div>
+
+        {/* Orderbook */}
+        <div>
+          <h3 className="font-bold text-purple-900 mb-4">Orderbook</h3>
+          <div className="space-y-2">
+            {/* Asks */}
+            <div className="space-y-1">
+              {tokenData[token].orderbook.asks.map((ask, index) => (
+                <div key={index} 
+                     className="flex justify-between items-center text-red-600
+                              bg-red-50 px-3 py-1 rounded">
+                  <span>${ask.price}</span>
+                  <span>{ask.size.toLocaleString()}</span>
+                </div>
+              ))}
+            </div>
+
+            <div className="text-center text-2xl font-bold text-purple-900 py-2">
+              ${tokenData[token].price}
+            </div>
+
+            {/* Bids */}
+            <div className="space-y-1">
+              {tokenData[token].orderbook.bids.map((bid, index) => (
+                <div key={index}
+                     className="flex justify-between items-center text-green-600
+                              bg-green-50 px-3 py-1 rounded">
+                  <span>${bid.price}</span>
+                  <span>{bid.size.toLocaleString()}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-purple-50 to-purple-100 p-8">
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="text-center mb-12">
+          <h1 className="text-4xl font-bold text-purple-900 mb-2">
+            OOF Legends Gallery
+          </h1>
+          <p className="text-purple-600">
+            Trade with the Legends of Solana 🏆
+          </p>
+        </div>
+
+        <div className="grid grid-cols-2 gap-8">
+          {/* OG Profile Section */}
+          <div>
+            <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
+              {/* Profile Display */}
+              {/* Frame Generation Button */}
+              <button
+                onClick={() => setShowFrameGenerator(true)}
+                className="w-full bg-purple-600 text-white px-4 py-3 rounded-lg
+                        hover:bg-purple-700 transition-colors mt-4
+                        flex items-center justify-center space-x-2"
+              >
+                <Share2 size={18} />
+                <span>Generate Shareable Frame</span>
+              </button>
+            </div>
+
+            {showFrameGenerator && (
+              <FrameGenerator
+                profile={ogProfile}
+                onDownload={() => {
+                  // Handle frame download
+                }}
+                onShare={() => {
+                  // Handle frame sharing
+                }}
+              />
+            )}
+          </div>
+
+          {/* Trading Section */}
+          <div>
+            <TradingInterface token="BOOK" />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default OOFLegendsEnhanced;

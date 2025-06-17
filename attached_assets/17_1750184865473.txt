@@ -1,0 +1,284 @@
+import React, { useState, useEffect } from 'react';
+import { 
+  Trophy, Target, TrendingUp, TrendingDown, Users, 
+  Star, Clock, ArrowRight, Award, Crown, Sparkles
+} from 'lucide-react';
+
+const OOFTradersArena = () => {
+  const [activeTab, setActiveTab] = useState('predictions');
+  const [userProfile, setUserProfile] = useState({
+    predictions: [],
+    accuracy: 0,
+    ranking: 0,
+    oofScore: 0,
+    earnedTokens: 0
+  });
+
+  const [livePredictions, setLivePredictions] = useState([]);
+  const [leaderboard, setLeaderboard] = useState([]);
+  const [selectedToken, setSelectedToken] = useState(null);
+
+  // Live trading pairs for predictions
+  const tradingPairs = [
+    { 
+      symbol: 'BONK/USD', 
+      price: 0.000001234,
+      change24h: 5.67,
+      volume: 1234567
+    },
+    { 
+      symbol: 'WIF/USD', 
+      price: 0.00234,
+      change24h: -2.34,
+      volume: 987654
+    },
+    // Add more trading pairs
+  ];
+
+  const PredictionCard = ({ prediction }) => (
+    <div className={`bg-white rounded-xl p-6 shadow-lg border-l-4 
+      ${prediction.direction === 'up' ? 'border-green-500' : 'border-red-500'}`}>
+      <div className="flex justify-between items-start mb-4">
+        <div>
+          <h3 className="font-bold text-lg">{prediction.pair}</h3>
+          <p className="text-sm text-gray-600">by {prediction.user}</p>
+        </div>
+        <div className={`px-3 py-1 rounded-full text-sm
+          ${prediction.direction === 'up' ? 
+            'bg-green-100 text-green-700' : 
+            'bg-red-100 text-red-700'}`}>
+          {prediction.direction === 'up' ? '🚀 Bullish' : '🐻 Bearish'}
+        </div>
+      </div>
+
+      <div className="space-y-2">
+        <div className="flex justify-between">
+          <span className="text-gray-600">Target Price</span>
+          <span className="font-bold">${prediction.targetPrice}</span>
+        </div>
+        <div className="flex justify-between">
+          <span className="text-gray-600">Timeframe</span>
+          <span>{prediction.timeframe}</span>
+        </div>
+        <div className="flex justify-between">
+          <span className="text-gray-600">Potential OOF</span>
+          <span className="text-purple-600 font-bold">
+            {prediction.potentialOof} OOF
+          </span>
+        </div>
+      </div>
+
+      {prediction.status && (
+        <div className={`mt-4 p-2 rounded text-center
+          ${prediction.status === 'success' ? 
+            'bg-green-100 text-green-700' : 
+            prediction.status === 'failed' ? 
+            'bg-red-100 text-red-700' : 
+            'bg-yellow-100 text-yellow-700'}`}>
+          {prediction.status === 'success' ? '✅ Called It!' : 
+           prediction.status === 'failed' ? '❌ Big OOF!' : 
+           '⏳ In Progress'}
+        </div>
+      )}
+    </div>
+  );
+
+  const TradingInterface = () => (
+    <div className="bg-white rounded-xl p-6 shadow-lg">
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-xl font-bold">Make Your Call</h2>
+        <div className="text-sm text-purple-600">
+          Earn up to 1000 $OOF for correct predictions!
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 gap-6">
+        {/* Token Selection */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Select Token
+          </label>
+          <select className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-purple-500">
+            {tradingPairs.map(pair => (
+              <option key={pair.symbol} value={pair.symbol}>
+                {pair.symbol} (${pair.price})
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* Direction */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Direction
+          </label>
+          <div className="flex space-x-4">
+            <button className="flex-1 py-3 border rounded-lg hover:bg-green-50 
+                           focus:ring-2 focus:ring-green-500 space-x-2
+                           flex items-center justify-center">
+              <TrendingUp className="text-green-500" size={20} />
+              <span>Bullish</span>
+            </button>
+            <button className="flex-1 py-3 border rounded-lg hover:bg-red-50
+                           focus:ring-2 focus:ring-red-500 space-x-2
+                           flex items-center justify-center">
+              <TrendingDown className="text-red-500" size={20} />
+              <span>Bearish</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Target Price */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Target Price
+          </label>
+          <input 
+            type="number" 
+            step="0.000001"
+            className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-purple-500"
+            placeholder="Enter target price..."
+          />
+        </div>
+
+        {/* Timeframe */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Timeframe
+          </label>
+          <select className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-purple-500">
+            <option value="1h">1 Hour</option>
+            <option value="4h">4 Hours</option>
+            <option value="24h">24 Hours</option>
+            <option value="7d">7 Days</option>
+          </select>
+        </div>
+      </div>
+
+      <button className="w-full mt-6 bg-purple-600 text-white py-3 rounded-lg
+                      hover:bg-purple-700 transition-colors flex items-center
+                      justify-center space-x-2">
+        <Target size={20} />
+        <span>Submit Prediction</span>
+      </button>
+    </div>
+  );
+
+  const Leaderboard = () => (
+    <div className="bg-white rounded-xl p-6 shadow-lg">
+      <h2 className="text-xl font-bold mb-6 flex items-center">
+        <Trophy className="text-yellow-500 mr-2" />
+        Top Predictors
+      </h2>
+
+      <div className="space-y-4">
+        {leaderboard.map((user, index) => (
+          <div key={user.id} className={`flex items-center p-4 rounded-lg
+            ${index === 0 ? 'bg-yellow-50' :
+              index === 1 ? 'bg-gray-50' :
+              index === 2 ? 'bg-orange-50' : 'bg-white'}`}>
+            <div className="flex-shrink-0 w-8 text-2xl">
+              {index === 0 ? '👑' :
+               index === 1 ? '🥈' :
+               index === 2 ? '🥉' : `${index + 1}`}
+            </div>
+            <div className="flex-1 ml-4">
+              <div className="font-bold">{user.name}</div>
+              <div className="text-sm text-gray-600">
+                Accuracy: {user.accuracy}%
+              </div>
+            </div>
+            <div className="text-right">
+              <div className="font-bold text-purple-600">
+                {user.earnedOof} $OOF
+              </div>
+              <div className="text-sm text-gray-600">
+                {user.totalCalls} calls
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="max-w-6xl mx-auto p-6">
+      {/* Header */}
+      <div className="text-center mb-12">
+        <h1 className="text-4xl font-bold text-purple-900 mb-2">
+          OOF Trader's Arena
+        </h1>
+        <p className="text-purple-600">
+          Make Your Calls, Avoid OOFs, Earn Rewards! 🎯
+        </p>
+      </div>
+
+      {/* User Stats */}
+      <div className="grid grid-cols-4 gap-6 mb-8">
+        <div className="bg-white rounded-xl p-4 shadow-lg">
+          <div className="flex items-center space-x-2 text-purple-600 mb-2">
+            <Target size={20} />
+            <span>Prediction Accuracy</span>
+          </div>
+          <div className="text-2xl font-bold">
+            {userProfile.accuracy}%
+          </div>
+        </div>
+
+        <div className="bg-white rounded-xl p-4 shadow-lg">
+          <div className="flex items-center space-x-2 text-purple-600 mb-2">
+            <Crown size={20} />
+            <span>Global Ranking</span>
+          </div>
+          <div className="text-2xl font-bold">
+            #{userProfile.ranking}
+          </div>
+        </div>
+
+        <div className="bg-white rounded-xl p-4 shadow-lg">
+          <div className="flex items-center space-x-2 text-purple-600 mb-2">
+            <Award size={20} />
+            <span>OOF Score</span>
+          </div>
+          <div className="text-2xl font-bold">
+            {userProfile.oofScore}
+          </div>
+        </div>
+
+        <div className="bg-white rounded-xl p-4 shadow-lg">
+          <div className="flex items-center space-x-2 text-purple-600 mb-2">
+            <Sparkles size={20} />
+            <span>Earned $OOF</span>
+          </div>
+          <div className="text-2xl font-bold">
+            {userProfile.earnedTokens}
+          </div>
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="grid grid-cols-3 gap-8">
+        {/* Left Column: Trading Interface */}
+        <div className="col-span-2 space-y-8">
+          <TradingInterface />
+          
+          {/* Live Predictions Feed */}
+          <div className="space-y-4">
+            <h2 className="text-xl font-bold">Latest Predictions</h2>
+            {livePredictions.map(prediction => (
+              <PredictionCard key={prediction.id} prediction={prediction} />
+            ))}
+          </div>
+        </div>
+
+        {/* Right Column: Leaderboard */}
+        <div>
+          <Leaderboard />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default OOFTradersArena;

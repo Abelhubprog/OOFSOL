@@ -1,0 +1,299 @@
+import React, { useState } from 'react';
+import {
+  Share2, ArrowUpCircle, ArrowDownCircle, Sparkles,
+  Trophy, Star, Crown, Heart, Users, BarChart2
+} from 'lucide-react';
+
+const OOFProfiles = () => {
+  const [selectedProfile, setSelectedProfile] = useState(null);
+  const [displayMode, setDisplayMode] = useState('all'); // all, legendary, epic
+  const [cardView, setCardView] = useState('grid'); // grid, showcase
+  const [showOOFInterface, setShowOOFInterface] = useState(false);
+
+  // Sample OG Data with Rich Metadata
+  const ogProfiles = [
+    {
+      id: "sol-king",
+      name: "Solana King",
+      handle: "@SolKing",
+      avatar: "👑",
+      type: "legendary",
+      background: "bg-gradient-to-br from-orange-400 via-purple-500 to-blue-600",
+      glow: "animate-glow-gold",
+      stats: {
+        influence: 98,
+        followers: "250K+",
+        gems: 15,
+      },
+      specialties: ["Early Adopter", "Community Leader", "Trend Setter"],
+      achievements: [
+        { name: "Diamond Mind", icon: "💎", description: "Never sold below 100x" },
+        { name: "OG Legend", icon: "🏆", description: "Top 10 influencer" },
+        { name: "Community Pillar", icon: "🏛️", description: "Built 3 major communities" }
+      ],
+      oofBalance: "1,000,000",
+      stakingRewards: "50,000",
+      level: 100,
+      tierBadge: "🌟",
+      exclusive: true
+    },
+    {
+      id: "meme-oracle",
+      name: "Meme Oracle",
+      handle: "@MemeOracle",
+      avatar: "🔮",
+      type: "epic",
+      background: "bg-gradient-to-br from-purple-400 via-pink-500 to-red-500",
+      glow: "animate-glow-purple",
+      stats: {
+        influence: 92,
+        followers: "180K+",
+        gems: 12,
+      },
+      specialties: ["Gem Finder", "Trend Analyst", "Meme Expert"],
+      achievements: [
+        { name: "Prophet", icon: "🧙‍♂️", description: "Predicted 10 100x gems" },
+        { name: "Meme Lord", icon: "😎", description: "Created viral memes" }
+      ],
+      oofBalance: "500,000",
+      stakingRewards: "25,000",
+      level: 85,
+      tierBadge: "⭐",
+      exclusive: true
+    }
+  ];
+
+  // Profile Card Component
+  const ProfileCard = ({ profile, showcase = false }) => (
+    <div 
+      className={`${showcase ? 'col-span-2' : ''} ${profile.background} 
+                rounded-2xl p-1 cursor-pointer transform hover:scale-105 
+                transition-all duration-300 ${profile.glow}`}
+      onClick={() => setSelectedProfile(profile)}
+    >
+      <div className="bg-black bg-opacity-30 rounded-xl p-6 backdrop-blur-sm h-full">
+        {/* Header */}
+        <div className="flex justify-between items-start mb-8">
+          <div className="flex items-center space-x-4">
+            <div className="text-6xl animate-float">{profile.avatar}</div>
+            <div>
+              <div className="flex items-center space-x-2">
+                <h3 className="text-white text-xl font-bold">{profile.name}</h3>
+                {profile.exclusive && (
+                  <span className="bg-yellow-400 text-yellow-900 text-xs px-2 py-1 rounded-full">
+                    EXCLUSIVE
+                  </span>
+                )}
+              </div>
+              <p className="text-white text-opacity-80">{profile.handle}</p>
+            </div>
+          </div>
+          <div className="flex items-center space-x-2">
+            <span className="text-3xl">{profile.tierBadge}</span>
+            <div className="bg-white bg-opacity-20 px-3 py-1 rounded-full">
+              <span className="text-white">Lvl {profile.level}</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Stats Grid */}
+        <div className="grid grid-cols-3 gap-4 mb-6">
+          <div className="bg-white bg-opacity-10 rounded-lg p-4 text-center">
+            <div className="text-white text-opacity-70 text-sm">Influence</div>
+            <div className="text-white text-xl font-bold">{profile.stats.influence}</div>
+          </div>
+          <div className="bg-white bg-opacity-10 rounded-lg p-4 text-center">
+            <div className="text-white text-opacity-70 text-sm">Followers</div>
+            <div className="text-white text-xl font-bold">{profile.stats.followers}</div>
+          </div>
+          <div className="bg-white bg-opacity-10 rounded-lg p-4 text-center">
+            <div className="text-white text-opacity-70 text-sm">Gems Found</div>
+            <div className="text-white text-xl font-bold">{profile.stats.gems}</div>
+          </div>
+        </div>
+
+        {/* Specialties */}
+        <div className="mb-6">
+          <div className="flex flex-wrap gap-2">
+            {profile.specialties.map((specialty, index) => (
+              <div 
+                key={index}
+                className="bg-white bg-opacity-10 px-3 py-1 rounded-full text-white text-sm"
+              >
+                {specialty}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Achievements */}
+        <div className="mb-6">
+          <div className="space-y-3">
+            {profile.achievements.map((achievement, index) => (
+              <div 
+                key={index}
+                className="bg-white bg-opacity-10 rounded-lg p-3 flex items-center space-x-3"
+              >
+                <span className="text-2xl">{achievement.icon}</span>
+                <div>
+                  <div className="text-white font-bold">{achievement.name}</div>
+                  <div className="text-white text-opacity-70 text-sm">
+                    {achievement.description}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* $OOF Stats */}
+        <div className="grid grid-cols-2 gap-4">
+          <div className="bg-gradient-to-r from-purple-500 to-purple-600 rounded-lg p-4">
+            <div className="text-white text-opacity-70 text-sm">$OOF Balance</div>
+            <div className="text-white text-xl font-bold">{profile.oofBalance}</div>
+          </div>
+          <div className="bg-gradient-to-r from-purple-500 to-purple-600 rounded-lg p-4">
+            <div className="text-white text-opacity-70 text-sm">Staking Rewards</div>
+            <div className="text-white text-xl font-bold">{profile.stakingRewards}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  // $OOF Trading Interface
+  const OOFInterface = () => (
+    <div className="bg-white rounded-xl shadow-lg p-6">
+      <h2 className="text-2xl font-bold text-purple-900 mb-6">$OOF Trading Hub</h2>
+      
+      <div className="grid grid-cols-3 gap-6 mb-8">
+        <div className="bg-purple-50 rounded-lg p-4">
+          <div className="text-sm text-purple-600">Price</div>
+          <div className="text-2xl font-bold text-purple-900">$0.0045</div>
+          <div className="text-green-500 text-sm">+12.5%</div>
+        </div>
+        <div className="bg-purple-50 rounded-lg p-4">
+          <div className="text-sm text-purple-600">Market Cap</div>
+          <div className="text-2xl font-bold text-purple-900">$4.5M</div>
+        </div>
+        <div className="bg-purple-50 rounded-lg p-4">
+          <div className="text-sm text-purple-600">24h Volume</div>
+          <div className="text-2xl font-bold text-purple-900">$850K</div>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 gap-6">
+        {/* Buy/Sell Form */}
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-purple-900 mb-2">
+              Amount (SOL)
+            </label>
+            <input
+              type="number"
+              className="w-full p-3 border border-purple-200 rounded-lg focus:ring-2 
+                       focus:ring-purple-500 outline-none"
+              placeholder="0.0"
+            />
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <button className="bg-green-600 text-white px-4 py-3 rounded-lg
+                           hover:bg-green-700 transition-colors flex items-center 
+                           justify-center space-x-2">
+              <ArrowUpCircle size={20} />
+              <span>Buy $OOF</span>
+            </button>
+            <button className="bg-red-600 text-white px-4 py-3 rounded-lg
+                           hover:bg-red-700 transition-colors flex items-center
+                           justify-center space-x-2">
+              <ArrowDownCircle size={20} />
+              <span>Sell $OOF</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Staking Interface */}
+        <div className="bg-purple-50 rounded-lg p-4">
+          <h3 className="font-bold text-purple-900 mb-4">$OOF Staking</h3>
+          <div className="space-y-4">
+            <div className="flex justify-between items-center">
+              <span className="text-purple-600">APY</span>
+              <span className="text-purple-900 font-bold">25%</span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="text-purple-600">Lock Period</span>
+              <span className="text-purple-900 font-bold">7 days</span>
+            </div>
+            <button className="w-full bg-purple-600 text-white px-4 py-2 rounded-lg
+                           hover:bg-purple-700 transition-colors">
+              Stake $OOF
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-purple-50 to-purple-100 p-8">
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="text-center mb-12">
+          <h1 className="text-4xl font-bold text-purple-900 mb-2">
+            OOF Legends
+          </h1>
+          <p className="text-purple-600">
+            The Ultimate Collection of Solana OGs ✨
+          </p>
+        </div>
+
+        {/* View Controls */}
+        <div className="bg-white rounded-xl shadow-lg p-4 mb-8">
+          <div className="flex justify-between items-center">
+            <div className="flex space-x-4">
+              {['all', 'legendary', 'epic'].map(mode => (
+                <button
+                  key={mode}
+                  onClick={() => setDisplayMode(mode)}
+                  className={`px-4 py-2 rounded-lg transition-colors
+                    ${displayMode === mode
+                      ? 'bg-purple-600 text-white'
+                      : 'text-purple-600 hover:bg-purple-50'}`}
+                >
+                  {mode.charAt(0).toUpperCase() + mode.slice(1)}
+                </button>
+              ))}
+            </div>
+            <button
+              onClick={() => setShowOOFInterface(!showOOFInterface)}
+              className="bg-purple-600 text-white px-6 py-2 rounded-lg
+                       hover:bg-purple-700 transition-colors flex items-center space-x-2"
+            >
+              <ArrowUpCircle size={18} />
+              <span>Trade $OOF</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Main Content */}
+        <div className="space-y-8">
+          {showOOFInterface && <OOFInterface />}
+          
+          <div className={`grid ${cardView === 'grid' ? 'grid-cols-2' : 'grid-cols-1'} gap-8`}>
+            {ogProfiles
+              .filter(profile => displayMode === 'all' || profile.type === displayMode)
+              .map(profile => (
+                <ProfileCard
+                  key={profile.id}
+                  profile={profile}
+                  showcase={cardView === 'showcase'}
+                />
+              ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default OOFProfiles;

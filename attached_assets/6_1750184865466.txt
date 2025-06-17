@@ -1,0 +1,308 @@
+import React, { useState, useEffect } from 'react';
+import {
+  Trophy, Star, ArrowUpCircle, ArrowDownCircle, Users,
+  BarChart2, MessageCircle, Share2, Heart, Crown, Rocket,
+  Sparkles
+} from 'lucide-react';
+
+const OOFLegendsGallery = () => {
+  const [selectedOG, setSelectedOG] = useState(null);
+  const [activeMemecoins, setActiveMemecoins] = useState([]);
+  const [viewMode, setViewMode] = useState('gallery'); // gallery, trading, watchlist
+
+  // Sample OG profiles with rich metadata
+  const ogProfiles = [
+    {
+      id: "sol-wizard",
+      name: "Sol Wizard",
+      handle: "@SolWizard",
+      avatar: "🧙‍♂️",
+      background: "bg-gradient-to-br from-purple-500 to-blue-600",
+      role: "Memecoin Oracle",
+      specialty: "Early Gem Finder",
+      stats: {
+        accuracy: 92,
+        followers: "125K",
+        totalCalls: 234
+      },
+      achievements: [
+        { name: "BONK Prophet", icon: "🐕", rarity: "legendary" },
+        { name: "MYRO Visionary", icon: "🐱", rarity: "epic" },
+        { name: "WIF Discoverer", icon: "🐶", rarity: "rare" }
+      ],
+      activeCalls: [
+        {
+          coin: "BOOK",
+          prediction: "100x Potential",
+          confidence: 95,
+          timestamp: "2h ago"
+        }
+      ],
+      badges: ["Early BONK", "Meme Master", "Community Legend"],
+      socialLinks: {
+        twitter: "https://twitter.com/solwizard",
+        telegram: "t.me/solwizard",
+        discord: "discord.gg/solwizard"
+      },
+      tradingStyle: "Quick Flip Master",
+      rarity: "mythic",
+      powerLevel: 99
+    }
+  ];
+
+  // Sample active memecoins with real-time data
+  const memecoinsData = [
+    {
+      symbol: "BOOK",
+      name: "Book of Memes",
+      price: 0.00234,
+      change24h: 45.67,
+      marketCap: "15M",
+      volume24h: "2.5M",
+      chart: "chart-data",
+      ogMentions: 12,
+      socialScore: 89,
+      trending: true,
+      backed: ["Sol Wizard", "Meme Queen"],
+      links: {
+        dexScreener: "https://dexscreener.com/book",
+        twitter: "https://twitter.com/bookmemes",
+        telegram: "t.me/bookmemes"
+      }
+    }
+  ];
+
+  // OG Profile Card Component
+  const OGProfileCard = ({ profile }) => (
+    <div 
+      className={`${profile.background} rounded-2xl p-1 cursor-pointer 
+                  transform hover:scale-105 transition-all duration-300`}
+    >
+      <div className="bg-black bg-opacity-40 rounded-xl p-6 backdrop-blur-sm">
+        {/* Header */}
+        <div className="flex justify-between items-start mb-6">
+          <div className="flex items-center space-x-4">
+            <div className="text-5xl">{profile.avatar}</div>
+            <div>
+              <h3 className="text-white text-xl font-bold">{profile.name}</h3>
+              <p className="text-white text-opacity-80">{profile.handle}</p>
+            </div>
+          </div>
+          <div className="flex items-center space-x-2">
+            <span className={`px-3 py-1 rounded-full text-xs
+                          ${profile.rarity === 'mythic' 
+                            ? 'bg-yellow-400 text-yellow-900'
+                            : 'bg-purple-400 text-purple-900'}`}>
+              {profile.rarity.toUpperCase()}
+            </span>
+            <div className="bg-black bg-opacity-20 px-3 py-1 rounded-full">
+              <span className="text-white">Lvl {profile.powerLevel}</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Stats Grid */}
+        <div className="grid grid-cols-3 gap-4 mb-6">
+          <div className="bg-white bg-opacity-10 rounded-lg p-3">
+            <div className="text-white text-opacity-70 text-sm">Accuracy</div>
+            <div className="text-white font-bold">{profile.stats.accuracy}%</div>
+          </div>
+          <div className="bg-white bg-opacity-10 rounded-lg p-3">
+            <div className="text-white text-opacity-70 text-sm">Followers</div>
+            <div className="text-white font-bold">{profile.stats.followers}</div>
+          </div>
+          <div className="bg-white bg-opacity-10 rounded-lg p-3">
+            <div className="text-white text-opacity-70 text-sm">Total Calls</div>
+            <div className="text-white font-bold">{profile.stats.totalCalls}</div>
+          </div>
+        </div>
+
+        {/* Achievements */}
+        <div className="mb-6">
+          <div className="text-white text-opacity-70 mb-2">Achievements</div>
+          <div className="flex space-x-2">
+            {profile.achievements.map((achievement, index) => (
+              <div key={index} 
+                   className="bg-white bg-opacity-10 px-3 py-2 rounded-lg
+                            flex items-center space-x-2">
+                <span>{achievement.icon}</span>
+                <span className="text-white text-sm">{achievement.name}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Active Calls */}
+        {profile.activeCalls.length > 0 && (
+          <div className="bg-white bg-opacity-10 rounded-lg p-4 mb-6">
+            <div className="text-white text-opacity-70 mb-2">Latest Call</div>
+            {profile.activeCalls.map((call, index) => (
+              <div key={index} className="flex justify-between items-center">
+                <div>
+                  <div className="text-white font-bold">${call.coin}</div>
+                  <div className="text-white text-opacity-70 text-sm">
+                    {call.prediction}
+                  </div>
+                </div>
+                <div className="text-right">
+                  <div className="text-green-400">{call.confidence}%</div>
+                  <div className="text-white text-opacity-70 text-sm">
+                    {call.timestamp}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Trading Style & Badges */}
+        <div className="flex justify-between items-end">
+          <div>
+            <div className="text-white text-opacity-70 mb-2">Trading Style</div>
+            <div className="text-white font-bold">{profile.tradingStyle}</div>
+          </div>
+          <div className="flex space-x-2">
+            {profile.badges.slice(0, 3).map((badge, index) => (
+              <div key={index} 
+                   className="bg-white bg-opacity-10 px-2 py-1 rounded-full
+                            text-white text-xs">
+                {badge}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  // Memecoin Trading Card
+  const MemecoinCard = ({ coin }) => (
+    <div className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-all">
+      <div className="flex justify-between items-start mb-6">
+        <div>
+          <h3 className="text-xl font-bold text-purple-900">${coin.symbol}</h3>
+          <p className="text-purple-600">{coin.name}</p>
+        </div>
+        {coin.trending && (
+          <div className="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm">
+            🔥 Trending
+          </div>
+        )}
+      </div>
+
+      <div className="grid grid-cols-2 gap-4 mb-6">
+        <div className="bg-purple-50 rounded-lg p-3">
+          <div className="text-sm text-purple-600">Price</div>
+          <div className="font-bold text-purple-900">${coin.price}</div>
+        </div>
+        <div className="bg-purple-50 rounded-lg p-3">
+          <div className="text-sm text-purple-600">24h Change</div>
+          <div className={`font-bold ${
+            coin.change24h >= 0 ? 'text-green-600' : 'text-red-600'
+          }`}>
+            {coin.change24h}%
+          </div>
+        </div>
+        <div className="bg-purple-50 rounded-lg p-3">
+          <div className="text-sm text-purple-600">Market Cap</div>
+          <div className="font-bold text-purple-900">${coin.marketCap}</div>
+        </div>
+        <div className="bg-purple-50 rounded-lg p-3">
+          <div className="text-sm text-purple-600">24h Volume</div>
+          <div className="font-bold text-purple-900">${coin.volume24h}</div>
+        </div>
+      </div>
+
+      {/* OG Backing */}
+      <div className="mb-6">
+        <div className="text-sm text-purple-600 mb-2">Backed By</div>
+        <div className="flex flex-wrap gap-2">
+          {coin.backed.map((og, index) => (
+            <div key={index} 
+                 className="bg-purple-100 px-3 py-1 rounded-full text-purple-600">
+              {og}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Action Buttons */}
+      <div className="flex space-x-4">
+        <button className="flex-1 bg-purple-600 text-white px-4 py-2 rounded-lg
+                        hover:bg-purple-700 transition-colors flex items-center
+                        justify-center space-x-2">
+          <BarChart2 size={18} />
+          <span>View Chart</span>
+        </button>
+        <button className="flex-1 bg-green-600 text-white px-4 py-2 rounded-lg
+                        hover:bg-green-700 transition-colors flex items-center
+                        justify-center space-x-2">
+          <ArrowUpCircle size={18} />
+          <span>Buy Now</span>
+        </button>
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-purple-50 to-purple-100 p-8">
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="text-center mb-12">
+          <h1 className="text-4xl font-bold text-purple-900 mb-2">
+            OOF Legends Gallery
+          </h1>
+          <p className="text-purple-600">
+            Where Solana OGs Shape the Memecoin Universe ✨
+          </p>
+        </div>
+
+        {/* View Mode Selector */}
+        <div className="bg-white rounded-xl shadow-lg p-4 mb-8">
+          <div className="flex justify-center space-x-4">
+            {['gallery', 'trading', 'watchlist'].map(mode => (
+              <button
+                key={mode}
+                onClick={() => setViewMode(mode)}
+                className={`px-6 py-3 rounded-lg transition-colors
+                  ${viewMode === mode
+                    ? 'bg-purple-600 text-white'
+                    : 'text-purple-600 hover:bg-purple-50'}`}
+              >
+                {mode.charAt(0).toUpperCase() + mode.slice(1)}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="grid grid-cols-2 gap-8">
+          {/* OG Profiles */}
+          <div className="space-y-8">
+            <h2 className="text-2xl font-bold text-purple-900 mb-6">
+              Legendary OGs
+            </h2>
+            {ogProfiles.map(profile => (
+              <OGProfileCard 
+                key={profile.id} 
+                profile={profile}
+                onClick={() => setSelectedOG(profile)}
+              />
+            ))}
+          </div>
+
+          {/* Active Memecoins */}
+          <div className="space-y-8">
+            <h2 className="text-2xl font-bold text-purple-900 mb-6">
+              Trending Memecoins
+            </h2>
+            {memecoinsData.map(coin => (
+              <MemecoinCard key={coin.symbol} coin={coin} />
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default OOFLegendsGallery;

@@ -1,0 +1,213 @@
+import React, { useState, useEffect } from 'react';
+import { 
+  TrendingUp, AlertCircle, Settings, Search, Shield, Filter,
+  Wallet, ArrowUpCircle, ArrowDownCircle, RefreshCw, Clock
+} from 'lucide-react';
+
+// Simulated token data for demonstration
+const mockTokens = [
+  {
+    symbol: 'BONK',
+    name: 'Bonk',
+    price: 0.00000123,
+    change24h: 15.5,
+    volume24h: 1500000,
+    marketCap: '15M',
+    riskLevel: 'medium'
+  },
+  {
+    symbol: 'MYRO',
+    name: 'Myro',
+    price: 0.00045,
+    change24h: -5.2,
+    volume24h: 980000,
+    marketCap: '8M',
+    riskLevel: 'low'
+  }
+];
+
+const TradingDashboard = () => {
+  const [selectedToken, setSelectedToken] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filterOptions, setFilterOptions] = useState({
+    riskLevel: 'all',
+    timeframe: '1h',
+    sortBy: 'volume'
+  });
+
+  // Stats cards component
+  const StatsCard = ({ title, value, change, icon: Icon }) => (
+    <div className="bg-white p-4 rounded-lg shadow">
+      <div className="flex justify-between items-start mb-2">
+        <span className="text-sm text-gray-600">{title}</span>
+        <Icon size={18} className="text-purple-600" />
+      </div>
+      <div className="text-xl font-bold text-purple-900">{value}</div>
+      {change && (
+        <div className={`text-sm ${change >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+          {change >= 0 ? '+' : ''}{change}%
+        </div>
+      )}
+    </div>
+  );
+
+  // Token row component
+  const TokenRow = ({ token, onSelect, isSelected }) => (
+    <div 
+      className={`flex items-center justify-between p-4 hover:bg-purple-50 cursor-pointer
+                ${isSelected ? 'bg-purple-50' : ''}`}
+      onClick={() => onSelect(token)}
+    >
+      <div className="flex items-center space-x-4">
+        <div>
+          <div className="font-bold text-purple-900">{token.symbol}</div>
+          <div className="text-sm text-gray-600">{token.name}</div>
+        </div>
+      </div>
+      <div className="text-right">
+        <div className="font-bold">${token.price.toFixed(8)}</div>
+        <div className={`text-sm ${token.change24h >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+          {token.change24h >= 0 ? '+' : ''}{token.change24h}%
+        </div>
+      </div>
+    </div>
+  );
+
+  // Quick trade panel component
+  const QuickTradePanel = ({ token }) => (
+    <div className="space-y-4">
+      <div className="flex justify-between items-center">
+        <span className="text-gray-600">Current Price</span>
+        <span className="font-bold">${token.price.toFixed(8)}</span>
+      </div>
+      
+      <div className="flex justify-between space-x-2">
+        <button className="flex-1 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 flex items-center justify-center space-x-2">
+          <ArrowUpCircle size={18} />
+          <span>Buy</span>
+        </button>
+        <button className="flex-1 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 flex items-center justify-center space-x-2">
+          <ArrowDownCircle size={18} />
+          <span>Sell</span>
+        </button>
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-purple-50 to-purple-100 p-6">
+      <div className="max-w-7xl mx-auto space-y-6">
+        {/* Header */}
+        <div className="flex justify-between items-center">
+          <h1 className="text-2xl font-bold text-purple-900">OOF Trading Dashboard</h1>
+          <div className="flex items-center space-x-4">
+            <button className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 flex items-center space-x-2">
+              <Wallet size={20} />
+              <span>Connect Wallet</span>
+            </button>
+            <button className="p-2 hover:bg-purple-100 rounded-lg">
+              <Settings size={20} className="text-purple-600" />
+            </button>
+          </div>
+        </div>
+
+        {/* Search and Filters */}
+        <div className="flex items-center space-x-4 bg-white p-4 rounded-xl shadow">
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-purple-400" size={20} />
+            <input
+              type="text"
+              placeholder="Search tokens..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-10 p-2 border rounded-lg focus:ring-2 focus:ring-purple-500 outline-none"
+            />
+          </div>
+          <button className="flex items-center space-x-2 px-4 py-2 bg-purple-100 hover:bg-purple-200 rounded-lg text-purple-600">
+            <Filter size={20} />
+            <span>Filters</span>
+          </button>
+        </div>
+
+        {/* Stats Overview */}
+        <div className="grid grid-cols-4 gap-4">
+          <StatsCard 
+            title="Total Volume" 
+            value="$2.5M" 
+            change={12.5} 
+            icon={TrendingUp}
+          />
+          <StatsCard 
+            title="Active Pairs" 
+            value="156" 
+            icon={RefreshCw}
+          />
+          <StatsCard 
+            title="Market Cap" 
+            value="$45M" 
+            change={-2.3} 
+            icon={TrendingUp}
+          />
+          <StatsCard 
+            title="Last Update" 
+            value="2min ago" 
+            icon={Clock}
+          />
+        </div>
+
+        {/* Main Content Grid */}
+        <div className="grid grid-cols-3 gap-6">
+          {/* Token List */}
+          <div className="col-span-2">
+            <div className="bg-white rounded-xl shadow overflow-hidden">
+              <div className="p-4 border-b">
+                <h2 className="font-bold text-purple-900">Active Tokens</h2>
+              </div>
+              <div className="divide-y">
+                {mockTokens.map((token) => (
+                  <TokenRow
+                    key={token.symbol}
+                    token={token}
+                    onSelect={setSelectedToken}
+                    isSelected={selectedToken?.symbol === token.symbol}
+                  />
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Right Sidebar */}
+          <div className="space-y-6">
+            {selectedToken && (
+              <>
+                {/* Quick Trade Panel */}
+                <div className="bg-white rounded-xl shadow p-6">
+                  <h2 className="font-bold text-purple-900 mb-4">Quick Trade</h2>
+                  <QuickTradePanel token={selectedToken} />
+                </div>
+
+                {/* Risk Analysis */}
+                <div className="bg-white rounded-xl shadow p-6">
+                  <h2 className="font-bold text-purple-900 mb-4 flex items-center space-x-2">
+                    <Shield size={20} className="text-purple-600" />
+                    <span>Risk Level</span>
+                  </h2>
+                  <div className="p-4 bg-purple-50 rounded-lg">
+                    <div className="text-lg font-bold text-purple-900 mb-2">
+                      {selectedToken.riskLevel.charAt(0).toUpperCase() + selectedToken.riskLevel.slice(1)}
+                    </div>
+                    <div className="text-sm text-purple-600">
+                      Based on liquidity, holder distribution, and contract analysis
+                    </div>
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default TradingDashboard;
