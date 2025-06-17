@@ -49,6 +49,7 @@ function Router() {
           <Route path="/" component={Dashboard} />
           <Route path="/tokens" component={TradersArena} />
           <Route path="/moments" component={OOFMoments} />
+          <Route path="/multiverse" component={OOFMultiverse} />
           <Route path="/time-machine" component={TimeMachine} />
           <Route path="/wallet-analyzer" component={WalletAnalyzer} />
           <Route path="/slots" component={Slots} />
