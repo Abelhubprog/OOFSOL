@@ -848,6 +848,40 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // User Stats API Route
+  app.get('/api/user/stats', async (req, res) => {
+    try {
+      if (!req.user) {
+        return res.status(401).json({ message: "Unauthorized" });
+      }
+
+      // Get user stats from storage
+      const user = await storage.getUser(req.user.id);
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      // Calculate user ranking
+      const leaderboard = await storage.getLeaderboard(1000);
+      const userRank = leaderboard.findIndex(u => u.id === req.user.id) + 1;
+
+      const stats = {
+        oofTokens: user.oofTokens || 0,
+        totalEarned: user.totalEarned || 0,
+        predictionAccuracy: user.predictionAccuracy || 0,
+        rank: userRank || 999,
+        oofScore: user.oofScore || 0,
+        campaignsCompleted: 0, // TODO: calculate from campaigns participation
+        achievementsUnlocked: 0 // TODO: calculate from user achievements
+      };
+
+      res.json(stats);
+    } catch (error) {
+      console.error("Error fetching user stats:", error);
+      res.status(500).json({ message: "Failed to fetch user stats" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }
