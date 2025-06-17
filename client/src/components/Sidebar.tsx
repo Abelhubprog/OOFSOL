@@ -61,12 +61,12 @@ export default function Sidebar({ className }: SidebarProps) {
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b border-purple-700/50">
         {!isCollapsed && (
-          <div className="flex items-center space-x-2">
+          <Link href="/" className="flex items-center space-x-2 hover:bg-purple-700/30 rounded-lg p-2 -m-2 transition-colors">
             <div className="w-8 h-8 bg-gradient-to-br from-purple-400 to-purple-600 rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-sm">OOF</span>
             </div>
             <span className="text-white font-semibold text-lg">Platform</span>
-          </div>
+          </Link>
         )}
         
         <Button

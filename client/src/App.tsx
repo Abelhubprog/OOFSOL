@@ -46,7 +46,7 @@ function Router() {
   return (
     <div className="flex min-h-screen bg-gradient-to-br from-purple-900 via-purple-800 to-purple-900">
       <Sidebar />
-      <main className="flex-1 lg:ml-64 p-3 sm:p-6 overflow-auto">
+      <main className="flex-1 lg:ml-64 p-3 sm:p-6 pb-20 overflow-auto">
         <Switch>
           <Route path="/" component={Dashboard} />
           <Route path="/tokens" component={TradersArena} />
@@ -69,6 +69,7 @@ function Router() {
           <Route component={NotFound} />
         </Switch>
       </main>
+      <BottomSlider />
     </div>
   );
 }
