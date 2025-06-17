@@ -5,6 +5,8 @@ import {
   missedOpportunities,
   slotSpins,
   userAchievements,
+  tokenAds,
+  adInteractions,
   type User,
   type UpsertUser,
   type Token,
@@ -17,9 +19,13 @@ import {
   type InsertSlotSpin,
   type UserAchievement,
   type InsertUserAchievement,
+  type TokenAd,
+  type InsertTokenAd,
+  type AdInteraction,
+  type InsertAdInteraction,
 } from "@shared/schema";
 import { db } from "./db";
-import { eq, desc, and, sql, gte, lte } from "drizzle-orm";
+import { eq, desc, and, sql, gte, lte, gt } from "drizzle-orm";
 
 // Interface for storage operations
 export interface IStorage {
@@ -57,6 +63,13 @@ export interface IStorage {
   
   // Leaderboard operations
   getLeaderboard(limit?: number): Promise<User[]>;
+  
+  // Token advertising operations
+  getActiveTokenAds(): Promise<TokenAd[]>;
+  createTokenAd(ad: InsertTokenAd): Promise<TokenAd>;
+  updateTokenAd(id: number, updates: Partial<TokenAd>): Promise<TokenAd>;
+  trackAdInteraction(interaction: InsertAdInteraction): Promise<AdInteraction>;
+  getAdStats(adId: number): Promise<{ views: number; clicks: number }>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -209,6 +222,57 @@ export class DatabaseStorage implements IStorage {
       .from(users)
       .orderBy(desc(users.oofScore))
       .limit(limit);
+  }
+
+  // Token advertising operations
+  async getActiveTokenAds(): Promise<TokenAd[]> {
+    const now = new Date();
+    const ads = await db.select().from(tokenAds).where(
+      and(
+        eq(tokenAds.isActive, true),
+        gt(tokenAds.endTime, now)
+      )
+    ).orderBy(tokenAds.slotNumber);
+    return ads;
+  }
+
+  async createTokenAd(ad: InsertTokenAd): Promise<TokenAd> {
+    const [createdAd] = await db.insert(tokenAds).values(ad).returning();
+    return createdAd;
+  }
+
+  async updateTokenAd(id: number, updates: Partial<TokenAd>): Promise<TokenAd> {
+    const [updatedAd] = await db.update(tokenAds)
+      .set(updates)
+      .where(eq(tokenAds.id, id))
+      .returning();
+    return updatedAd;
+  }
+
+  async trackAdInteraction(interaction: InsertAdInteraction): Promise<AdInteraction> {
+    const [createdInteraction] = await db.insert(adInteractions).values(interaction).returning();
+    
+    // Update ad stats
+    if (interaction.interactionType === 'view') {
+      await db.update(tokenAds)
+        .set({ views: sql`${tokenAds.views} + 1` })
+        .where(eq(tokenAds.id, interaction.adId));
+    } else if (interaction.interactionType === 'click') {
+      await db.update(tokenAds)
+        .set({ clicks: sql`${tokenAds.clicks} + 1` })
+        .where(eq(tokenAds.id, interaction.adId));
+    }
+    
+    return createdInteraction;
+  }
+
+  async getAdStats(adId: number): Promise<{ views: number; clicks: number }> {
+    const [ad] = await db.select({
+      views: tokenAds.views,
+      clicks: tokenAds.clicks
+    }).from(tokenAds).where(eq(tokenAds.id, adId));
+    
+    return { views: ad?.views || 0, clicks: ad?.clicks || 0 };
   }
 }
 

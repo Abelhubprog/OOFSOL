@@ -17,6 +17,7 @@ import {
   Rocket
 } from "lucide-react";
 import OOFCounter from "@/components/OOFCounter";
+import TokenAdvertisingSpaces from "@/components/TokenAdvertisingSpaces";
 
 export default function Landing() {
   const handleLogin = () => {
@@ -100,143 +101,8 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* Features Preview */}
-      <section className="py-12 px-4">
-        <div className="max-w-7xl mx-auto">
-          <h2 className="text-3xl font-bold text-center mb-12">
-            <BarChart3 className="w-8 h-8 inline mr-3 text-purple-400" />
-            Platform Features
-          </h2>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Real-time Dashboard */}
-            <Card className="bg-purple-800/30 border-purple-700 glass-card">
-              <CardContent className="p-6">
-                <div className="flex items-center mb-4">
-                  <Flame className="w-8 h-8 text-orange-400 mr-3" />
-                  <h3 className="text-xl font-bold text-white">Live Dashboard</h3>
-                </div>
-                <p className="text-purple-300 mb-4">
-                  Monitor hottest Solana memecoins in real-time with risk analysis and instant alerts.
-                </p>
-                <Button 
-                  onClick={handleLogin}
-                  variant="outline"
-                  className="w-full border-purple-400 text-purple-200"
-                >
-                  View Dashboard
-                  <ArrowRight className="w-4 h-4 ml-2" />
-                </Button>
-              </CardContent>
-            </Card>
-
-            {/* Trader's Arena */}
-            <Card className="bg-purple-800/30 border-purple-700 glass-card">
-              <CardContent className="p-6">
-                <div className="flex items-center mb-4">
-                  <Target className="w-8 h-8 text-yellow-400 mr-3" />
-                  <h3 className="text-xl font-bold text-white">Trader's Arena</h3>
-                </div>
-                <p className="text-purple-300 mb-4">
-                  Make price predictions and earn $OOF tokens for accurate calls. Compete on the leaderboard!
-                </p>
-                <Button 
-                  onClick={handleLogin}
-                  variant="outline"
-                  className="w-full border-purple-400 text-purple-200"
-                >
-                  Start Predicting
-                  <ArrowRight className="w-4 h-4 ml-2" />
-                </Button>
-              </CardContent>
-            </Card>
-
-            {/* Time Machine */}
-            <Card className="bg-purple-800/30 border-purple-700 glass-card">
-              <CardContent className="p-6">
-                <div className="flex items-center mb-4">
-                  <Clock className="w-8 h-8 text-purple-400 mr-3" />
-                  <h3 className="text-xl font-bold text-white">Time Machine</h3>
-                </div>
-                <p className="text-purple-300 mb-4">
-                  Travel back in time to see what could have been. Calculate your biggest missed gains!
-                </p>
-                <Button 
-                  onClick={handleLogin}
-                  variant="outline"
-                  className="w-full border-purple-400 text-purple-200"
-                >
-                  Time Travel
-                  <ArrowRight className="w-4 h-4 ml-2" />
-                </Button>
-              </CardContent>
-            </Card>
-
-            {/* Wallet Analyzer */}
-            <Card className="bg-purple-800/30 border-purple-700 glass-card">
-              <CardContent className="p-6">
-                <div className="flex items-center mb-4">
-                  <Search className="w-8 h-8 text-blue-400 mr-3" />
-                  <h3 className="text-xl font-bold text-white">Wallet Analyzer</h3>
-                </div>
-                <p className="text-purple-300 mb-4">
-                  Analyze any Solana wallet to discover epic missed opportunities and create shareable OOF moments.
-                </p>
-                <Button 
-                  onClick={handleLogin}
-                  variant="outline"
-                  className="w-full border-purple-400 text-purple-200"
-                >
-                  Analyze Wallet
-                  <ArrowRight className="w-4 h-4 ml-2" />
-                </Button>
-              </CardContent>
-            </Card>
-
-            {/* OOF Slots */}
-            <Card className="bg-purple-800/30 border-purple-700 glass-card">
-              <CardContent className="p-6">
-                <div className="flex items-center mb-4">
-                  <Sparkles className="w-8 h-8 text-yellow-400 mr-3" />
-                  <h3 className="text-xl font-bold text-white">OOF Multiverse Slots</h3>
-                </div>
-                <p className="text-purple-300 mb-4">
-                  Spin through legendary memecoin moments! Collect rare NFTs and win massive $OOF rewards.
-                </p>
-                <Button 
-                  onClick={handleLogin}
-                  variant="outline"
-                  className="w-full border-purple-400 text-purple-200"
-                >
-                  Spin to Win
-                  <ArrowRight className="w-4 h-4 ml-2" />
-                </Button>
-              </CardContent>
-            </Card>
-
-            {/* Community */}
-            <Card className="bg-purple-800/30 border-purple-700 glass-card">
-              <CardContent className="p-6">
-                <div className="flex items-center mb-4">
-                  <Users className="w-8 h-8 text-green-400 mr-3" />
-                  <h3 className="text-xl font-bold text-white">Join Community</h3>
-                </div>
-                <p className="text-purple-300 mb-4">
-                  Connect with fellow traders, share OOF moments, and learn from the community's mistakes.
-                </p>
-                <Button 
-                  onClick={handleLogin}
-                  variant="outline"
-                  className="w-full border-purple-400 text-purple-200"
-                >
-                  Join Revolution
-                  <ArrowRight className="w-4 h-4 ml-2" />
-                </Button>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </section>
+      {/* Token Advertising Spaces */}
+      <TokenAdvertisingSpaces />
 
       {/* Call to Action */}
       <section className="py-16 px-4">
