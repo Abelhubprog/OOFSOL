@@ -16,7 +16,8 @@ import {
   Crown,
   Coins,
   Zap,
-  Gift
+  Gift,
+  Users
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -42,6 +43,7 @@ export default function Navigation() {
     { path: "/battle-royale", label: "Battle", icon: Zap },
     { path: "/reality-bender", label: "Reality", icon: Sparkles },
     { path: "/airdrop", label: "Airdrop", icon: Sparkles },
+    { path: "/social", label: "Social", icon: User },
   ];
 
   const isActive = (path: string) => {

@@ -52,6 +52,7 @@ function Router() {
             <Route path="/battle-royale" component={OOFBattleRoyale} />
             <Route path="/reality-bender" component={OOFRealityBender} />
             <Route path="/airdrop" component={OOFAirdrop} />
+            <Route path="/social" component={OOFSocial} />
           </>
         )}
         <Route component={NotFound} />

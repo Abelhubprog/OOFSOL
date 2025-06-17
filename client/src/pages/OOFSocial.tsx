@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { 
   Heart, MessageCircle, Share2, TrendingUp, 
-  Star, Crown, Zap, Trophy, Fire,
+  Star, Crown, Zap, Trophy, Flame,
   ThumbsUp, Eye, Clock, Target
 } from "lucide-react";
 
@@ -310,7 +310,7 @@ export default function OOFSocial() {
             <Card className="oof-shadow">
               <CardHeader>
                 <CardTitle className="text-lg font-bold text-purple-900 flex items-center">
-                  <Fire className="mr-2 h-5 w-5 text-orange-500" />
+                  <Flame className="mr-2 h-5 w-5 text-orange-500" />
                   Trending Now
                 </CardTitle>
               </CardHeader>
