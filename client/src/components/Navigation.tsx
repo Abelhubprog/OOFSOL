@@ -11,7 +11,11 @@ import {
   X,
   LogOut,
   User,
-  Shield
+  Shield,
+  BookOpen,
+  Crown,
+  Coins,
+  Zap
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -31,6 +35,10 @@ export default function Navigation() {
     { path: "/wallet-analyzer", label: "Analyzer", icon: Search },
     { path: "/slots", label: "Slots", icon: Sparkles },
     { path: "/detective", label: "Detective", icon: Shield },
+    { path: "/origins", label: "Origins", icon: BookOpen },
+    { path: "/legends", label: "Legends", icon: Crown },
+    { path: "/staking", label: "Staking", icon: Coins },
+    { path: "/battle-royale", label: "Battle", icon: Zap },
   ];
 
   const isActive = (path: string) => {
