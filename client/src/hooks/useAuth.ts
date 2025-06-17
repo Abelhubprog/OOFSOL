@@ -4,12 +4,12 @@ export function useAuth() {
   const { data: user, isLoading } = useQuery({
     queryKey: ["/api/auth/user"],
     retry: false,
-    enabled: false, // Disable automatic fetching since pages are public
+    enabled: true, // Enable fetching to check auth status
   });
 
   return {
     user,
-    isLoading: false, // Never show loading state for public pages
+    isLoading,
     isAuthenticated: !!user,
   };
 }

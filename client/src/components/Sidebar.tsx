@@ -48,10 +48,6 @@ export default function Sidebar({ className }: SidebarProps) {
   const [location] = useLocation();
   const { user, isAuthenticated } = useAuth();
 
-  if (!isAuthenticated) {
-    return null;
-  }
-
   return (
     <div 
       className={cn(
@@ -84,19 +80,35 @@ export default function Sidebar({ className }: SidebarProps) {
       {/* User Profile */}
       {!isCollapsed && (
         <div className="p-4 border-b border-purple-700/50">
-          <Link href="/profile" className="flex items-center space-x-3 hover:bg-purple-700/30 rounded-lg p-2 -m-2 transition-colors">
-            <div className="w-10 h-10 bg-purple-600 rounded-full flex items-center justify-center">
-              <User className="h-5 w-5 text-white" />
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-white font-medium text-sm truncate">
-                {(user as any)?.firstName || 'User'}
-              </p>
-              <p className="text-purple-300 text-xs truncate">
-                {(user as any)?.oofTokens || 0} OOF Tokens
-              </p>
-            </div>
-          </Link>
+          {isAuthenticated ? (
+            <Link href="/profile" className="flex items-center space-x-3 hover:bg-purple-700/30 rounded-lg p-2 -m-2 transition-colors">
+              <div className="w-10 h-10 bg-purple-600 rounded-full flex items-center justify-center">
+                <User className="h-5 w-5 text-white" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-white font-medium text-sm truncate">
+                  {(user as any)?.firstName || 'User'}
+                </p>
+                <p className="text-purple-300 text-xs truncate">
+                  {(user as any)?.oofTokens || 0} OOF Tokens
+                </p>
+              </div>
+            </Link>
+          ) : (
+            <Link href="/api/login" className="flex items-center space-x-3 hover:bg-purple-700/30 rounded-lg p-2 -m-2 transition-colors">
+              <div className="w-10 h-10 bg-purple-600 rounded-full flex items-center justify-center">
+                <User className="h-5 w-5 text-white" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-white font-medium text-sm truncate">
+                  ABEL
+                </p>
+                <p className="text-purple-300 text-xs truncate">
+                  0 OOF Tokens
+                </p>
+              </div>
+            </Link>
+          )}
         </div>
       )}
 
@@ -134,18 +146,33 @@ export default function Sidebar({ className }: SidebarProps) {
 
       {/* Footer */}
       <div className="p-4 border-t border-purple-700/50">
-        <Button
-          variant="ghost"
-          size="sm"
-          className={cn(
-            "w-full justify-start text-purple-300 hover:text-white hover:bg-purple-700/50",
-            isCollapsed && "px-3"
-          )}
-          onClick={() => window.location.href = '/api/logout'}
-        >
-          <LogOut className="h-4 w-4" />
-          {!isCollapsed && <span className="ml-3">Sign Out</span>}
-        </Button>
+        {isAuthenticated ? (
+          <Button
+            variant="ghost"
+            size="sm"
+            className={cn(
+              "w-full justify-start text-purple-300 hover:text-white hover:bg-purple-700/50",
+              isCollapsed && "px-3"
+            )}
+            onClick={() => window.location.href = '/api/logout'}
+          >
+            <LogOut className="h-4 w-4" />
+            {!isCollapsed && <span className="ml-3">Sign Out</span>}
+          </Button>
+        ) : (
+          <Button
+            variant="ghost"
+            size="sm"
+            className={cn(
+              "w-full justify-start text-purple-300 hover:text-white hover:bg-purple-700/50",
+              isCollapsed && "px-3"
+            )}
+            onClick={() => window.location.href = '/api/login'}
+          >
+            <User className="h-4 w-4" />
+            {!isCollapsed && <span className="ml-3">Sign In</span>}
+          </Button>
+        )}
       </div>
     </div>
   );
