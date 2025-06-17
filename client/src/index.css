@@ -100,6 +100,85 @@
     background: linear-gradient(135deg, hsl(272, 47%, 21%) 0%, hsl(271, 81%, 56%) 100%);
   }
   
+  /* Animations for OOF theme */
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+  
+  .animate-glow-gold {
+    animation: glow-gold 2s ease-in-out infinite alternate;
+  }
+  
+  .animate-glow-purple {
+    animation: glow-purple 2s ease-in-out infinite alternate;
+  }
+  
+  .animate-bounce-slow {
+    animation: bounce 3s infinite;
+  }
+  
+  .animate-pulse-fast {
+    animation: pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+  
+  /* Custom keyframes */
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
+  
+  @keyframes glow-gold {
+    0% { box-shadow: 0 0 5px #fbbf24, 0 0 10px #fbbf24, 0 0 15px #fbbf24; }
+    100% { box-shadow: 0 0 10px #fbbf24, 0 0 20px #fbbf24, 0 0 30px #fbbf24; }
+  }
+  
+  @keyframes glow-purple {
+    0% { box-shadow: 0 0 5px hsl(271, 81%, 56%), 0 0 10px hsl(271, 81%, 56%), 0 0 15px hsl(271, 81%, 56%); }
+    100% { box-shadow: 0 0 10px hsl(271, 81%, 56%), 0 0 20px hsl(271, 81%, 56%), 0 0 30px hsl(271, 81%, 56%); }
+  }
+  
+  /* Glass morphism effects */
+  .glass {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  
+  .glass-dark {
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  /* Utility classes for OOF theming */
+  .text-oof-primary {
+    color: hsl(271, 81%, 56%);
+  }
+  
+  .bg-oof-primary {
+    background-color: hsl(271, 81%, 56%);
+  }
+  
+  .border-oof-primary {
+    border-color: hsl(271, 81%, 56%);
+  }
+  
+  /* Hover states */
+  .hover-oof-glow:hover {
+    box-shadow: 0 0 20px hsl(271, 81%, 56%);
+    transition: box-shadow 0.3s ease;
+  }
+  
+  /* Card hover effects */
+  .card-hover {
+    transition: all 0.3s ease;
+  }
+  
+  .card-hover:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(139, 92, 246, 0.3);
+  }
+  
   /* Glass Card Effects */
   .glass-card {
     backdrop-filter: blur(16px) saturate(180%);
