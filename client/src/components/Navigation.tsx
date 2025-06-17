@@ -10,7 +10,8 @@ import {
   Menu,
   X,
   LogOut,
-  User
+  User,
+  Shield
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -29,6 +30,7 @@ export default function Navigation() {
     { path: "/time-machine", label: "Time Machine", icon: Clock },
     { path: "/wallet-analyzer", label: "Analyzer", icon: Search },
     { path: "/slots", label: "Slots", icon: Sparkles },
+    { path: "/detective", label: "Detective", icon: Shield },
   ];
 
   const isActive = (path: string) => {

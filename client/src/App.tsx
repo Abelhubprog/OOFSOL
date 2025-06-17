@@ -10,6 +10,7 @@ import TradersArena from "@/pages/TradersArena";
 import TimeMachine from "@/pages/TimeMachine";
 import WalletAnalyzer from "@/pages/WalletAnalyzer";
 import Slots from "@/pages/Slots";
+import OOFDetective from "@/pages/OOFDetective";
 import NotFound from "@/pages/not-found";
 import Navigation from "@/components/Navigation";
 
@@ -37,6 +38,7 @@ function Router() {
             <Route path="/time-machine" component={TimeMachine} />
             <Route path="/wallet-analyzer" component={WalletAnalyzer} />
             <Route path="/slots" component={Slots} />
+            <Route path="/detective" component={OOFDetective} />
           </>
         )}
         <Route component={NotFound} />

@@ -50,12 +50,22 @@ export const tokens = pgTable("tokens", {
   name: varchar("name").notNull(),
   symbol: varchar("symbol").notNull(),
   icon: varchar("icon"),
+  emoji: varchar("emoji"),
   price: decimal("price", { precision: 20, scale: 10 }),
   marketCap: decimal("market_cap", { precision: 20, scale: 2 }),
   volume24h: decimal("volume_24h", { precision: 20, scale: 2 }),
   change24h: decimal("change_24h", { precision: 8, scale: 4 }),
   riskScore: integer("risk_score").default(50), // 0-100 scale
+  rugPullRisk: integer("rug_pull_risk").default(0), // 0-100 scale
+  socialScore: integer("social_score").default(0), // 0-100 scale
+  whaleActivity: varchar("whale_activity").default("Low"), // Low, Medium, High, Extreme
+  holderCount: integer("holder_count").default(0),
+  liquidityUSD: decimal("liquidity_usd", { precision: 20, scale: 2 }),
+  description: text("description"),
   launchDate: timestamp("launch_date"),
+  peakPrice: decimal("peak_price", { precision: 20, scale: 10 }),
+  peakDate: timestamp("peak_date"),
+  isActive: boolean("is_active").default(true),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
