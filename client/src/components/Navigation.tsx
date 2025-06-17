@@ -39,6 +39,7 @@ export default function Navigation() {
     { path: "/legends", label: "Legends", icon: Crown },
     { path: "/staking", label: "Staking", icon: Coins },
     { path: "/battle-royale", label: "Battle", icon: Zap },
+    { path: "/reality-bender", label: "Reality", icon: Sparkles },
   ];
 
   const isActive = (path: string) => {
