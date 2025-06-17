@@ -21,7 +21,7 @@ import OOFAirdrop from "@/pages/OOFAirdrop";
 import OOFSocial from "@/pages/OOFSocial";
 import NotFound from "@/pages/not-found";
 import Navigation from "@/components/Navigation";
-import { SolanaWalletProvider } from "./components/SolanaWalletProvider";
+
 
 function Router() {
   const { isAuthenticated, isLoading } = useAuth();
@@ -68,15 +68,13 @@ function App() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-purple-100 to-purple-200">
       <QueryClientProvider client={queryClient}>
-        <SolanaWalletProvider>
-          <TooltipProvider>
-            <Navigation />
-            <main className="pt-16">
-              <Router />
-            </main>
-            <Toaster />
-          </TooltipProvider>
-        </SolanaWalletProvider>
+        <TooltipProvider>
+          <Navigation />
+          <main className="pt-16">
+            <Router />
+          </main>
+          <Toaster />
+        </TooltipProvider>
       </QueryClientProvider>
     </div>
   );
