@@ -1,7 +1,7 @@
 import { useDynamicContext } from '@dynamic-labs/sdk-react-core';
 
 export function useAuth() {
-  const { user, primaryWallet, isAuthenticated: dynamicAuth } = useDynamicContext();
+  const { user, primaryWallet } = useDynamicContext();
 
   // For compatibility with existing components
   const authUser = primaryWallet ? {
@@ -13,7 +13,7 @@ export function useAuth() {
     profileImageUrl: null
   } : null;
 
-  const isAuthenticated = dynamicAuth && !!primaryWallet;
+  const isAuthenticated = !!primaryWallet;
 
   return {
     user: authUser,

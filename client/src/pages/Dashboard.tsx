@@ -36,7 +36,6 @@ import {
 import { Link } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/useAuth";
-import { DynamicWidget } from '@dynamic-labs/sdk-react-core';
 
 interface GlobalStats {
   totalOOFMoments: number;
@@ -80,26 +79,7 @@ export default function Dashboard() {
     return () => clearInterval(interval);
   }, []);
 
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-purple-800 to-purple-900 text-white flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-6xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent mb-4">
-            OOF
-          </h1>
-          <h2 className="text-2xl text-purple-200 mb-2">
-            The Meme Coin for Missed Opportunities 🔍
-          </h2>
-          <p className="text-purple-300 mb-8 max-w-md mx-auto">
-            Connect your Solana wallet to access the OOF Platform and start turning your crypto regrets into rewards!
-          </p>
-          <div className="flex justify-center">
-            <DynamicWidget />
-          </div>
-        </div>
-      </div>
-    );
-  }
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-900 via-purple-800 to-indigo-900 text-white">
