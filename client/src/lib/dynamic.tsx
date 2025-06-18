@@ -1,17 +1,13 @@
 import { DynamicContextProvider } from '@dynamic-labs/sdk-react-core';
-import { EthereumWalletConnectors } from '@dynamic-labs/ethereum';
 import { SolanaWalletConnectors } from '@dynamic-labs/solana';
 
 const DynamicProvider = ({ children }: { children: React.ReactNode }) => {
-  // Use the provided Dynamic Environment ID
-  const environmentId = "0a73d89a-ab65-4323-b27c-9173ae561989";
-
   return (
     <DynamicContextProvider
       settings={{
-        environmentId,
+        environmentId: "7037c007-259c-4dc8-8f95-3ed01c0ab2fb",
         walletConnectors: [SolanaWalletConnectors],
-        appName: 'OOF',
+        appName: 'OOF Platform',
         cssOverrides: `
           .dynamic-widget-card {
             background: linear-gradient(135deg, #9333ea 0%, #7c3aed 100%);
@@ -20,6 +16,9 @@ const DynamicProvider = ({ children }: { children: React.ReactNode }) => {
           .dynamic-widget-button {
             background: linear-gradient(135deg, #a855f7 0%, #9333ea 100%);
             color: white;
+            border-radius: 8px;
+            padding: 8px 16px;
+            font-weight: 500;
           }
           .dynamic-widget-button:hover {
             background: linear-gradient(135deg, #9333ea 0%, #7c3aed 100%);
