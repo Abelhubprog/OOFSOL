@@ -8,6 +8,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import Landing from "@/pages/Landing";
 import Dashboard from "@/pages/Dashboard";
 import TradersArena from "@/pages/TradersArena";
+import TokenExplorer from "@/pages/TokenExplorer";
 import TimeMachine from "@/pages/TimeMachine";
 import WalletAnalyzer from "@/pages/WalletAnalyzer";
 import Slots from "@/pages/Slots";
@@ -38,6 +39,7 @@ function Router() {
           <Route path="/" component={Landing} />
           <Route path="/dashboard" component={Dashboard} />
           <Route path="/tokens" component={TradersArena} />
+          <Route path="/token-explorer" component={TokenExplorer} />
           <Route path="/moments" component={OOFMoments} />
           <Route path="/multiverse" component={OOFMultiverse} />
           <Route path="/profile" component={Profile} />

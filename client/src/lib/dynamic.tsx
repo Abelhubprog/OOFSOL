@@ -11,11 +11,6 @@ const DynamicProvider = ({ children }: { children: React.ReactNode }) => {
         // Enable Solana wallet connectors for existing wallet users
         walletConnectors: [SolanaWalletConnectors],
         
-        // Enable embedded wallets for automatic wallet creation
-        embeddedWallets: {
-          createOnSignUp: 'all-users',
-        },
-        
         // Enhanced styling for OOF branding
         cssOverrides: `
           .dynamic-widget-card {
