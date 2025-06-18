@@ -35,7 +35,7 @@ const navigationItems = [
   { path: '/token-explorer', icon: TrendingUp, label: 'Token Explorer', color: 'text-green-400' },
   { path: '/tokens', icon: BarChart3, label: 'Traders Arena', color: 'text-indigo-400' },
   { path: '/campaigns', icon: Target, label: 'OOF Campaigns', color: 'text-green-400' },
-  { path: '/moments', icon: Star, label: 'OOF Moments', color: 'text-yellow-400' },
+  { path: '/oof-moments', icon: Star, label: 'OOF Moments', color: 'text-yellow-400' },
   { path: '/multiverse', icon: Sparkles, label: 'OOF Multiverse', color: 'text-pink-400' },
   { path: '/detective', icon: Shield, label: 'OOF Detective', color: 'text-red-400' },
   { path: '/detective-advanced', icon: Zap, label: 'Advanced AI', color: 'text-cyan-400' },

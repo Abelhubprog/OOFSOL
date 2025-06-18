@@ -44,7 +44,7 @@ function Router() {
           <Route path="/dashboard" component={Dashboard} />
           <Route path="/tokens" component={TradersArena} />
           <Route path="/token-explorer" component={TokenExplorer} />
-          <Route path="/moments" component={OOFMoments} />
+          <Route path="/oof-moments" component={OOFMoments} />
           <Route path="/multiverse" component={OOFMultiverse} />
           <Route path="/profile" component={Profile} />
           <Route path="/time-machine" component={TimeMachine} />
