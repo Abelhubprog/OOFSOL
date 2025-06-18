@@ -1,372 +1,602 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  Sparkles, Share2, Download, Crown, 
-  Trophy, Star, Heart, MessageCircle, ChevronLeft, ChevronRight 
-} from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useDynamicContext } from '@dynamic-labs/sdk-react-core';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { apiRequest } from '@/lib/queryClient';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
+import { Input } from '@/components/ui/input';
+import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { useToast } from '@/hooks/use-toast';
+import { 
+  Search, 
+  Wallet, 
+  Heart, 
+  Share2, 
+  Download, 
+  Crown, 
+  Trophy,
+  Star,
+  Sparkles,
+  TrendingUp,
+  TrendingDown,
+  Copy,
+  ExternalLink,
+  Loader2
+} from 'lucide-react';
 
-interface Moment {
-  id: string;
+interface OOFMoment {
+  id: number;
   title: string;
   description: string;
   quote: string;
   rarity: 'legendary' | 'epic' | 'rare';
-  background: string;
-  emoji: string;
+  momentType: 'paper_hands' | 'dust_collector' | 'gains_master';
+  tokenSymbol: string;
+  tokenAddress: string;
+  walletAddress: string;
+  cardMetadata: {
+    background: string;
+    emoji: string;
+    textColor: string;
+    accentColor: string;
+    gradientFrom: string;
+    gradientTo: string;
+  };
   socialStats: {
     likes: number;
     shares: number;
     comments: number;
   };
   tags: string[];
+  nftMinted: boolean;
+  zoraUrl?: string;
+  createdAt: string;
 }
 
-const OOFMomentsCollection = () => {
-  const [selectedMoment, setSelectedMoment] = useState<Moment | null>(null);
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const [filter, setFilter] = useState('All');
+interface WalletAnalysis {
+  walletAddress: string;
+  totalTransactions: number;
+  totalTokensTraded: number;
+  dustTokensCount: number;
+  paperHandsCount: number;
+  profitableTokensCount: number;
+  lastAnalyzed: string;
+}
 
-  // Hilarious OOF Moment Templates
-  const OOF_MOMENTS: Record<string, Moment[]> = {
-    legendary: [
-      {
-        id: 'paper-hands-king',
-        title: "The Paper Hands King 👑",
-        description: "Sold 1M BONK one day before 100x. Now writes tragic poetry about diamond hands.",
-        quote: "My hands were paper, my heart now torn, a simple hodl would've made me reborn...",
-        rarity: "legendary",
-        background: "bg-gradient-to-br from-yellow-300 to-yellow-600",
-        emoji: "🧻👑",
-        socialStats: {
-          likes: 1234,
-          shares: 456,
-          comments: 789
-        },
-        tags: ["#PaperHandsProblems", "#CouldaWouldaShoulda", "#BONKregrets"]
-      },
-      {
-        id: 'fomo-master',
-        title: "The FOMO Master 🎭",
-        description: "Bought the top of every memecoin pump in 2024. A true collector of local maximas.",
-        quote: "They say timing the market is impossible. I proved them right - every single time.",
-        rarity: "legendary",
-        background: "bg-gradient-to-br from-purple-400 to-purple-700",
-        emoji: "📈😱",
-        socialStats: {
-          likes: 2345,
-          shares: 567,
-          comments: 890
-        },
-        tags: ["#FOMOlife", "#BuyHighSellLow", "#ProfessionalTopBuyer"]
-      }
-    ],
-    epic: [
-      {
-        id: 'sleeping-trader',
-        title: "The Sleeping Trader 😴",
-        description: "Slept through the MYRO launch. Dreams now have price charts.",
-        quote: "I don't always sleep through pumps, but when I do, it's always a 100x.",
-        rarity: "epic",
-        background: "bg-gradient-to-br from-indigo-400 to-indigo-700",
-        emoji: "💤📱",
-        socialStats: {
-          likes: 876,
-          shares: 234,
-          comments: 567
-        },
-        tags: ["#SleepIsCostly", "#MYROmissed", "#NappingOnGains"]
-      },
-      {
-        id: 'gas-fee-warrior',
-        title: "The Gas Fee Warrior ⛽",
-        description: "Spent more on gas fees than actual token purchases. A true DeFi philanthropist.",
-        quote: "I don't trade tokens, I donate to miners with style.",
-        rarity: "epic",
-        background: "bg-gradient-to-br from-orange-400 to-red-600",
-        emoji: "⛽💸",
-        socialStats: {
-          likes: 654,
-          shares: 321,
-          comments: 432
-        },
-        tags: ["#GasGuzzler", "#MinerSupport", "#ExpensiveClicks"]
-      }
-    ],
-    rare: [
-      {
-        id: 'chart-whisperer',
-        title: "The Chart Whisperer 🔮",
-        description: "Called 17 dips in a row... to buy. Still waiting for all 17 recoveries.",
-        quote: "They say the trend is your friend. Mine just has a weird sense of humor.",
-        rarity: "rare",
-        background: "bg-gradient-to-br from-blue-400 to-blue-700",
-        emoji: "📊🤔",
-        socialStats: {
-          likes: 543,
-          shares: 123,
-          comments: 345
-        },
-        tags: ["#ChartLife", "#DiplyDipDip", "#TechnicalAnalyst"]
-      },
-      {
-        id: 'wallet-hoarder',
-        title: "The Wallet Hoarder 💼",
-        description: "Has 47 different wallets but can't remember which one has the good stuff.",
-        quote: "Security through confusion - if I can't find my tokens, neither can hackers.",
-        rarity: "rare",
-        background: "bg-gradient-to-br from-green-400 to-teal-600",
-        emoji: "💼🤯",
-        socialStats: {
-          likes: 432,
-          shares: 234,
-          comments: 123
-        },
-        tags: ["#WalletMaze", "#SecurityExpert", "#LostTokens"]
-      }
-    ]
+const OOFMoments: React.FC = () => {
+  const { user, primaryWallet } = useDynamicContext();
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
+
+  const [walletInput, setWalletInput] = useState('');
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [selectedMoment, setSelectedMoment] = useState<OOFMoment | null>(null);
+  const [showMintDialog, setShowMintDialog] = useState(false);
+  const [activeTab, setActiveTab] = useState('discover');
+
+  // Fetch public OOF Moments
+  const { data: publicMoments, isLoading: loadingPublic } = useQuery({
+    queryKey: ['/api/oof-moments/public'],
+    enabled: activeTab === 'discover'
+  });
+
+  // Fetch user's OOF Moments
+  const { data: userMoments, isLoading: loadingUser } = useQuery({
+    queryKey: ['/api/oof-moments/user', user?.userId],
+    enabled: activeTab === 'my-moments' && !!user?.userId
+  });
+
+  // Wallet analysis mutation
+  const analyzeMutation = useMutation({
+    mutationFn: async (walletAddress: string) => {
+      return apiRequest('/api/oof-moments/analyze', {
+        method: 'POST',
+        body: JSON.stringify({
+          walletAddress,
+          userId: user?.userId || null
+        })
+      });
+    },
+    onSuccess: (data) => {
+      toast({
+        title: "Analysis Complete!",
+        description: `Generated ${data.moments.length} OOF Moments from wallet analysis.`
+      });
+      queryClient.invalidateQueries({ queryKey: ['/api/oof-moments'] });
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Analysis Failed",
+        description: error.message || "Failed to analyze wallet",
+        variant: "destructive"
+      });
+    }
+  });
+
+  // Like mutation
+  const likeMutation = useMutation({
+    mutationFn: async ({ momentId, action }: { momentId: number; action: 'like' | 'unlike' }) => {
+      return apiRequest(`/api/oof-moments/${momentId}/like`, {
+        method: 'POST',
+        body: JSON.stringify({
+          userId: user?.userId || 'anonymous',
+          action
+        })
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/oof-moments'] });
+    }
+  });
+
+  // Share mutation
+  const shareMutation = useMutation({
+    mutationFn: async ({ momentId, platform }: { momentId: number; platform: string }) => {
+      return apiRequest(`/api/oof-moments/${momentId}/share`, {
+        method: 'POST',
+        body: JSON.stringify({
+          userId: user?.userId || 'anonymous',
+          platform
+        })
+      });
+    },
+    onSuccess: (data) => {
+      // Copy share URL to clipboard
+      navigator.clipboard.writeText(data.shareUrl);
+      toast({
+        title: "Share Link Copied!",
+        description: "Share URL copied to clipboard"
+      });
+      queryClient.invalidateQueries({ queryKey: ['/api/oof-moments'] });
+    }
+  });
+
+  // Mint NFT mutation
+  const mintMutation = useMutation({
+    mutationFn: async (momentId: number) => {
+      return apiRequest(`/api/oof-moments/${momentId}/mint`, {
+        method: 'POST',
+        body: JSON.stringify({
+          userWalletAddress: primaryWallet?.address
+        })
+      });
+    },
+    onSuccess: (data) => {
+      toast({
+        title: "NFT Minted Successfully!",
+        description: "Your OOF Moment has been minted on Zora"
+      });
+      setShowMintDialog(false);
+      queryClient.invalidateQueries({ queryKey: ['/api/oof-moments'] });
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Minting Failed",
+        description: error.message || "Failed to mint NFT",
+        variant: "destructive"
+      });
+    }
+  });
+
+  const handleAnalyzeWallet = async () => {
+    if (!walletInput.trim()) {
+      toast({
+        title: "Invalid Input",
+        description: "Please enter a valid Solana wallet address",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    setIsAnalyzing(true);
+    try {
+      await analyzeMutation.mutateAsync(walletInput.trim());
+      setWalletInput('');
+    } finally {
+      setIsAnalyzing(false);
+    }
   };
 
-  const allMoments = Object.values(OOF_MOMENTS).flat();
-  const filteredMoments = filter === 'All' ? allMoments : 
-    allMoments.filter(moment => moment.rarity === filter.toLowerCase());
-
-  const momentsPerSlide = 3;
-  const totalSlides = Math.ceil(filteredMoments.length / momentsPerSlide);
-
-  const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % totalSlides);
+  const handleLike = (momentId: number, isLiked: boolean) => {
+    likeMutation.mutate({
+      momentId,
+      action: isLiked ? 'unlike' : 'like'
+    });
   };
 
-  const prevSlide = () => {
-    setCurrentSlide((prev) => (prev - 1 + totalSlides) % totalSlides);
+  const handleShare = (momentId: number, platform: string) => {
+    shareMutation.mutate({ momentId, platform });
   };
 
-  const getCurrentMoments = () => {
-    const start = currentSlide * momentsPerSlide;
-    return filteredMoments.slice(start, start + momentsPerSlide);
+  const handleMint = (moment: OOFMoment) => {
+    if (!primaryWallet?.address) {
+      toast({
+        title: "Wallet Required",
+        description: "Please connect your wallet to mint NFTs",
+        variant: "destructive"
+      });
+      return;
+    }
+    setSelectedMoment(moment);
+    setShowMintDialog(true);
   };
 
-  // Auto-advance slider
-  useEffect(() => {
-    const interval = setInterval(() => {
-      nextSlide();
-    }, 8000);
-    return () => clearInterval(interval);
-  }, [totalSlides]);
+  const confirmMint = () => {
+    if (selectedMoment) {
+      mintMutation.mutate(selectedMoment.id);
+    }
+  };
 
-  // Reset slide when filter changes
-  useEffect(() => {
-    setCurrentSlide(0);
-  }, [filter]);
+  const getRarityIcon = (rarity: string) => {
+    switch (rarity) {
+      case 'legendary': return <Crown className="w-4 h-4 text-yellow-500" />;
+      case 'epic': return <Trophy className="w-4 h-4 text-purple-500" />;
+      case 'rare': return <Star className="w-4 h-4 text-blue-500" />;
+      default: return <Sparkles className="w-4 h-4 text-gray-500" />;
+    }
+  };
 
-  // Moment Card Component
-  const MomentCard = ({ moment }: { moment: Moment }) => (
-    <div 
-      className={`rounded-xl overflow-hidden shadow-lg transform transition-all 
-                  hover:scale-105 cursor-pointer ${moment.background} text-white p-6 h-full`}
-      onClick={() => setSelectedMoment(moment)}
+  const getTypeIcon = (type: string) => {
+    switch (type) {
+      case 'paper_hands': return <TrendingDown className="w-4 h-4 text-orange-500" />;
+      case 'dust_collector': return <Wallet className="w-4 h-4 text-gray-500" />;
+      case 'gains_master': return <TrendingUp className="w-4 h-4 text-green-500" />;
+      default: return <Sparkles className="w-4 h-4" />;
+    }
+  };
+
+  const OOFMomentCard: React.FC<{ moment: OOFMoment; showActions?: boolean }> = ({ 
+    moment, 
+    showActions = true 
+  }) => (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+      className="group"
     >
-      {/* Rarity Badge */}
-      <div className="flex justify-between items-start mb-4">
-        <span className="text-4xl">{moment.emoji}</span>
-        <span className={`px-3 py-1 rounded-full text-xs font-bold 
-                         ${moment.rarity === 'legendary' ? 'bg-yellow-300 text-yellow-900' :
-                           moment.rarity === 'epic' ? 'bg-purple-300 text-purple-900' :
-                           'bg-blue-300 text-blue-900'}`}>
-          {moment.rarity.toUpperCase()}
-        </span>
-      </div>
-
-      {/* Content */}
-      <h3 className="text-xl font-bold mb-2">{moment.title}</h3>
-      <p className="text-sm opacity-90 mb-4 line-clamp-3">{moment.description}</p>
-      
-      {/* Quote */}
-      <div className="bg-black bg-opacity-20 rounded-lg p-4 mb-4">
-        <p className="italic text-sm line-clamp-2">"{moment.quote}"</p>
-      </div>
-
-      {/* Social Stats */}
-      <div className="flex justify-between text-sm opacity-75">
-        <div className="flex items-center space-x-2">
-          <Heart size={16} />
-          <span>{moment.socialStats.likes}</span>
-        </div>
-        <div className="flex items-center space-x-2">
-          <Share2 size={16} />
-          <span>{moment.socialStats.shares}</span>
-        </div>
-        <div className="flex items-center space-x-2">
-          <MessageCircle size={16} />
-          <span>{moment.socialStats.comments}</span>
-        </div>
-      </div>
-    </div>
-  );
-
-  // Expanded View Component
-  const ExpandedMoment = ({ moment }: { moment: Moment }) => (
-    <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-6">
-      <div className="max-w-2xl w-full bg-white rounded-xl overflow-hidden shadow-2xl max-h-screen overflow-y-auto">
-        {/* Header */}
-        <div className={`${moment.background} p-8 text-white`}>
-          <div className="flex justify-between items-start mb-4">
-            <span className="text-6xl">{moment.emoji}</span>
-            <button 
-              onClick={() => setSelectedMoment(null)}
-              className="text-white opacity-75 hover:opacity-100 text-2xl"
-            >
-              ✕
-            </button>
+      <Card className="relative overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+        {/* Card Background */}
+        <div 
+          className="absolute inset-0 opacity-20"
+          style={{
+            background: `linear-gradient(135deg, ${moment.cardMetadata.gradientFrom}, ${moment.cardMetadata.gradientTo})`
+          }}
+        />
+        
+        <CardHeader className="relative z-10">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              {getRarityIcon(moment.rarity)}
+              <Badge variant="outline" className="capitalize">
+                {moment.rarity}
+              </Badge>
+              {getTypeIcon(moment.momentType)}
+              <Badge variant="secondary" className="capitalize">
+                {moment.momentType.replace('_', ' ')}
+              </Badge>
+            </div>
+            {moment.nftMinted && (
+              <Badge className="bg-purple-500 hover:bg-purple-600">
+                <ExternalLink className="w-3 h-3 mr-1" />
+                NFT
+              </Badge>
+            )}
           </div>
-          <h2 className="text-3xl font-bold mb-2">{moment.title}</h2>
-          <p className="opacity-90">{moment.description}</p>
-        </div>
+          
+          <CardTitle className="flex items-center gap-2">
+            <span className="text-2xl">{moment.cardMetadata.emoji}</span>
+            {moment.title}
+          </CardTitle>
+        </CardHeader>
 
-        {/* Content */}
-        <div className="p-8 space-y-6">
-          {/* Quote Section */}
-          <div className="text-center space-y-4">
-            <span className="text-4xl">💭</span>
-            <p className="text-xl italic text-gray-700">"{moment.quote}"</p>
-          </div>
+        <CardContent className="relative z-10 space-y-4">
+          <p className="text-sm text-muted-foreground">{moment.description}</p>
+          
+          <blockquote className="border-l-4 border-primary pl-4 italic">
+            "{moment.quote}"
+          </blockquote>
 
-          {/* Tags */}
           <div className="flex flex-wrap gap-2">
-            {moment.tags.map(tag => (
-              <span key={tag} className="bg-purple-100 text-purple-600 px-3 py-1 rounded-full text-sm">
+            {moment.tags.map((tag, index) => (
+              <Badge key={index} variant="outline" className="text-xs">
                 {tag}
-              </span>
+              </Badge>
             ))}
           </div>
 
-          {/* Mint Options */}
-          <div className="space-y-4">
-            <Button 
-              className="w-full bg-purple-600 text-white hover:bg-purple-700 flex items-center justify-center space-x-2"
-            >
-              <Star size={20} />
-              <span>Mint on Phantom</span>
-            </Button>
-            <Button 
-              className="w-full bg-blue-600 text-white hover:bg-blue-700 flex items-center justify-center space-x-2"
-            >
-              <Crown size={20} />
-              <span>Mint on Zora</span>
-            </Button>
+          <div className="flex items-center justify-between text-sm text-muted-foreground">
+            <span>Token: {moment.tokenSymbol}</span>
+            <span>
+              {moment.walletAddress.slice(0, 4)}...{moment.walletAddress.slice(-4)}
+            </span>
           </div>
 
-          {/* Share Options */}
-          <div className="flex justify-center space-x-4">
-            <Button variant="ghost" size="sm" className="text-purple-600 hover:text-purple-700">
-              <Share2 size={24} />
-            </Button>
-            <Button variant="ghost" size="sm" className="text-purple-600 hover:text-purple-700">
-              <Download size={24} />
-            </Button>
-          </div>
-        </div>
-      </div>
-    </div>
+          {showActions && (
+            <div className="flex items-center justify-between pt-4 border-t">
+              <div className="flex items-center gap-4">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => handleLike(moment.id, false)}
+                  className="flex items-center gap-1"
+                >
+                  <Heart className="w-4 h-4" />
+                  {moment.socialStats.likes}
+                </Button>
+                
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => handleShare(moment.id, 'twitter')}
+                  className="flex items-center gap-1"
+                >
+                  <Share2 className="w-4 h-4" />
+                  {moment.socialStats.shares}
+                </Button>
+              </div>
+
+              <div className="flex items-center gap-2">
+                {!moment.nftMinted && primaryWallet && (
+                  <Button
+                    size="sm"
+                    onClick={() => handleMint(moment)}
+                    disabled={mintMutation.isPending}
+                  >
+                    <Download className="w-4 h-4 mr-1" />
+                    Mint NFT
+                  </Button>
+                )}
+                
+                {moment.zoraUrl && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => window.open(moment.zoraUrl, '_blank')}
+                  >
+                    <ExternalLink className="w-4 h-4 mr-1" />
+                    View on Zora
+                  </Button>
+                )}
+              </div>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+    </motion.div>
   );
 
   return (
-    <div className="min-h-screen text-white p-3 sm:p-6">
-      <div className="max-w-6xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-8 sm:mb-12">
-          <h1 className="text-3xl sm:text-4xl font-bold text-white mb-2">
-            Legendary OOF Moments
-          </h1>
-          <p className="text-purple-300">
-            Where paper hands become immortal memes ✨
-          </p>
-        </div>
+    <div className="container mx-auto px-4 py-8 max-w-6xl">
+      {/* Header */}
+      <div className="text-center mb-8">
+        <motion.h1 
+          className="text-4xl font-bold mb-4 bg-gradient-to-r from-purple-600 to-orange-500 bg-clip-text text-transparent"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+        >
+          Legendary OOF Moments
+        </motion.h1>
+        <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          Immortalize your trading triumphs and failures. Analyze any Solana wallet to generate 
+          shareable OOF Moment cards and mint them as NFTs on Zora.
+        </p>
+      </div>
 
-        {/* Filter Tabs */}
-        <div className="flex justify-center space-x-2 sm:space-x-4 mb-8 flex-wrap gap-2">
-          {['All', 'Legendary', 'Epic', 'Rare'].map(filterOption => (
-            <Button
-              key={filterOption}
-              variant={filter === filterOption ? "default" : "outline"}
-              size="sm"
-              onClick={() => setFilter(filterOption)}
-              className={cn(
-                "px-4 py-2 rounded-full transition-colors",
-                filter === filterOption 
-                  ? "bg-purple-600 text-white" 
-                  : "bg-purple-100 text-purple-600 hover:bg-purple-200"
-              )}
-            >
-              {filterOption}
-            </Button>
-          ))}
-        </div>
+      {/* Wallet Analysis Section */}
+      <motion.div 
+        className="mb-8"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.2 }}
+      >
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Search className="w-5 h-5" />
+              Analyze Wallet
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex gap-4">
+              <Input
+                placeholder="Enter Solana wallet address..."
+                value={walletInput}
+                onChange={(e) => setWalletInput(e.target.value)}
+                className="flex-1"
+              />
+              <Button 
+                onClick={handleAnalyzeWallet}
+                disabled={isAnalyzing || analyzeMutation.isPending}
+                className="min-w-[120px]"
+              >
+                {isAnalyzing || analyzeMutation.isPending ? (
+                  <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                ) : (
+                  <Search className="w-4 h-4 mr-2" />
+                )}
+                Analyze
+              </Button>
+            </div>
+            {primaryWallet && (
+              <Button
+                variant="outline"
+                size="sm"
+                className="mt-2"
+                onClick={() => setWalletInput(primaryWallet.address)}
+              >
+                Use My Wallet
+              </Button>
+            )}
+          </CardContent>
+        </Card>
+      </motion.div>
 
-        {/* Slider Container */}
-        <div className="relative mb-8">
-          {/* Moments Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 min-h-[500px]">
-            {getCurrentMoments().map(moment => (
-              <MomentCard key={moment.id} moment={moment} />
-            ))}
+      {/* Tabs */}
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+        <TabsList className="grid w-full grid-cols-2">
+          <TabsTrigger value="discover">Discover</TabsTrigger>
+          <TabsTrigger value="my-moments">My Moments</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="discover" className="space-y-6">
+          <div className="flex items-center justify-between">
+            <h2 className="text-2xl font-semibold">Public OOF Moments</h2>
+            <p className="text-sm text-muted-foreground">
+              Latest trading fails and wins from the community
+            </p>
           </div>
 
-          {/* Navigation Arrows */}
-          {totalSlides > 1 && (
+          {loadingPublic ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {[...Array(6)].map((_, i) => (
+                <Card key={i} className="animate-pulse">
+                  <CardHeader>
+                    <div className="h-4 bg-muted rounded w-3/4"></div>
+                    <div className="h-6 bg-muted rounded"></div>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-3">
+                      <div className="h-4 bg-muted rounded"></div>
+                      <div className="h-4 bg-muted rounded w-5/6"></div>
+                      <div className="h-16 bg-muted rounded"></div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          ) : (
+            <AnimatePresence>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {publicMoments?.map((moment: OOFMoment) => (
+                  <OOFMomentCard key={moment.id} moment={moment} />
+                ))}
+              </div>
+            </AnimatePresence>
+          )}
+
+          {!loadingPublic && (!publicMoments || publicMoments.length === 0) && (
+            <div className="text-center py-12">
+              <Sparkles className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
+              <h3 className="text-lg font-semibold mb-2">No OOF Moments Yet</h3>
+              <p className="text-muted-foreground">
+                Be the first to analyze a wallet and create legendary OOF Moments!
+              </p>
+            </div>
+          )}
+        </TabsContent>
+
+        <TabsContent value="my-moments" className="space-y-6">
+          {!user ? (
+            <div className="text-center py-12">
+              <Wallet className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
+              <h3 className="text-lg font-semibold mb-2">Connect Wallet Required</h3>
+              <p className="text-muted-foreground">
+                Connect your wallet to view and manage your OOF Moments
+              </p>
+            </div>
+          ) : (
             <>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={prevSlide}
-                className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 bg-white/10 hover:bg-white/20 text-white rounded-full p-2"
-              >
-                <ChevronLeft size={24} />
-              </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={nextSlide}
-                className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 bg-white/10 hover:bg-white/20 text-white rounded-full p-2"
-              >
-                <ChevronRight size={24} />
-              </Button>
+              <div className="flex items-center justify-between">
+                <h2 className="text-2xl font-semibold">My OOF Moments</h2>
+                <p className="text-sm text-muted-foreground">
+                  Your personal collection of trading moments
+                </p>
+              </div>
+
+              {loadingUser ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {[...Array(3)].map((_, i) => (
+                    <Card key={i} className="animate-pulse">
+                      <CardHeader>
+                        <div className="h-4 bg-muted rounded w-3/4"></div>
+                        <div className="h-6 bg-muted rounded"></div>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="space-y-3">
+                          <div className="h-4 bg-muted rounded"></div>
+                          <div className="h-4 bg-muted rounded w-5/6"></div>
+                          <div className="h-16 bg-muted rounded"></div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {userMoments?.map((moment: OOFMoment) => (
+                    <OOFMomentCard key={moment.id} moment={moment} />
+                  ))}
+                </div>
+              )}
+
+              {!loadingUser && (!userMoments || userMoments.length === 0) && (
+                <div className="text-center py-12">
+                  <Search className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
+                  <h3 className="text-lg font-semibold mb-2">No Moments Created</h3>
+                  <p className="text-muted-foreground mb-4">
+                    Analyze a wallet to generate your first OOF Moments
+                  </p>
+                  <Button onClick={() => setActiveTab('discover')}>
+                    Start Analyzing
+                  </Button>
+                </div>
+              )}
             </>
           )}
-        </div>
+        </TabsContent>
+      </Tabs>
 
-        {/* Slider Dots */}
-        {totalSlides > 1 && (
-          <div className="flex justify-center space-x-2 mb-8">
-            {Array.from({ length: totalSlides }).map((_, index) => (
-              <button
-                key={index}
-                onClick={() => setCurrentSlide(index)}
-                className={cn(
-                  "w-3 h-3 rounded-full transition-colors",
-                  currentSlide === index ? "bg-purple-400" : "bg-purple-200"
-                )}
-              />
-            ))}
-          </div>
-        )}
+      {/* Mint NFT Dialog */}
+      <Dialog open={showMintDialog} onOpenChange={setShowMintDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Mint OOF Moment as NFT</DialogTitle>
+          </DialogHeader>
+          
+          {selectedMoment && (
+            <div className="space-y-4">
+              <div className="text-center">
+                <div className="text-4xl mb-2">{selectedMoment.cardMetadata.emoji}</div>
+                <h3 className="font-semibold">{selectedMoment.title}</h3>
+                <p className="text-sm text-muted-foreground">{selectedMoment.description}</p>
+              </div>
 
-        {/* Create Your Own */}
-        <div className="text-center">
-          <Button 
-            className="bg-purple-600 text-white hover:bg-purple-700 px-6 sm:px-8 py-3 sm:py-4 rounded-xl inline-flex items-center space-x-2"
-          >
-            <Sparkles size={20} />
-            <span>Create Your OOF Moment</span>
-          </Button>
-        </div>
+              <div className="bg-muted p-4 rounded-lg">
+                <h4 className="font-semibold mb-2">Minting Details:</h4>
+                <ul className="text-sm space-y-1">
+                  <li>• Free minting on Base network via Zora</li>
+                  <li>• Permanent ownership of your OOF Moment</li>
+                  <li>• Tradeable on OpenSea and other NFT marketplaces</li>
+                  <li>• Includes all original analysis metadata</li>
+                </ul>
+              </div>
 
-        {/* Expanded Moment Modal */}
-        {selectedMoment && <ExpandedMoment moment={selectedMoment} />}
-      </div>
+              <div className="flex justify-end gap-2">
+                <Button variant="outline" onClick={() => setShowMintDialog(false)}>
+                  Cancel
+                </Button>
+                <Button 
+                  onClick={confirmMint} 
+                  disabled={mintMutation.isPending}
+                >
+                  {mintMutation.isPending ? (
+                    <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                  ) : (
+                    <Download className="w-4 h-4 mr-2" />
+                  )}
+                  Mint NFT
+                </Button>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
 
-export default OOFMomentsCollection;
+export default OOFMoments;

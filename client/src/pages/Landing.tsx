@@ -21,6 +21,7 @@ import TokenAdvertisingSpaces from "@/components/TokenAdvertisingSpaces";
 import Footer from "@/components/Footer";
 import { useAuth } from "@/hooks/useAuth";
 import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
+import { Link } from "wouter";
 
 export default function Landing() {
   const { user, isAuthenticated } = useAuth();
@@ -81,21 +82,23 @@ export default function Landing() {
 
           {/* Quick Actions */}
           <div className="flex flex-wrap justify-center gap-4 mb-12">
-            <Button 
-              onClick={handleConnectWallet}
-              className="bg-gradient-to-r from-yellow-400 to-yellow-500 text-yellow-900 hover:from-yellow-500 hover:to-yellow-600"
-            >
-              <Zap className="w-5 h-5 mr-2" />
-              Calculate My OOFs
-            </Button>
-            <Button 
-              onClick={handleConnectWallet}
-              variant="outline" 
-              className="border-purple-400 text-purple-200 hover:bg-purple-700"
-            >
-              <Wallet className="w-5 h-5 mr-2" />
-              Analyze Wallet
-            </Button>
+            <Link href="/oof-moments">
+              <Button 
+                className="bg-gradient-to-r from-yellow-400 to-yellow-500 text-yellow-900 hover:from-yellow-500 hover:to-yellow-600"
+              >
+                <Zap className="w-5 h-5 mr-2" />
+                Calculate My OOFs
+              </Button>
+            </Link>
+            <Link href="/oof-moments">
+              <Button 
+                variant="outline" 
+                className="border-purple-400 text-purple-200 hover:bg-purple-700"
+              >
+                <Wallet className="w-5 h-5 mr-2" />
+                Analyze Wallet
+              </Button>
+            </Link>
             <Button 
               onClick={handleConnectWallet}
               className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700"

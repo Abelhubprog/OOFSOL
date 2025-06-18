@@ -4,7 +4,16 @@ import { storage } from "./storage";
 // Removed Replit auth - using Dynamic.xyz for wallet authentication
 import { solanaService } from "./services/solanaService";
 import { rugDetectionService } from "./services/rugDetectionService";
-import { insertPredictionSchema, insertMissedOpportunitySchema, insertSlotSpinSchema } from "@shared/schema";
+import { solanaWalletAnalysis } from "./services/solanaWalletAnalysis";
+import { oofMomentsGenerator } from "./services/oofMomentsGenerator";
+import { zoraIntegration } from "./services/zoraIntegration";
+import { 
+  insertPredictionSchema, 
+  insertMissedOpportunitySchema, 
+  insertSlotSpinSchema,
+  insertOOFMomentSchema,
+  insertMomentInteractionSchema 
+} from "@shared/schema";
 import { z } from "zod";
 
 export async function registerRoutes(app: Express): Promise<Server> {
@@ -883,6 +892,338 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error fetching user stats:", error);
       res.status(500).json({ message: "Failed to fetch user stats" });
+    }
+  });
+
+  // ========================
+  // OOF MOMENTS API ROUTES
+  // ========================
+
+  // Analyze wallet and generate OOF Moments
+  app.post('/api/oof-moments/analyze', async (req, res) => {
+    try {
+      const { walletAddress, userId } = req.body;
+
+      if (!walletAddress) {
+        return res.status(400).json({ message: "Wallet address is required" });
+      }
+
+      // Check if analysis already exists and is recent
+      const existingAnalysis = await storage.getWalletAnalysis(walletAddress);
+      const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000);
+      
+      if (existingAnalysis && existingAnalysis.lastAnalyzed > oneHourAgo) {
+        const moments = await storage.getOOFMomentsByWallet(walletAddress);
+        return res.json({
+          analysis: existingAnalysis,
+          moments,
+          fromCache: true
+        });
+      }
+
+      // Perform fresh wallet analysis
+      const analysis = await solanaWalletAnalysis.analyzeWallet(walletAddress);
+      
+      // Generate OOF Moment cards
+      const momentCards = await oofMomentsGenerator.generateOOFMoments(walletAddress, userId);
+      
+      // Store analysis in database
+      const analysisData = {
+        walletAddress,
+        totalTransactions: analysis.totalTransactions,
+        totalTokensTraded: analysis.totalTokensTraded,
+        biggestGain: analysis.biggestGain,
+        biggestLoss: analysis.biggestLoss,
+        dustTokensCount: analysis.dustTokens.length,
+        paperHandsCount: analysis.paperHandsMoments.length,
+        profitableTokensCount: analysis.profitableTokens.length,
+        analysisData: analysis,
+        lastAnalyzed: new Date()
+      };
+
+      const savedAnalysis = await storage.createWalletAnalysis(analysisData);
+
+      // Store OOF Moment cards
+      const savedMoments = [];
+      for (const card of momentCards) {
+        const momentData = oofMomentsGenerator.convertToDBFormat(card, walletAddress, userId);
+        const savedMoment = await storage.createOOFMoment(momentData);
+        savedMoments.push(savedMoment);
+      }
+
+      res.json({
+        analysis: savedAnalysis,
+        moments: savedMoments,
+        fromCache: false
+      });
+
+    } catch (error) {
+      console.error("Error analyzing wallet for OOF Moments:", error);
+      res.status(500).json({ 
+        message: "Failed to analyze wallet",
+        error: error instanceof Error ? error.message : "Unknown error"
+      });
+    }
+  });
+
+  // Get public OOF Moments feed
+  app.get('/api/oof-moments/public', async (req, res) => {
+    try {
+      const limit = parseInt(req.query.limit as string) || 20;
+      const offset = parseInt(req.query.offset as string) || 0;
+      
+      const moments = await storage.getPublicOOFMoments(limit, offset);
+      res.json(moments);
+    } catch (error) {
+      console.error("Error fetching public OOF Moments:", error);
+      res.status(500).json({ message: "Failed to fetch OOF Moments" });
+    }
+  });
+
+  // Get specific OOF Moment
+  app.get('/api/oof-moments/:id', async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const moment = await storage.getOOFMoment(id);
+      
+      if (!moment) {
+        return res.status(404).json({ message: "OOF Moment not found" });
+      }
+
+      // Get interactions for this moment
+      const interactions = await storage.getMomentInteractions(id);
+      
+      res.json({
+        moment,
+        interactions
+      });
+    } catch (error) {
+      console.error("Error fetching OOF Moment:", error);
+      res.status(500).json({ message: "Failed to fetch OOF Moment" });
+    }
+  });
+
+  // Social interactions - Like/Unlike
+  app.post('/api/oof-moments/:id/like', async (req, res) => {
+    try {
+      const momentId = parseInt(req.params.id);
+      const { userId, action } = req.body; // action: 'like' or 'unlike'
+
+      if (!userId) {
+        return res.status(400).json({ message: "User ID required" });
+      }
+
+      // Check if user already interacted
+      const existingInteraction = await storage.getUserMomentInteraction(momentId, userId);
+      
+      if (action === 'like') {
+        if (existingInteraction?.interactionType === 'like') {
+          return res.status(400).json({ message: "Already liked" });
+        }
+
+        // Create or update like interaction
+        if (existingInteraction) {
+          await storage.updateMomentInteraction(existingInteraction.id, {
+            interactionType: 'like'
+          });
+        } else {
+          await storage.createMomentInteraction({
+            momentId,
+            userId,
+            interactionType: 'like',
+            metadata: { timestamp: new Date().toISOString() }
+          });
+        }
+      } else if (action === 'unlike') {
+        if (existingInteraction?.interactionType === 'like') {
+          await storage.updateMomentInteraction(existingInteraction.id, {
+            interactionType: 'view'
+          });
+        }
+      }
+
+      // Get updated moment
+      const moment = await storage.getOOFMoment(momentId);
+      res.json({ moment });
+
+    } catch (error) {
+      console.error("Error processing like interaction:", error);
+      res.status(500).json({ message: "Failed to process like" });
+    }
+  });
+
+  // Share OOF Moment
+  app.post('/api/oof-moments/:id/share', async (req, res) => {
+    try {
+      const momentId = parseInt(req.params.id);
+      const { userId, platform } = req.body; // platform: 'twitter', 'telegram', 'discord'
+
+      if (!userId) {
+        return res.status(400).json({ message: "User ID required" });
+      }
+
+      // Record share interaction
+      await storage.createMomentInteraction({
+        momentId,
+        userId,
+        interactionType: 'share',
+        metadata: { 
+          platform,
+          timestamp: new Date().toISOString()
+        }
+      });
+
+      // Generate share content
+      const moment = await storage.getOOFMoment(momentId);
+      if (!moment) {
+        return res.status(404).json({ message: "OOF Moment not found" });
+      }
+
+      const shareUrl = `${process.env.APP_URL || 'http://localhost:5000'}/moments/${momentId}`;
+      const shareText = `Check out this legendary OOF moment: "${moment.quote}" - ${shareUrl}`;
+
+      res.json({
+        shareUrl,
+        shareText,
+        platform,
+        moment
+      });
+
+    } catch (error) {
+      console.error("Error processing share:", error);
+      res.status(500).json({ message: "Failed to process share" });
+    }
+  });
+
+  // Mint OOF Moment as NFT on Zora
+  app.post('/api/oof-moments/:id/mint', async (req, res) => {
+    try {
+      const momentId = parseInt(req.params.id);
+      const { userWalletAddress } = req.body;
+
+      if (!userWalletAddress) {
+        return res.status(400).json({ message: "User wallet address required" });
+      }
+
+      const moment = await storage.getOOFMoment(momentId);
+      if (!moment) {
+        return res.status(404).json({ message: "OOF Moment not found" });
+      }
+
+      // Mint on Zora
+      const mintResult = await zoraIntegration.mintOOFMoment(moment, userWalletAddress);
+
+      if (mintResult.success) {
+        // Update moment with NFT information
+        await storage.updateOOFMoment(momentId, {
+          nftMinted: true,
+          nftContractAddress: mintResult.contractAddress,
+          nftTokenId: mintResult.tokenId,
+          nftTransactionHash: mintResult.transactionHash,
+          zoraUrl: mintResult.zoraUrl
+        });
+
+        res.json({
+          message: "OOF Moment minted successfully",
+          mintResult,
+          zoraUrl: mintResult.zoraUrl
+        });
+      } else {
+        res.status(500).json({
+          message: "Failed to mint OOF Moment",
+          error: mintResult.error
+        });
+      }
+
+    } catch (error) {
+      console.error("Error minting OOF Moment:", error);
+      res.status(500).json({ message: "Failed to mint OOF Moment" });
+    }
+  });
+
+  // Get user's OOF Moments
+  app.get('/api/oof-moments/user/:userId', async (req, res) => {
+    try {
+      const userId = req.params.userId;
+      const moments = await storage.getOOFMomentsByUser(userId);
+      res.json(moments);
+    } catch (error) {
+      console.error("Error fetching user OOF Moments:", error);
+      res.status(500).json({ message: "Failed to fetch user OOF Moments" });
+    }
+  });
+
+  // Get wallet's OOF Moments
+  app.get('/api/oof-moments/wallet/:walletAddress', async (req, res) => {
+    try {
+      const walletAddress = req.params.walletAddress;
+      const moments = await storage.getOOFMomentsByWallet(walletAddress);
+      res.json(moments);
+    } catch (error) {
+      console.error("Error fetching wallet OOF Moments:", error);
+      res.status(500).json({ message: "Failed to fetch wallet OOF Moments" });
+    }
+  });
+
+  // Generate card image for OOF Moment
+  app.get('/api/oof-moments/card-image/:id', async (req, res) => {
+    try {
+      const momentId = parseInt(req.params.id);
+      const moment = await storage.getOOFMoment(momentId);
+      
+      if (!moment) {
+        return res.status(404).json({ message: "OOF Moment not found" });
+      }
+
+      // In production, generate actual card image
+      // For now, return a placeholder SVG
+      const cardSvg = `
+        <svg width="400" height="600" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:${moment.cardMetadata?.gradientFrom || '#FFD700'};stop-opacity:1" />
+              <stop offset="100%" style="stop-color:${moment.cardMetadata?.gradientTo || '#FFA500'};stop-opacity:1" />
+            </linearGradient>
+          </defs>
+          <rect width="400" height="600" fill="url(#grad1)" rx="20"/>
+          <text x="200" y="100" text-anchor="middle" fill="white" font-size="24" font-weight="bold">${moment.title}</text>
+          <text x="200" y="300" text-anchor="middle" fill="white" font-size="48">${moment.cardMetadata?.emoji || '🏆'}</text>
+          <text x="200" y="400" text-anchor="middle" fill="white" font-size="14" text-wrap="wrap">"${moment.quote}"</text>
+          <text x="200" y="550" text-anchor="middle" fill="white" font-size="12">OOF Moments</text>
+        </svg>
+      `;
+
+      res.setHeader('Content-Type', 'image/svg+xml');
+      res.send(cardSvg);
+
+    } catch (error) {
+      console.error("Error generating card image:", error);
+      res.status(500).json({ message: "Failed to generate card image" });
+    }
+  });
+
+  // Update OOF Moment privacy settings
+  app.patch('/api/oof-moments/:id/privacy', async (req, res) => {
+    try {
+      const momentId = parseInt(req.params.id);
+      const { isPublic, userId } = req.body;
+
+      const moment = await storage.getOOFMoment(momentId);
+      if (!moment) {
+        return res.status(404).json({ message: "OOF Moment not found" });
+      }
+
+      // Check if user owns this moment
+      if (moment.userId && moment.userId !== userId) {
+        return res.status(403).json({ message: "Not authorized to modify this moment" });
+      }
+
+      const updatedMoment = await storage.updateOOFMoment(momentId, { isPublic });
+      res.json(updatedMoment);
+
+    } catch (error) {
+      console.error("Error updating OOF Moment privacy:", error);
+      res.status(500).json({ message: "Failed to update privacy settings" });
     }
   });
 
