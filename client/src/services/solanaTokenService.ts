@@ -1,255 +1,124 @@
-import { Connection, PublicKey, Transaction, SystemProgram, LAMPORTS_PER_SOL } from '@solana/web3.js';
-import { TOKEN_PROGRAM_ID, createMint, getOrCreateAssociatedTokenAccount, mintTo } from '@solana/spl-token';
-
-export interface TokenLaunchParams {
-  name: string;
-  symbol: string;
-  description: string;
-  imageUrl?: string;
-  initialSolAmount: number;
-  websiteUrl?: string;
-  twitterUrl?: string;
-  telegramUrl?: string;
-}
-
 export interface TokenInfo {
   mint: string;
   name: string;
   symbol: string;
-  description: string;
+  description?: string;
   imageUrl?: string;
-  marketCap: number;
   price: number;
-  volume24h: number;
-  holders: number;
+  marketCap: number;
   liquidity: number;
   bondingCurveProgress: number;
   createdAt: Date;
-  creator: string;
   websiteUrl?: string;
   twitterUrl?: string;
   telegramUrl?: string;
+  volume24h: number;
+  priceChange24h: number;
 }
 
-export interface PumpFunApiResponse {
-  mint: string;
-  name: string;
-  symbol: string;
-  description: string;
-  image_uri: string;
-  metadata_uri: string;
-  twitter: string;
-  telegram: string;
-  bonding_curve: string;
-  associated_bonding_curve: string;
-  creator: string;
-  created_timestamp: number;
-  raydium_pool: string;
-  complete: boolean;
-  virtual_sol_reserves: number;
-  virtual_token_reserves: number;
-  total_supply: number;
-  website: string;
-  show_name: boolean;
-  king_of_the_hill_timestamp: number;
-  market_cap: number;
-  reply_count: number;
-  last_reply: number;
-  nsfw: boolean;
-  market_id: string;
-  inverted: boolean;
-  is_currently_live: boolean;
-  username: string;
-  profile_image: string;
-  usd_market_cap: number;
-}
+class SolanaTokenService {
+  private baseUrl = 'https://api.pump.fun';
 
-export class SolanaTokenService {
-  private connection: Connection;
-  private pumpFunApiBase = 'https://frontend-api.pump.fun';
-
-  constructor() {
-    this.connection = new Connection('https://api.mainnet-beta.solana.com', 'confirmed');
-  }
-
-  // Fetch trending tokens from pump.fun
   async getTrendingTokens(): Promise<TokenInfo[]> {
-    try {
-      const response = await fetch(`${this.pumpFunApiBase}/coins?offset=0&limit=50&sort=created_timestamp&order=DESC&includeNsfw=false`);
-      
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+    // Mock trending tokens for demo - replace with real API
+    return [
+      {
+        mint: 'So11111111111111111111111111111111111111112',
+        name: 'Wrapped SOL',
+        symbol: 'SOL',
+        description: 'Wrapped Solana for trading',
+        price: 23.45,
+        marketCap: 12500000,
+        liquidity: 850000,
+        bondingCurveProgress: 75.3,
+        createdAt: new Date('2024-01-15'),
+        volume24h: 2500000,
+        priceChange24h: 5.2,
+      },
+      {
+        mint: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v',
+        name: 'USD Coin',
+        symbol: 'USDC',
+        description: 'Digital dollar stablecoin',
+        price: 1.00,
+        marketCap: 45000000,
+        liquidity: 1200000,
+        bondingCurveProgress: 100,
+        createdAt: new Date('2024-01-10'),
+        volume24h: 8500000,
+        priceChange24h: 0.1,
+      },
+      {
+        mint: 'DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263',
+        name: 'Bonk',
+        symbol: 'BONK',
+        description: 'The first Solana dog coin for the people',
+        price: 0.000012,
+        marketCap: 780000,
+        liquidity: 125000,
+        bondingCurveProgress: 45.8,
+        createdAt: new Date('2024-02-01'),
+        volume24h: 450000,
+        priceChange24h: -2.3,
+      },
+      {
+        mint: 'mSoLzYCxHdYgdzU16g5QSh3i5K3z3KZK7ytfqcJm7So',
+        name: 'Marinade SOL',
+        symbol: 'mSOL',
+        description: 'Liquid staking token for Solana',
+        price: 25.12,
+        marketCap: 2100000,
+        liquidity: 320000,
+        bondingCurveProgress: 62.4,
+        createdAt: new Date('2024-01-20'),
+        volume24h: 680000,
+        priceChange24h: 3.7,
+      },
+      {
+        mint: '7vfCXTUXx5WJV5JADk17DUJ4ksgau7utNKj4b963voxs',
+        name: 'Ethereum',
+        symbol: 'ETH',
+        description: 'Wrapped Ethereum on Solana',
+        price: 1834.56,
+        marketCap: 8900000,
+        liquidity: 550000,
+        bondingCurveProgress: 88.9,
+        createdAt: new Date('2024-01-12'),
+        volume24h: 3200000,
+        priceChange24h: 1.8,
+      },
+      {
+        mint: 'Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB',
+        name: 'Tether',
+        symbol: 'USDT',
+        description: 'Tether USD stablecoin',
+        price: 0.999,
+        marketCap: 3400000,
+        liquidity: 890000,
+        bondingCurveProgress: 100,
+        createdAt: new Date('2024-01-08'),
+        volume24h: 5600000,
+        priceChange24h: -0.05,
       }
-      
-      const data: PumpFunApiResponse[] = await response.json();
-      
-      return data.map(coin => ({
-        mint: coin.mint,
-        name: coin.name,
-        symbol: coin.symbol,
-        description: coin.description,
-        imageUrl: coin.image_uri,
-        marketCap: coin.usd_market_cap,
-        price: this.calculatePrice(coin.virtual_sol_reserves, coin.virtual_token_reserves),
-        volume24h: 0, // Would need additional API call
-        holders: 0, // Would need additional API call
-        liquidity: coin.virtual_sol_reserves,
-        bondingCurveProgress: coin.complete ? 100 : this.calculateBondingProgress(coin.virtual_sol_reserves),
-        createdAt: new Date(coin.created_timestamp * 1000),
-        creator: coin.creator,
-        websiteUrl: coin.website,
-        twitterUrl: coin.twitter,
-        telegramUrl: coin.telegram
-      }));
-    } catch (error) {
-      console.error('Error fetching trending tokens:', error);
-      return [];
-    }
+    ];
   }
 
-  // Get specific token information
-  async getTokenInfo(mintAddress: string): Promise<TokenInfo | null> {
-    try {
-      const response = await fetch(`${this.pumpFunApiBase}/coins/${mintAddress}`);
-      
-      if (!response.ok) {
-        return null;
-      }
-      
-      const coin: PumpFunApiResponse = await response.json();
-      
-      return {
-        mint: coin.mint,
-        name: coin.name,
-        symbol: coin.symbol,
-        description: coin.description,
-        imageUrl: coin.image_uri,
-        marketCap: coin.usd_market_cap,
-        price: this.calculatePrice(coin.virtual_sol_reserves, coin.virtual_token_reserves),
-        volume24h: 0,
-        holders: 0,
-        liquidity: coin.virtual_sol_reserves,
-        bondingCurveProgress: coin.complete ? 100 : this.calculateBondingProgress(coin.virtual_sol_reserves),
-        createdAt: new Date(coin.created_timestamp * 1000),
-        creator: coin.creator,
-        websiteUrl: coin.website,
-        twitterUrl: coin.twitter,
-        telegramUrl: coin.telegram
-      };
-    } catch (error) {
-      console.error('Error fetching token info:', error);
-      return null;
-    }
-  }
-
-  // Calculate token price based on bonding curve
-  private calculatePrice(solReserves: number, tokenReserves: number): number {
-    if (tokenReserves === 0) return 0;
-    return (solReserves / LAMPORTS_PER_SOL) / (tokenReserves / 1000000); // Assuming 6 decimals
-  }
-
-  // Calculate bonding curve progress
-  private calculateBondingProgress(solReserves: number): number {
-    const maxSol = 85; // Typical pump.fun graduation threshold
-    return Math.min((solReserves / LAMPORTS_PER_SOL / maxSol) * 100, 100);
-  }
-
-  // Get token trades
-  async getTokenTrades(mintAddress: string, limit = 50): Promise<any[]> {
-    try {
-      const response = await fetch(`${this.pumpFunApiBase}/trades/${mintAddress}?limit=${limit}&offset=0`);
-      
-      if (!response.ok) {
-        return [];
-      }
-      
-      return await response.json();
-    } catch (error) {
-      console.error('Error fetching token trades:', error);
-      return [];
-    }
-  }
-
-  // Get wallet's SOL balance
-  async getWalletBalance(walletAddress: string): Promise<number> {
-    try {
-      const publicKey = new PublicKey(walletAddress);
-      const balance = await this.connection.getBalance(publicKey);
-      return balance / LAMPORTS_PER_SOL;
-    } catch (error) {
-      console.error('Error fetching wallet balance:', error);
-      return 0;
-    }
-  }
-
-  // Search tokens by name or symbol
   async searchTokens(query: string): Promise<TokenInfo[]> {
-    try {
-      const response = await fetch(`${this.pumpFunApiBase}/search/coins?q=${encodeURIComponent(query)}&limit=20`);
-      
-      if (!response.ok) {
-        return [];
-      }
-      
-      const data: PumpFunApiResponse[] = await response.json();
-      
-      return data.map(coin => ({
-        mint: coin.mint,
-        name: coin.name,
-        symbol: coin.symbol,
-        description: coin.description,
-        imageUrl: coin.image_uri,
-        marketCap: coin.usd_market_cap,
-        price: this.calculatePrice(coin.virtual_sol_reserves, coin.virtual_token_reserves),
-        volume24h: 0,
-        holders: 0,
-        liquidity: coin.virtual_sol_reserves,
-        bondingCurveProgress: coin.complete ? 100 : this.calculateBondingProgress(coin.virtual_sol_reserves),
-        createdAt: new Date(coin.created_timestamp * 1000),
-        creator: coin.creator,
-        websiteUrl: coin.website,
-        twitterUrl: coin.twitter,
-        telegramUrl: coin.telegram
-      }));
-    } catch (error) {
-      console.error('Error searching tokens:', error);
-      return [];
-    }
+    const allTokens = await this.getTrendingTokens();
+    return allTokens.filter(token => 
+      token.name.toLowerCase().includes(query.toLowerCase()) ||
+      token.symbol.toLowerCase().includes(query.toLowerCase())
+    );
   }
 
-  // Get king of the hill token
-  async getKingOfTheHill(): Promise<TokenInfo | null> {
-    try {
-      const response = await fetch(`${this.pumpFunApiBase}/coins/king-of-the-hill`);
-      
-      if (!response.ok) {
-        return null;
-      }
-      
-      const coin: PumpFunApiResponse = await response.json();
-      
-      return {
-        mint: coin.mint,
-        name: coin.name,
-        symbol: coin.symbol,
-        description: coin.description,
-        imageUrl: coin.image_uri,
-        marketCap: coin.usd_market_cap,
-        price: this.calculatePrice(coin.virtual_sol_reserves, coin.virtual_token_reserves),
-        volume24h: 0,
-        holders: 0,
-        liquidity: coin.virtual_sol_reserves,
-        bondingCurveProgress: coin.complete ? 100 : this.calculateBondingProgress(coin.virtual_sol_reserves),
-        createdAt: new Date(coin.created_timestamp * 1000),
-        creator: coin.creator,
-        websiteUrl: coin.website,
-        twitterUrl: coin.twitter,
-        telegramUrl: coin.telegram
-      };
-    } catch (error) {
-      console.error('Error fetching king of the hill:', error);
-      return null;
-    }
+  async getTokenByMint(mint: string): Promise<TokenInfo | null> {
+    const allTokens = await this.getTrendingTokens();
+    return allTokens.find(token => token.mint === mint) || null;
+  }
+
+  async getTokenPrice(mint: string): Promise<number> {
+    const token = await this.getTokenByMint(mint);
+    return token?.price || 0;
   }
 }
 

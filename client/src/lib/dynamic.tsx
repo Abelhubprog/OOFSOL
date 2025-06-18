@@ -1,4 +1,5 @@
 import { DynamicContextProvider } from '@dynamic-labs/sdk-react-core';
+import { SolanaWalletConnectors } from '@dynamic-labs/solana';
 
 const DynamicProvider = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -7,8 +8,13 @@ const DynamicProvider = ({ children }: { children: React.ReactNode }) => {
         environmentId: import.meta.env.VITE_DYNAMIC_ENVIRONMENT_ID || "7037c007-259c-4dc8-8f95-3ed01c0ab2fb",
         appName: 'OOF Platform',
         
-        // Enable automatic wallet creation for new users
-        walletConnectors: [],
+        // Enable Solana wallet connectors for existing wallet users
+        walletConnectors: [SolanaWalletConnectors],
+        
+        // Enable embedded wallets for automatic wallet creation
+        embeddedWallets: {
+          createOnSignUp: 'all-users',
+        },
         
         // Enhanced styling for OOF branding
         cssOverrides: `

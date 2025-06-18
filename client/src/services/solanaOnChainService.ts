@@ -1,144 +1,51 @@
-import { Connection, PublicKey, Transaction, SystemProgram, LAMPORTS_PER_SOL, sendAndConfirmTransaction, Keypair } from '@solana/web3.js';
-import { TOKEN_PROGRAM_ID, createMint, getOrCreateAssociatedTokenAccount, mintTo, transfer, getAccount } from '@solana/spl-token';
+import { Connection, PublicKey, Transaction, SystemProgram, LAMPORTS_PER_SOL } from '@solana/web3.js';
+import { TOKEN_PROGRAM_ID, createTransferInstruction, getAssociatedTokenAddress } from '@solana/spl-token';
 
-export interface TokenLaunchConfig {
+interface TransactionResult {
+  success: boolean;
+  signature?: string;
+  error?: string;
+}
+
+interface TokenLaunchParams {
   name: string;
   symbol: string;
   description: string;
   imageUrl?: string;
+  website?: string;
+  twitter?: string;
+  telegram?: string;
   initialSupply: number;
-  decimals: number;
-  websiteUrl?: string;
-  telegramUrl?: string;
-  twitterUrl?: string;
+  creatorWallet: string;
 }
 
-export interface SwapConfig {
-  inputMint: string;
-  outputMint: string;
-  amount: number;
-  slippage: number;
-}
-
-export interface TradeResult {
-  signature: string;
-  success: boolean;
-  error?: string;
-}
-
-export interface TokenMetrics {
-  price: number;
-  marketCap: number;
-  volume24h: number;
-  holders: number;
-  totalSupply: number;
-  circulatingSupply: number;
-}
-
-export class SolanaOnChainService {
+class SolanaOnChainService {
   private connection: Connection;
-  private jupiterApiUrl = 'https://quote-api.jup.ag/v6';
-  private pumpFunApiUrl = 'https://frontend-api.pump.fun';
-
+  private pumpFunProgramId = new PublicKey('6EF8rrecthR5Dkzon8Nwu78hRvfCKubJ14M5uBEwF6P');
+  
   constructor() {
-    this.connection = new Connection(
-      'https://api.mainnet-beta.solana.com',
-      'confirmed'
-    );
+    // Use Solana devnet RPC
+    this.connection = new Connection('https://api.devnet.solana.com', 'confirmed');
   }
 
-  // Token Launch Operations (Pump.fun style)
-  async launchToken(config: TokenLaunchConfig, payerWallet: string): Promise<TradeResult> {
+  async getWalletBalance(walletAddress: string): Promise<number> {
     try {
-      // Simulate token launch transaction
-      const transaction = new Transaction();
-      
-      // Add token creation instruction (simplified)
-      const createTokenInstruction = SystemProgram.transfer({
-        fromPubkey: new PublicKey(payerWallet),
-        toPubkey: new PublicKey(payerWallet), // Placeholder
-        lamports: 0.1 * LAMPORTS_PER_SOL, // Launch fee
-      });
-      
-      transaction.add(createTokenInstruction);
-      
-      // In production, this would be sent through wallet adapter
-      return {
-        signature: 'mock_signature_' + Date.now(),
-        success: true,
-      };
+      const publicKey = new PublicKey(walletAddress);
+      const balance = await this.connection.getBalance(publicKey);
+      return balance / LAMPORTS_PER_SOL;
     } catch (error) {
-      return {
-        signature: '',
-        success: false,
-        error: error instanceof Error ? error.message : 'Unknown error',
-      };
+      console.error('Error fetching wallet balance:', error);
+      return 0;
     }
   }
 
-  // Jupiter Swap Integration
-  async getSwapQuote(inputMint: string, outputMint: string, amount: number): Promise<any> {
+  async getTokenBalance(walletAddress: string, tokenMint: string): Promise<number> {
     try {
-      const response = await fetch(
-        `${this.jupiterApiUrl}/quote?inputMint=${inputMint}&outputMint=${outputMint}&amount=${amount}&slippageBps=50`
-      );
+      const publicKey = new PublicKey(walletAddress);
+      const mintPublicKey = new PublicKey(tokenMint);
       
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      
-      return await response.json();
-    } catch (error) {
-      console.error('Error fetching swap quote:', error);
-      throw error;
-    }
-  }
-
-  async executeSwap(config: SwapConfig, walletAddress: string): Promise<TradeResult> {
-    try {
-      // Get swap quote first
-      const quote = await this.getSwapQuote(config.inputMint, config.outputMint, config.amount);
-      
-      // Get swap transaction
-      const swapResponse = await fetch(`${this.jupiterApiUrl}/swap`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          quoteResponse: quote,
-          userPublicKey: walletAddress,
-          wrapAndUnwrapSol: true,
-        }),
-      });
-
-      if (!swapResponse.ok) {
-        throw new Error('Failed to get swap transaction');
-      }
-
-      const swapTransaction = await swapResponse.json();
-      
-      return {
-        signature: 'swap_signature_' + Date.now(),
-        success: true,
-      };
-    } catch (error) {
-      return {
-        signature: '',
-        success: false,
-        error: error instanceof Error ? error.message : 'Swap failed',
-      };
-    }
-  }
-
-  // Token Operations
-  async getTokenBalance(walletAddress: string, mintAddress: string): Promise<number> {
-    try {
-      const walletPublicKey = new PublicKey(walletAddress);
-      const mintPublicKey = new PublicKey(mintAddress);
-      
-      const tokenAccounts = await this.connection.getTokenAccountsByOwner(
-        walletPublicKey,
+      const tokenAccounts = await this.connection.getParsedTokenAccountsByOwner(
+        publicKey,
         { mint: mintPublicKey }
       );
 
@@ -146,234 +53,237 @@ export class SolanaOnChainService {
         return 0;
       }
 
-      const accountInfo = await getAccount(
-        this.connection,
-        tokenAccounts.value[0].pubkey
-      );
-
-      return Number(accountInfo.amount);
+      const balance = tokenAccounts.value[0].account.data.parsed.info.tokenAmount.uiAmount;
+      return balance || 0;
     } catch (error) {
       console.error('Error fetching token balance:', error);
       return 0;
     }
   }
 
-  async getSOLBalance(walletAddress: string): Promise<number> {
+  async launchPumpFunToken(params: TokenLaunchParams): Promise<TransactionResult> {
     try {
-      const publicKey = new PublicKey(walletAddress);
-      const balance = await this.connection.getBalance(publicKey);
-      return balance / LAMPORTS_PER_SOL;
-    } catch (error) {
-      console.error('Error fetching SOL balance:', error);
-      return 0;
-    }
-  }
-
-  // Price and Market Data
-  async getTokenPrice(mintAddress: string): Promise<number> {
-    try {
-      // Use Jupiter price API
-      const response = await fetch(
-        `${this.jupiterApiUrl}/price?ids=${mintAddress}`
+      // This is a mock implementation - real pump.fun integration would require
+      // their specific program interface and transaction building
+      
+      const transaction = new Transaction();
+      
+      // Add mock instruction for token creation
+      transaction.add(
+        SystemProgram.transfer({
+          fromPubkey: new PublicKey(params.creatorWallet),
+          toPubkey: this.pumpFunProgramId,
+          lamports: 0.1 * LAMPORTS_PER_SOL, // Mock creation fee
+        })
       );
-      
-      if (!response.ok) {
-        return 0;
-      }
-      
-      const data = await response.json();
-      return data.data[mintAddress]?.price || 0;
-    } catch (error) {
-      console.error('Error fetching token price:', error);
-      return 0;
-    }
-  }
 
-  async getTokenMetrics(mintAddress: string): Promise<TokenMetrics> {
-    try {
-      const price = await this.getTokenPrice(mintAddress);
-      
-      // Fetch additional metrics from various sources
+      // For demo purposes, return success without actual execution
       return {
-        price,
-        marketCap: 0,
-        volume24h: 0,
-        holders: 0,
-        totalSupply: 0,
-        circulatingSupply: 0,
+        success: true,
+        signature: `mock_launch_${Date.now()}`,
       };
     } catch (error) {
-      console.error('Error fetching token metrics:', error);
+      console.error('Error launching token:', error);
       return {
-        price: 0,
-        marketCap: 0,
-        volume24h: 0,
-        holders: 0,
-        totalSupply: 0,
-        circulatingSupply: 0,
+        success: false,
+        error: error instanceof Error ? error.message : 'Unknown error',
       };
     }
   }
 
-  // Portfolio Management
-  async getWalletPortfolio(walletAddress: string): Promise<any[]> {
+  async buyPumpFunToken(
+    tokenMint: string,
+    solAmount: number,
+    buyerWallet: string
+  ): Promise<TransactionResult> {
     try {
-      const walletPublicKey = new PublicKey(walletAddress);
+      // Mock pump.fun buy implementation
+      const balance = await this.getWalletBalance(buyerWallet);
       
-      // Get all token accounts
-      const tokenAccounts = await this.connection.getTokenAccountsByOwner(
-        walletPublicKey,
-        { programId: TOKEN_PROGRAM_ID }
-      );
-
-      const portfolio = [];
-      
-      for (const account of tokenAccounts.value) {
-        try {
-          const accountInfo = await getAccount(this.connection, account.pubkey);
-          const balance = Number(accountInfo.amount);
-          
-          if (balance > 0) {
-            const price = await this.getTokenPrice(accountInfo.mint.toString());
-            
-            portfolio.push({
-              mint: accountInfo.mint.toString(),
-              balance,
-              value: balance * price,
-              price,
-            });
-          }
-        } catch (error) {
-          console.error('Error processing token account:', error);
-        }
+      if (balance < solAmount) {
+        return {
+          success: false,
+          error: 'Insufficient SOL balance',
+        };
       }
 
-      return portfolio;
+      // In real implementation, this would:
+      // 1. Calculate token amount based on bonding curve
+      // 2. Create swap instruction through pump.fun program
+      // 3. Handle slippage and fees
+      
+      return {
+        success: true,
+        signature: `mock_buy_${Date.now()}`,
+      };
     } catch (error) {
-      console.error('Error fetching wallet portfolio:', error);
-      return [];
+      console.error('Error buying token:', error);
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Unknown error',
+      };
     }
   }
 
-  // Transaction History
-  async getTransactionHistory(walletAddress: string, limit = 50): Promise<any[]> {
+  async sellPumpFunToken(
+    tokenMint: string,
+    tokenAmount: number,
+    sellerWallet: string
+  ): Promise<TransactionResult> {
+    try {
+      // Mock pump.fun sell implementation
+      const tokenBalance = await this.getTokenBalance(sellerWallet, tokenMint);
+      
+      if (tokenBalance < tokenAmount) {
+        return {
+          success: false,
+          error: 'Insufficient token balance',
+        };
+      }
+
+      // In real implementation, this would:
+      // 1. Calculate SOL amount based on bonding curve
+      // 2. Create swap instruction through pump.fun program
+      // 3. Handle slippage and fees
+      
+      return {
+        success: true,
+        signature: `mock_sell_${Date.now()}`,
+      };
+    } catch (error) {
+      console.error('Error selling token:', error);
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Unknown error',
+      };
+    }
+  }
+
+  async swapTokens(
+    fromMint: string,
+    toMint: string,
+    amount: number,
+    walletAddress: string,
+    slippage: number = 1
+  ): Promise<TransactionResult> {
+    try {
+      // Mock Jupiter swap implementation
+      // Real implementation would use Jupiter API for routing
+      
+      const fromBalance = await this.getTokenBalance(walletAddress, fromMint);
+      
+      if (fromBalance < amount) {
+        return {
+          success: false,
+          error: 'Insufficient token balance for swap',
+        };
+      }
+
+      return {
+        success: true,
+        signature: `mock_swap_${Date.now()}`,
+      };
+    } catch (error) {
+      console.error('Error swapping tokens:', error);
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Unknown error',
+      };
+    }
+  }
+
+  async sendSOL(
+    fromWallet: string,
+    toWallet: string,
+    amount: number
+  ): Promise<TransactionResult> {
+    try {
+      const fromPublicKey = new PublicKey(fromWallet);
+      const toPublicKey = new PublicKey(toWallet);
+      
+      const balance = await this.getWalletBalance(fromWallet);
+      
+      if (balance < amount) {
+        return {
+          success: false,
+          error: 'Insufficient SOL balance',
+        };
+      }
+
+      const transaction = new Transaction().add(
+        SystemProgram.transfer({
+          fromPubkey: fromPublicKey,
+          toPubkey: toPublicKey,
+          lamports: amount * LAMPORTS_PER_SOL,
+        })
+      );
+
+      // For demo purposes, return success without actual execution
+      return {
+        success: true,
+        signature: `mock_transfer_${Date.now()}`,
+      };
+    } catch (error) {
+      console.error('Error sending SOL:', error);
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Unknown error',
+      };
+    }
+  }
+
+  async getRecentTransactions(walletAddress: string): Promise<any[]> {
     try {
       const publicKey = new PublicKey(walletAddress);
-      
       const signatures = await this.connection.getSignaturesForAddress(
         publicKey,
-        { limit }
+        { limit: 10 }
       );
 
-      const transactions = [];
-      
-      for (const sig of signatures) {
-        try {
-          const tx = await this.connection.getTransaction(sig.signature, {
-            commitment: 'confirmed',
-            maxSupportedTransactionVersion: 0,
-          });
-          
-          if (tx) {
-            transactions.push({
-              signature: sig.signature,
-              blockTime: tx.blockTime,
-              slot: tx.slot,
-              fee: tx.meta?.fee,
-              status: tx.meta?.err ? 'failed' : 'success',
-            });
-          }
-        } catch (error) {
-          console.error('Error fetching transaction:', error);
-        }
-      }
+      const transactions = await Promise.all(
+        signatures.map(async (sig) => {
+          const tx = await this.connection.getParsedTransaction(sig.signature);
+          return {
+            signature: sig.signature,
+            blockTime: sig.blockTime,
+            slot: sig.slot,
+            err: sig.err,
+            transaction: tx,
+          };
+        })
+      );
 
-      return transactions;
+      return transactions.filter(tx => tx.transaction !== null);
     } catch (error) {
-      console.error('Error fetching transaction history:', error);
+      console.error('Error fetching transactions:', error);
       return [];
     }
   }
 
-  // Pump.fun Integration
-  async buyPumpFunToken(mintAddress: string, solAmount: number, walletAddress: string): Promise<TradeResult> {
+  async validateTokenMint(mintAddress: string): Promise<boolean> {
     try {
-      // This would integrate with Pump.fun's buy function
-      // For now, return a mock result
-      return {
-        signature: 'pump_buy_' + Date.now(),
-        success: true,
-      };
+      const publicKey = new PublicKey(mintAddress);
+      const accountInfo = await this.connection.getAccountInfo(publicKey);
+      return accountInfo !== null && accountInfo.owner.equals(TOKEN_PROGRAM_ID);
     } catch (error) {
-      return {
-        signature: '',
-        success: false,
-        error: error instanceof Error ? error.message : 'Buy failed',
-      };
+      return false;
     }
   }
 
-  async sellPumpFunToken(mintAddress: string, tokenAmount: number, walletAddress: string): Promise<TradeResult> {
+  // Utility method to estimate transaction fees
+  async estimateTransactionFee(transaction: Transaction): Promise<number> {
     try {
-      // This would integrate with Pump.fun's sell function
-      return {
-        signature: 'pump_sell_' + Date.now(),
-        success: true,
-      };
+      const { blockhash } = await this.connection.getLatestBlockhash();
+      transaction.recentBlockhash = blockhash;
+      
+      const fee = await this.connection.getFeeForMessage(
+        transaction.compileMessage()
+      );
+      
+      return fee.value ? fee.value / LAMPORTS_PER_SOL : 0.00025; // Default estimate
     } catch (error) {
-      return {
-        signature: '',
-        success: false,
-        error: error instanceof Error ? error.message : 'Sell failed',
-      };
-    }
-  }
-
-  // Raydium Pool Operations
-  async createLiquidityPool(tokenMint: string, solAmount: number, tokenAmount: number, walletAddress: string): Promise<TradeResult> {
-    try {
-      // This would integrate with Raydium's pool creation
-      return {
-        signature: 'raydium_pool_' + Date.now(),
-        success: true,
-      };
-    } catch (error) {
-      return {
-        signature: '',
-        success: false,
-        error: error instanceof Error ? error.message : 'Pool creation failed',
-      };
-    }
-  }
-
-  // Staking Operations
-  async stakeTokens(mintAddress: string, amount: number, walletAddress: string): Promise<TradeResult> {
-    try {
-      return {
-        signature: 'stake_' + Date.now(),
-        success: true,
-      };
-    } catch (error) {
-      return {
-        signature: '',
-        success: false,
-        error: error instanceof Error ? error.message : 'Staking failed',
-      };
-    }
-  }
-
-  async unstakeTokens(mintAddress: string, amount: number, walletAddress: string): Promise<TradeResult> {
-    try {
-      return {
-        signature: 'unstake_' + Date.now(),
-        success: true,
-      };
-    } catch (error) {
-      return {
-        signature: '',
-        success: false,
-        error: error instanceof Error ? error.message : 'Unstaking failed',
-      };
+      console.error('Error estimating transaction fee:', error);
+      return 0.00025; // Default estimate
     }
   }
 }
