@@ -524,7 +524,7 @@ export default function OOFsCampaigns() {
                 <div>
                   <h4 className="font-medium mb-2">Target Actions</h4>
                   <div className="space-y-2">
-                    {campaign.targetActions.map((action, index) => {
+                    {campaign.targetActions ? campaign.targetActions.map((action, index) => {
                       const ActionIcon = ACTION_TYPES.find(a => a.id === action.type)?.icon || Heart;
                       return (
                         <div key={index} className="flex items-center justify-between text-sm">
@@ -535,7 +535,9 @@ export default function OOFsCampaigns() {
                           <span className="font-medium">${action.reward} USDC</span>
                         </div>
                       );
-                    })}
+                    }) : (
+                      <div className="text-sm text-gray-500">No target actions configured</div>
+                    )}
                   </div>
                 </div>
 
@@ -628,7 +630,7 @@ export default function OOFsCampaigns() {
                 <div>
                   <h4 className="font-medium mb-2">Required Actions</h4>
                   <div className="space-y-2">
-                    {campaign.targetActions.map((action, index) => {
+                    {campaign.targetActions ? campaign.targetActions.map((action, index) => {
                       const ActionIcon = ACTION_TYPES.find(a => a.id === action.type)?.icon || Heart;
                       return (
                         <div key={index} className="flex items-center space-x-2 text-sm">
@@ -637,14 +639,16 @@ export default function OOFsCampaigns() {
                           <Badge variant="secondary">${action.reward}</Badge>
                         </div>
                       );
-                    })}
+                    }) : (
+                      <div className="text-sm text-gray-500">No actions configured</div>
+                    )}
                   </div>
                 </div>
 
                 <div>
                   <h4 className="font-medium mb-2">Content Links</h4>
                   <div className="space-y-2">
-                    {Object.entries(campaign.contentUrls).map(([platform, url]) => (
+                    {campaign.contentUrls ? Object.entries(campaign.contentUrls).map(([platform, url]) => (
                       <div key={platform} className="flex items-center space-x-2 text-sm">
                         <span className="capitalize font-medium">{platform}:</span>
                         <a 
@@ -656,7 +660,9 @@ export default function OOFsCampaigns() {
                           {url}
                         </a>
                       </div>
-                    ))}
+                    )) : (
+                      <div className="text-sm text-gray-500">No content links available</div>
+                    )}
                   </div>
                 </div>
               </div>
