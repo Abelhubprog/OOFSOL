@@ -129,14 +129,14 @@ export default function Dashboard() {
 
       {/* Social Achievement Demo Section */}
       <div className="max-w-4xl mx-auto mb-8">
-        <Card className="bg-gradient-to-r from-yellow-600/20 to-orange-600/20 border-yellow-500/30 backdrop-blur-lg">
+        <Card className="bg-gradient-to-r from-yellow-900/40 to-orange-900/40 border-yellow-400/50 backdrop-blur-lg">
           <CardContent className="p-6">
             <div className="text-center mb-6">
-              <Trophy className="w-12 h-12 mx-auto mb-3 text-yellow-400" />
+              <Trophy className="w-12 h-12 mx-auto mb-3 text-yellow-300" />
               <h3 className="text-2xl font-bold text-white mb-2">
                 🎉 Social Achievement Confetti Burst Demo
               </h3>
-              <p className="text-purple-200">
+              <p className="text-gray-100">
                 Experience our celebration system - click buttons to trigger different achievement confetti bursts!
               </p>
             </div>
@@ -208,7 +208,7 @@ export default function Dashboard() {
           </Button>
         </Link>
         <Link href="/tokens">
-          <Button variant="outline" className="border-purple-400 text-purple-200 hover:bg-purple-500/20 px-6 py-3">
+          <Button variant="outline" className="border-white/60 text-white hover:bg-white/10 px-6 py-3">
             <Search className="w-5 h-5 mr-2" />
             Analyze Wallet
           </Button>
@@ -223,30 +223,30 @@ export default function Dashboard() {
 
       {/* OOF Campaigns Feature Section */}
       <div className="max-w-4xl mx-auto mb-8">
-        <Card className="bg-gradient-to-r from-green-600/20 to-blue-600/20 border-green-500/30 backdrop-blur-lg">
+        <Card className="bg-gradient-to-r from-green-900/50 to-blue-900/50 border-green-400/50 backdrop-blur-lg">
           <CardContent className="p-8">
             <div className="text-center mb-6">
               <div className="w-20 h-20 mx-auto mb-4 bg-gradient-to-r from-green-500 to-blue-500 rounded-full flex items-center justify-center">
                 <Target className="w-10 h-10 text-white" />
               </div>
               <h3 className="text-3xl font-bold text-white mb-3">OOF Campaigns</h3>
-              <p className="text-purple-200 text-lg">
+              <p className="text-gray-100 text-lg">
                 Launch viral social media campaigns with crypto rewards
               </p>
             </div>
             
             <div className="grid md:grid-cols-2 gap-6 mb-6">
               <div className="text-center p-4">
-                <Users className="w-8 h-8 text-green-400 mx-auto mb-3" />
+                <Users className="w-8 h-8 text-green-300 mx-auto mb-3" />
                 <h4 className="font-semibold text-white mb-2">Community Driven</h4>
-                <p className="text-sm text-purple-300">
+                <p className="text-sm text-gray-200">
                   Engage your community across Twitter, TikTok, Farcaster, and Arena
                 </p>
               </div>
               <div className="text-center p-4">
-                <DollarSign className="w-8 h-8 text-blue-400 mx-auto mb-3" />
+                <DollarSign className="w-8 h-8 text-blue-300 mx-auto mb-3" />
                 <h4 className="font-semibold text-white mb-2">Crypto Rewards</h4>
-                <p className="text-sm text-purple-300">
+                <p className="text-sm text-gray-200">
                   Pay participants in USDC and OOF tokens for authentic engagement
                 </p>
               </div>
@@ -269,41 +269,41 @@ export default function Dashboard() {
         <h3 className="text-2xl font-bold text-center mb-8 text-white">Explore the OOF Platform</h3>
         <div className="grid md:grid-cols-4 gap-4">
           <Link href="/moments">
-            <Card className="bg-purple-800/30 border-purple-500/30 hover:bg-purple-700/40 transition-all duration-300 cursor-pointer">
+            <Card className="bg-purple-900/60 border-purple-400/50 hover:bg-purple-800/70 transition-all duration-300 cursor-pointer">
               <CardContent className="p-6 text-center">
-                <Star className="w-10 h-10 text-purple-300 mx-auto mb-3" />
+                <Star className="w-10 h-10 text-purple-200 mx-auto mb-3" />
                 <h4 className="font-semibold text-white mb-2">OOF Moments</h4>
-                <p className="text-sm text-purple-300">Track your missed crypto opportunities</p>
+                <p className="text-sm text-gray-200">Track your missed crypto opportunities</p>
               </CardContent>
             </Card>
           </Link>
           
           <Link href="/detective">
-            <Card className="bg-purple-800/30 border-purple-500/30 hover:bg-purple-700/40 transition-all duration-300 cursor-pointer">
+            <Card className="bg-purple-900/60 border-purple-400/50 hover:bg-purple-800/70 transition-all duration-300 cursor-pointer">
               <CardContent className="p-6 text-center">
-                <Shield className="w-10 h-10 text-purple-300 mx-auto mb-3" />
+                <Shield className="w-10 h-10 text-purple-200 mx-auto mb-3" />
                 <h4 className="font-semibold text-white mb-2">OOF Detective</h4>
-                <p className="text-sm text-purple-300">AI-powered rug detection and analysis</p>
+                <p className="text-sm text-gray-200">AI-powered rug detection and analysis</p>
               </CardContent>
             </Card>
           </Link>
           
           <Link href="/multiverse">
-            <Card className="bg-purple-800/30 border-purple-500/30 hover:bg-purple-700/40 transition-all duration-300 cursor-pointer">
+            <Card className="bg-purple-900/60 border-purple-400/50 hover:bg-purple-800/70 transition-all duration-300 cursor-pointer">
               <CardContent className="p-6 text-center">
-                <Layers className="w-10 h-10 text-purple-300 mx-auto mb-3" />
+                <Layers className="w-10 h-10 text-purple-200 mx-auto mb-3" />
                 <h4 className="font-semibold text-white mb-2">OOF Multiverse</h4>
-                <p className="text-sm text-purple-300">Explore parallel trading universes</p>
+                <p className="text-sm text-gray-200">Explore parallel trading universes</p>
               </CardContent>
             </Card>
           </Link>
           
           <Link href="/staking">
-            <Card className="bg-purple-800/30 border-purple-500/30 hover:bg-purple-700/40 transition-all duration-300 cursor-pointer">
+            <Card className="bg-purple-900/60 border-purple-400/50 hover:bg-purple-800/70 transition-all duration-300 cursor-pointer">
               <CardContent className="p-6 text-center">
-                <Coins className="w-10 h-10 text-purple-300 mx-auto mb-3" />
+                <Coins className="w-10 h-10 text-purple-200 mx-auto mb-3" />
                 <h4 className="font-semibold text-white mb-2">OOF Staking</h4>
-                <p className="text-sm text-purple-300">Stake OOF tokens and earn passive rewards</p>
+                <p className="text-sm text-gray-200">Stake OOF tokens and earn passive rewards</p>
               </CardContent>
             </Card>
           </Link>
