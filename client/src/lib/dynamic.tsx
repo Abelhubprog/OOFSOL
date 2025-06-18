@@ -6,13 +6,11 @@ const DynamicProvider = ({ children }: { children: React.ReactNode }) => {
     <DynamicContextProvider
       settings={{
         environmentId: "7037c007-259c-4dc8-8f95-3ed01c0ab2fb",
-        walletConnectors: [SolanaWalletConnectors],
+        walletConnectors: SolanaWalletConnectors,
         appName: 'OOF Platform',
         
         // Enable embedded wallets for automatic wallet creation
-        embeddedWallets: {
-          createOnSignup: 'users-without-wallets',
-        },
+        initialAuthenticationMode: 'connect-only',
         
         // Enhanced styling for OOF branding
         cssOverrides: `

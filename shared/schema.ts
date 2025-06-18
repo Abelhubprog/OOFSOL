@@ -37,6 +37,7 @@ export const users = pgTable("users", {
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
   // OOF specific fields
+  walletAddress: varchar("wallet_address").unique(),
   oofTokens: integer("oof_tokens").default(0),
   predictionAccuracy: decimal("prediction_accuracy", { precision: 5, scale: 2 }).default("0"),
   totalPredictions: integer("total_predictions").default(0),

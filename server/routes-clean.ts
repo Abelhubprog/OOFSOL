@@ -7,6 +7,35 @@ import { rugDetectionService } from "./services/rugDetectionService";
 export async function registerRoutes(app: Express): Promise<Server> {
   // Simple wallet-based authentication - no middleware needed
   
+  // Wallet management endpoint
+  app.post('/api/save-wallet', async (req, res) => {
+    try {
+      const { email, walletAddress, userId } = req.body;
+      console.log('Saving wallet for user:', { email, walletAddress, userId });
+      
+      // Create or update user with wallet address
+      if (walletAddress) {
+        await storage.upsertUser({
+          id: userId || walletAddress,
+          email: email || null,
+          firstName: null,
+          lastName: null,
+          profileImageUrl: null,
+          walletAddress: walletAddress,
+          oofTokens: 100, // Starting bonus
+          oofScore: 0
+        });
+        
+        res.json({ success: true, walletAddress });
+      } else {
+        res.status(400).json({ message: "Wallet address required" });
+      }
+    } catch (error) {
+      console.error("Error saving wallet:", error);
+      res.status(500).json({ message: "Failed to save wallet" });
+    }
+  });
+
   // Token routes (public)
   app.get('/api/tokens', async (req, res) => {
     try {
