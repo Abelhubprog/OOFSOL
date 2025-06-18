@@ -10,7 +10,7 @@ export interface WalletInfo {
 }
 
 export function useWallet() {
-  const { user, isAuthenticated, primaryWallet, setShowAuthFlow } = useDynamicContext();
+  const { user, primaryWallet, setShowAuthFlow } = useDynamicContext();
   const [walletInfo, setWalletInfo] = useState<WalletInfo | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -30,6 +30,8 @@ export function useWallet() {
       return 0;
     }
   };
+
+  const isAuthenticated = !!user && !!primaryWallet;
 
   useEffect(() => {
     const updateWalletInfo = async () => {
@@ -67,12 +69,12 @@ export function useWallet() {
     };
 
     updateWalletInfo();
-  }, [isAuthenticated, primaryWallet, user]);
+  }, [user, primaryWallet]);
 
   return {
     wallet: walletInfo,
     user,
-    isConnected: isAuthenticated && !!primaryWallet,
+    isConnected: isAuthenticated,
     isLoading,
     connectWallet,
     disconnect: () => {
