@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useDynamicContext } from '@dynamic-labs/sdk-react-core';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { apiRequest } from '@/lib/queryClient';
+
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -90,13 +90,21 @@ export default function OOFMomentsPage() {
   // Fetch public OOF Moments
   const { data: publicMoments = [], isLoading: loadingPublic } = useQuery({
     queryKey: ['/api/oof-moments/public'],
-    queryFn: () => apiRequest('/api/oof-moments/public')
+    queryFn: async () => {
+      const response = await fetch('/api/oof-moments/public');
+      if (!response.ok) throw new Error('Failed to fetch public moments');
+      return response.json();
+    }
   });
 
   // Fetch user's OOF Moments
   const { data: userMoments = [], isLoading: loadingUser } = useQuery({
     queryKey: ['/api/oof-moments/user', user?.userId],
-    queryFn: () => apiRequest(`/api/oof-moments/user/${user?.userId}`),
+    queryFn: async () => {
+      const response = await fetch(`/api/oof-moments/user/${user?.userId}`);
+      if (!response.ok) throw new Error('Failed to fetch user moments');
+      return response.json();
+    },
     enabled: !!user?.userId
   });
 
