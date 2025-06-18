@@ -19,10 +19,21 @@ import {
 import OOFCounter from "@/components/OOFCounter";
 import TokenAdvertisingSpaces from "@/components/TokenAdvertisingSpaces";
 import Footer from "@/components/Footer";
+import { useAuth } from "@/hooks/useAuth";
+import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
 
 export default function Landing() {
-  const handleLogin = () => {
-    window.location.href = "/api/login";
+  const { user, isAuthenticated } = useAuth();
+  const { setShowAuthFlow, primaryWallet } = useDynamicContext();
+
+  const handleConnectWallet = () => {
+    if (isAuthenticated && primaryWallet) {
+      // User is authenticated and has a wallet - redirect to dashboard
+      window.location.href = "/dashboard";
+    } else {
+      // Show Dynamic's authentication flow
+      setShowAuthFlow(true);
+    }
   };
 
   return (
@@ -37,11 +48,11 @@ export default function Landing() {
             </div>
             <div className="flex items-center space-x-3 sm:space-x-6">
               <Button 
-                onClick={handleLogin}
+                onClick={handleConnectWallet}
                 size="sm"
                 className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-xs sm:text-sm px-3 sm:px-4"
               >
-                Connect Wallet
+                {isAuthenticated && primaryWallet ? "Dashboard" : "Connect Wallet"}
               </Button>
             </div>
           </div>
@@ -71,14 +82,14 @@ export default function Landing() {
           {/* Quick Actions */}
           <div className="flex flex-wrap justify-center gap-4 mb-12">
             <Button 
-              onClick={handleLogin}
+              onClick={handleConnectWallet}
               className="bg-gradient-to-r from-yellow-400 to-yellow-500 text-yellow-900 hover:from-yellow-500 hover:to-yellow-600"
             >
               <Zap className="w-5 h-5 mr-2" />
               Calculate My OOFs
             </Button>
             <Button 
-              onClick={handleLogin}
+              onClick={handleConnectWallet}
               variant="outline" 
               className="border-purple-400 text-purple-200 hover:bg-purple-700"
             >
@@ -86,7 +97,7 @@ export default function Landing() {
               Analyze Wallet
             </Button>
             <Button 
-              onClick={handleLogin}
+              onClick={handleConnectWallet}
               className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700"
             >
               <TrendingUp className="w-5 h-5 mr-2" />
@@ -115,7 +126,7 @@ export default function Landing() {
             Join thousands of traders who are already earning $OOF tokens by sharing their trading insights and missed opportunities.
           </p>
           <Button 
-            onClick={handleLogin}
+            onClick={handleConnectWallet}
             size="lg"
             className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-lg px-8 py-6"
           >
