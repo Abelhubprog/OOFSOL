@@ -3,6 +3,7 @@ import { EthereumWalletConnectors } from '@dynamic-labs/ethereum';
 import { SolanaWalletConnectors } from '@dynamic-labs/solana';
 
 const DynamicProvider = ({ children }: { children: React.ReactNode }) => {
+  // Use the provided Dynamic Environment ID
   const environmentId = "0a73d89a-ab65-4323-b27c-9173ae561989";
 
   return (

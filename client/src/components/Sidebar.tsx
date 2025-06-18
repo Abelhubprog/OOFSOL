@@ -17,11 +17,13 @@ import {
   LogOut,
   Star,
   Gem,
-  LayoutDashboard
+  LayoutDashboard,
+  Target
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/hooks/useAuth';
+import { DynamicWidget } from '@dynamic-labs/sdk-react-core';
 
 interface SidebarProps {
   className?: string;
@@ -31,6 +33,8 @@ const navigationItems = [
   { path: '/', icon: Home, label: 'Home', color: 'text-purple-400' },
   { path: '/dashboard', icon: LayoutDashboard, label: 'Dashboard', color: 'text-blue-400' },
   { path: '/tokens', icon: TrendingUp, label: 'Token Explorer', color: 'text-green-400' },
+  { path: '/traders-arena', icon: BarChart3, label: 'Traders Arena', color: 'text-indigo-400' },
+  { path: '/campaigns', icon: Target, label: 'OOF Campaigns', color: 'text-green-400' },
   { path: '/moments', icon: Star, label: 'OOF Moments', color: 'text-yellow-400' },
   { path: '/multiverse', icon: Sparkles, label: 'OOF Multiverse', color: 'text-pink-400' },
   { path: '/detective', icon: Shield, label: 'OOF Detective', color: 'text-red-400' },
@@ -39,7 +43,6 @@ const navigationItems = [
   { path: '/battle-royale', icon: Gamepad2, label: 'Battle Royale', color: 'text-orange-400' },
   { path: '/staking', icon: Banknote, label: 'OOF Staking', color: 'text-purple-400' },
   { path: '/time-machine', icon: Clock, label: 'Time Machine', color: 'text-cyan-400' },
-  { path: '/traders-arena', icon: BarChart3, label: 'Traders Arena', color: 'text-indigo-400' },
   { path: '/wallet-analyzer', icon: Gem, label: 'Wallet Analyzer', color: 'text-emerald-400' },
 ];
 
@@ -81,33 +84,32 @@ export default function Sidebar({ className }: SidebarProps) {
       {!isCollapsed && (
         <div className="p-4 border-b border-purple-700/50">
           {isAuthenticated ? (
-            <Link href="/profile" className="flex items-center space-x-3 hover:bg-purple-700/30 rounded-lg p-2 -m-2 transition-colors">
-              <div className="w-10 h-10 bg-purple-600 rounded-full flex items-center justify-center">
-                <User className="h-5 w-5 text-white" />
+            <div className="space-y-3">
+              <Link href="/profile" className="flex items-center space-x-3 hover:bg-purple-700/30 rounded-lg p-2 -m-2 transition-colors">
+                <div className="w-10 h-10 bg-purple-600 rounded-full flex items-center justify-center">
+                  <User className="h-5 w-5 text-white" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-white font-medium text-sm truncate">
+                    {user?.walletAddress ? 
+                      `${user.walletAddress.slice(0, 6)}...${user.walletAddress.slice(-4)}` 
+                      : 'Connected'
+                    }
+                  </p>
+                  <p className="text-purple-300 text-xs truncate">
+                    0 OOF Tokens
+                  </p>
+                </div>
+              </Link>
+              <div className="w-full">
+                <DynamicWidget />
               </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-white font-medium text-sm truncate">
-                  {(user as any)?.firstName || 'User'}
-                </p>
-                <p className="text-purple-300 text-xs truncate">
-                  {(user as any)?.oofTokens || 0} OOF Tokens
-                </p>
-              </div>
-            </Link>
+            </div>
           ) : (
-            <Link href="/api/login" className="flex items-center space-x-3 hover:bg-purple-700/30 rounded-lg p-2 -m-2 transition-colors">
-              <div className="w-10 h-10 bg-purple-600 rounded-full flex items-center justify-center">
-                <User className="h-5 w-5 text-white" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-white font-medium text-sm truncate">
-                  ABEL
-                </p>
-                <p className="text-purple-300 text-xs truncate">
-                  0 OOF Tokens
-                </p>
-              </div>
-            </Link>
+            <div className="text-center">
+              <p className="text-purple-300 text-sm mb-3">Connect Wallet</p>
+              <DynamicWidget />
+            </div>
           )}
         </div>
       )}
@@ -146,33 +148,12 @@ export default function Sidebar({ className }: SidebarProps) {
 
       {/* Footer */}
       <div className="p-4 border-t border-purple-700/50">
-        {isAuthenticated ? (
-          <Button
-            variant="ghost"
-            size="sm"
-            className={cn(
-              "w-full justify-start text-purple-300 hover:text-white hover:bg-purple-700/50",
-              isCollapsed && "px-3"
-            )}
-            onClick={() => window.location.href = '/api/logout'}
-          >
-            <LogOut className="h-4 w-4" />
-            {!isCollapsed && <span className="ml-3">Sign Out</span>}
-          </Button>
-        ) : (
-          <Button
-            variant="ghost"
-            size="sm"
-            className={cn(
-              "w-full justify-start text-purple-300 hover:text-white hover:bg-purple-700/50",
-              isCollapsed && "px-3"
-            )}
-            onClick={() => window.location.href = '/api/login'}
-          >
-            <User className="h-4 w-4" />
-            {!isCollapsed && <span className="ml-3">Sign In</span>}
-          </Button>
-        )}
+        <div className={cn(
+          "flex items-center justify-center text-purple-400 text-xs",
+          isCollapsed && "px-3"
+        )}>
+          {!isCollapsed && <span>Powered by Solana ⚡</span>}
+        </div>
       </div>
     </div>
   );
