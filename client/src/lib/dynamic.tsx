@@ -4,8 +4,11 @@ const DynamicProvider = ({ children }: { children: React.ReactNode }) => {
   return (
     <DynamicContextProvider
       settings={{
-        environmentId: "7037c007-259c-4dc8-8f95-3ed01c0ab2fb",
+        environmentId: import.meta.env.VITE_DYNAMIC_ENVIRONMENT_ID || "7037c007-259c-4dc8-8f95-3ed01c0ab2fb",
         appName: 'OOF Platform',
+        
+        // Enable automatic wallet creation for new users
+        walletConnectors: [],
         
         // Enhanced styling for OOF branding
         cssOverrides: `

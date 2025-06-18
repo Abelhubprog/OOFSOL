@@ -411,14 +411,11 @@ const OOFMultiverse = () => {
           {!walletState.connected ? (
             <div className="bg-purple-800 bg-opacity-50 rounded-lg p-6 mb-8">
               <Wallet className="w-16 h-16 text-purple-300 mx-auto mb-4" />
-              <h3 className="text-xl font-semibold mb-2">Connect Your Wallet</h3>
+              <h3 className="text-xl font-semibold mb-2">Login to Generate Cards</h3>
               <p className="text-purple-300 mb-4">
-                Connect your Solana wallet to generate personalized OOF cards from your trading history
+                Login or signup to generate personalized OOF cards from your Solana trading history
               </p>
-              <Button className="bg-purple-600 hover:bg-purple-700">
-                <Wallet className="mr-2" size={16} />
-                Connect Wallet
-              </Button>
+              <AuthButton />
             </div>
           ) : (
             <div className="bg-green-800 bg-opacity-50 rounded-lg p-4 mb-8">
