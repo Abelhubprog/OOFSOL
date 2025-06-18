@@ -36,6 +36,7 @@ import {
 import { Link } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/useAuth";
+import { DynamicWidget } from '@dynamic-labs/sdk-react-core';
 
 interface GlobalStats {
   totalOOFMoments: number;
@@ -83,11 +84,18 @@ export default function Dashboard() {
     return (
       <div className="min-h-screen bg-gradient-to-br from-purple-900 via-purple-800 to-purple-900 text-white flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-4xl font-bold mb-4">Welcome to OOF</h1>
-          <p className="text-purple-300 mb-8">Please login to access your dashboard</p>
-          <Button onClick={() => window.location.href = "/api/login"}>
-            Login with Replit
-          </Button>
+          <h1 className="text-6xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent mb-4">
+            OOF
+          </h1>
+          <h2 className="text-2xl text-purple-200 mb-2">
+            The Meme Coin for Missed Opportunities 🔍
+          </h2>
+          <p className="text-purple-300 mb-8 max-w-md mx-auto">
+            Connect your Solana wallet to access the OOF Platform and start turning your crypto regrets into rewards!
+          </p>
+          <div className="flex justify-center">
+            <DynamicWidget />
+          </div>
         </div>
       </div>
     );
@@ -110,20 +118,26 @@ export default function Dashboard() {
 
           {/* User Profile */}
           <div className="p-4 border-b border-purple-500/30">
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center">
-                <span className="text-white font-semibold text-sm">
-                  {user?.email?.charAt(0).toUpperCase() || 'U'}
-                </span>
-              </div>
-              <div>
-                <div className="text-white font-medium">
-                  {user?.email?.split('@')[0].toUpperCase() || 'USER'}
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center space-x-3">
+                <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center">
+                  <Wallet className="w-5 h-5 text-white" />
                 </div>
-                <div className="text-purple-300 text-sm">
-                  {userStats?.oofTokens || 0} OOF Tokens
+                <div>
+                  <div className="text-white font-medium text-sm">
+                    {user?.walletAddress ? 
+                      `${user.walletAddress.slice(0, 6)}...${user.walletAddress.slice(-4)}` 
+                      : 'Connected'
+                    }
+                  </div>
+                  <div className="text-purple-300 text-xs">
+                    {userStats?.oofTokens || 0} OOF Tokens
+                  </div>
                 </div>
               </div>
+            </div>
+            <div className="w-full">
+              <DynamicWidget />
             </div>
           </div>
 
@@ -154,14 +168,6 @@ export default function Dashboard() {
                   <TrendingUp className="w-5 h-5 text-purple-300 group-hover:text-white" />
                   <span className="text-purple-200 group-hover:text-white text-sm">Traders Arena</span>
                 </Link>
-              </div>
-            </div>
-
-            <div>
-              <h3 className="text-purple-300 text-xs font-semibold uppercase tracking-wider mb-3">
-                Campaigns & Engagement
-              </h3>
-              <div className="space-y-1">
                 <Link href="/campaigns" className="flex items-center space-x-3 px-3 py-2 rounded-lg bg-gradient-to-r from-green-500/20 to-blue-500/20 border border-green-500/30 text-white group">
                   <Target className="w-5 h-5 text-green-400" />
                   <span className="text-white text-sm font-medium">OOF Campaigns</span>
