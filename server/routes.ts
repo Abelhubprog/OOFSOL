@@ -1,25 +1,23 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { setupAuth, isAuthenticated } from "./replitAuth";
+// Removed Replit auth - using Dynamic.xyz for wallet authentication
 import { solanaService } from "./services/solanaService";
 import { rugDetectionService } from "./services/rugDetectionService";
 import { insertPredictionSchema, insertMissedOpportunitySchema, insertSlotSpinSchema } from "@shared/schema";
 import { z } from "zod";
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // Auth middleware
-  await setupAuth(app);
+  // No auth middleware needed - Dynamic.xyz handles authentication client-side
 
-  // Auth routes
-  app.get('/api/auth/user', isAuthenticated, async (req: any, res) => {
+  // User routes (no authentication required - using Dynamic.xyz wallet addresses)
+  app.get('/api/auth/user', async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
-      const user = await storage.getUser(userId);
-      res.json(user);
+      // Return empty user for now - wallet authentication handled by Dynamic.xyz
+      res.json({ message: "Using Dynamic.xyz wallet authentication" });
     } catch (error) {
-      console.error("Error fetching user:", error);
-      res.status(500).json({ message: "Failed to fetch user" });
+      console.error("Error:", error);
+      res.status(500).json({ message: "Error" });
     }
   });
 
@@ -59,10 +57,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get('/api/predictions/user', isAuthenticated, async (req: any, res) => {
+  app.get('/api/predictions/user', async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
-      const predictions = await storage.getUserPredictions(userId);
+      const walletAddress = req.query.walletAddress;
+      if (!walletAddress) {
+        return res.status(400).json({ message: "Wallet address required" });
+      }
+      const predictions = await storage.getUserPredictions(walletAddress);
       res.json(predictions);
     } catch (error) {
       console.error("Error fetching user predictions:", error);
@@ -70,12 +71,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post('/api/predictions', isAuthenticated, async (req: any, res) => {
+  app.post('/api/predictions', async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const walletAddress = req.body.walletAddress;
+      if (!walletAddress) {
+        return res.status(400).json({ message: "Wallet address required" });
+      }
       const validatedData = insertPredictionSchema.parse({
         ...req.body,
-        userId,
+        userId: walletAddress,
       });
 
       // Calculate expiration time based on timeframe
