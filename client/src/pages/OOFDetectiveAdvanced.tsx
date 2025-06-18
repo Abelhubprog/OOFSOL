@@ -83,10 +83,10 @@ export default function OOFDetectiveAdvanced() {
   // Token analysis mutation
   const analyzeTokenMutation = useMutation({
     mutationFn: async (tokenAddress: string) => {
-      return await apiRequest('/api/rug-detection/analyze', {
-        method: 'POST',
-        body: JSON.stringify({ tokenAddress })
+      const response = await apiRequest('POST', '/api/rug-detection/analyze', {
+        tokenAddress
       });
+      return response.json();
     },
     onSuccess: (data: TokenAnalysis) => {
       setSelectedToken(data);
@@ -483,7 +483,7 @@ export default function OOFDetectiveAdvanced() {
                   </div>
                 ) : (
                   <div className="space-y-4">
-                    {(alerts as any[]).map((alert: any) => (
+                    {Array.isArray(alerts) ? alerts.map((alert: any) => (
                       <div key={alert.id} className={`border-l-4 p-4 rounded-r-lg ${getAlertSeverityColor(alert.severity)}`}>
                         <div className="flex justify-between items-start mb-2">
                           <div>
@@ -508,7 +508,11 @@ export default function OOFDetectiveAdvanced() {
                           </div>
                         </div>
                       </div>
-                    ))}
+                    )) : (
+                      <div className="text-center py-8 text-gray-500">
+                        No alerts available
+                      </div>
+                    )}
                   </div>
                 )}
               </CardContent>
