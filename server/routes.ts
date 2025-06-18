@@ -1236,6 +1236,134 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // AI Multi-Agent Wallet Analysis
+  app.post('/api/ai/analyze-wallet', async (req, res) => {
+    try {
+      const { walletAddress } = req.body;
+      const user = req.user;
+      
+      if (!walletAddress) {
+        return res.status(400).json({ error: 'Wallet address is required' });
+      }
+
+      // Import the AI coordinator
+      const { aiCoordinator } = await import('./agents/orchestrator/coordinator');
+      
+      // Generate OOF moments using multi-agent system
+      const oofCandidates = await aiCoordinator.orchestrateOOFGeneration(
+        walletAddress, 
+        user?.userId
+      );
+
+      // Convert candidates to database format and save
+      const savedMoments = [];
+      for (const candidate of oofCandidates) {
+        const oofMoment = await storage.createOOFMoment({
+          title: candidate.title,
+          description: candidate.description,
+          quote: candidate.quote,
+          rarity: candidate.rarity,
+          momentType: candidate.type,
+          tokenSymbol: candidate.tokenSymbol,
+          tokenAddress: candidate.tokenAddress,
+          walletAddress: walletAddress,
+          userId: user?.userId || null,
+          cardMetadata: {
+            background: 'gradient',
+            emoji: candidate.visualTheme.emoji,
+            textColor: '#ffffff',
+            accentColor: candidate.visualTheme.accentColor,
+            gradientFrom: candidate.visualTheme.gradientFrom,
+            gradientTo: candidate.visualTheme.gradientTo
+          },
+          hashtags: candidate.hashtags,
+          isPublic: true
+        });
+
+        // Initialize social stats for frontend
+        const momentWithStats = {
+          ...oofMoment,
+          socialStats: {
+            upvotes: 0,
+            downvotes: 0,
+            likes: 0,
+            comments: 0,
+            shares: 0,
+            views: 0
+          }
+        };
+
+        savedMoments.push(momentWithStats);
+      }
+
+      res.json(savedMoments);
+    } catch (error) {
+      console.error('AI analysis error:', error);
+      res.status(500).json({ error: 'Multi-agent analysis failed' });
+    }
+  });
+
+  // Social interaction endpoints for OOF Moments
+  app.post('/api/oof-moments/:id/vote', async (req, res) => {
+    try {
+      const momentId = parseInt(req.params.id);
+      const { userId, voteType } = req.body; // voteType: 'up' or 'down'
+
+      if (!userId) {
+        return res.status(400).json({ message: "User ID required" });
+      }
+
+      // Record vote interaction
+      await storage.createMomentInteraction({
+        momentId,
+        userId,
+        interactionType: voteType === 'up' ? 'upvote' : 'downvote'
+      });
+
+      const moment = await storage.getOOFMoment(momentId);
+      res.json({ moment });
+
+    } catch (error) {
+      console.error("Error processing vote:", error);
+      res.status(500).json({ message: "Failed to process vote" });
+    }
+  });
+
+  // Download HD PNG for card owners
+  app.post('/api/oof-moments/:id/download', async (req, res) => {
+    try {
+      const momentId = parseInt(req.params.id);
+      const userId = req.user?.userId;
+
+      if (!userId) {
+        return res.status(401).json({ message: "Authentication required" });
+      }
+
+      const moment = await storage.getOOFMoment(momentId);
+      if (!moment) {
+        return res.status(404).json({ message: "OOF Moment not found" });
+      }
+
+      // Check if user owns this moment
+      if (moment.userId !== userId) {
+        return res.status(403).json({ message: "Only the card owner can download HD version" });
+      }
+
+      // Generate HD PNG download (this would integrate with image generation service)
+      const downloadUrl = `${process.env.APP_URL || 'http://localhost:5000'}/api/images/hd-png/${momentId}`;
+      
+      res.json({
+        downloadUrl,
+        filename: `${moment.tokenSymbol}_OOF_Moment_HD.png`,
+        message: "HD PNG ready for download"
+      });
+
+    } catch (error) {
+      console.error("Error processing download:", error);
+      res.status(500).json({ message: "Failed to generate download" });
+    }
+  });
+
   // Launch OOF Moments as Zora Tokens
   app.post('/api/zora/launch-tokens', async (req, res) => {
     try {

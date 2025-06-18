@@ -1,42 +1,53 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useDynamicContext } from '@dynamic-labs/sdk-react-core';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { apiRequest } from '@/lib/queryClient';
+import { useToast } from '@/hooks/use-toast';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Textarea } from '@/components/ui/textarea';
 import { Progress } from '@/components/ui/progress';
-import { ZoraTokenLauncher } from '@/components/ZoraTokenLauncher';
-import { useToast } from '@/hooks/use-toast';
 import { 
-  Search, 
-  Wallet, 
+  Sparkles, 
+  Brain,
+  Palette,
+  Network,
+  CheckCircle,
+  Clock,
   Heart, 
+  MessageCircle, 
   Share2, 
   Download, 
-  Crown, 
   Trophy,
-  Star,
-  Sparkles,
-  TrendingUp,
-  TrendingDown,
-  Copy,
-  ExternalLink,
-  Loader2,
-  MessageCircle,
-  Rocket,
-  DollarSign,
   Zap,
+  Star,
+  ExternalLink,
+  Crown,
+  Rocket,
+  Target,
+  DollarSign,
+  Loader2,
+  Send,
+  ArrowUp,
+  ArrowDown,
+  Eye,
   Users,
-  BarChart3,
+  Gem,
+  Coins,
+  Reply,
+  MoreHorizontal,
+  Copy,
+  X,
   RefreshCw
 } from 'lucide-react';
 
+// Types for the OOF Moments system
 interface OOFMoment {
   id: number;
   title: string;
@@ -47,55 +58,366 @@ interface OOFMoment {
   tokenSymbol: string;
   tokenAddress: string;
   walletAddress: string;
+  userId?: string;
   cardMetadata: {
     background: string;
     emoji: string;
     textColor: string;
     accentColor: string;
-    gradientFrom?: string;
-    gradientTo?: string;
+    gradientFrom: string;
+    gradientTo: string;
   };
   socialStats: {
+    upvotes: number;
+    downvotes: number;
     likes: number;
-    shares: number;
     comments: number;
+    shares: number;
+    views: number;
   };
+  hashtags: string[];
+  zoraAddress?: string;
   isPublic: boolean;
-  createdAt: string;
-  zoraUrl?: string;
-  nftMinted?: boolean;
+  createdAt: Date;
 }
 
-interface GeneratedCards {
-  paperHands?: any;
-  dustCollector?: any;
-  gainsMaster?: any;
+interface Comment {
+  id: number;
+  momentId: number;
+  userId: string;
+  username: string;
+  content: string;
+  replies: Comment[];
+  likes: number;
+  createdAt: Date;
 }
 
-export default function OOFMomentsPage() {
-  const { user, primaryWallet } = useDynamicContext();
-  const { toast } = useToast();
-  const queryClient = useQueryClient();
-  
-  const [walletAddress, setWalletAddress] = useState('');
-  const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [generatedCards, setGeneratedCards] = useState<GeneratedCards>({});
-  const [selectedCards, setSelectedCards] = useState<any[]>([]);
-  const [showZoraLauncher, setShowZoraLauncher] = useState(false);
-  const [activeTab, setActiveTab] = useState('discover');
-  const [commentText, setCommentText] = useState('');
-  const [showCommentDialog, setShowCommentDialog] = useState(false);
-  const [selectedMomentId, setSelectedMomentId] = useState<number | null>(null);
+interface GenerationProgress {
+  stage: 'analyzing' | 'detecting' | 'designing' | 'posting' | 'complete';
+  progress: number;
+  message: string;
+  agentActive: string;
+}
 
-  // Fetch public OOF Moments
-  const { data: publicMoments = [], isLoading: loadingPublic } = useQuery({
+// AI Agent Status Component
+const AIAgentStatus: React.FC<{ progress: GenerationProgress }> = ({ progress }) => {
+  const agents = [
+    { id: 'scout', name: 'Scout Agent', icon: Brain, description: 'Scanning wallet history' },
+    { id: 'director', name: 'Director Agent', icon: Target, description: 'Crafting narratives' },
+    { id: 'artist', name: 'Art Agent', icon: Palette, description: 'Designing visuals' },
+    { id: 'publisher', name: 'Zora Agent', icon: Network, description: 'Publishing to Zora' }
+  ];
+
+  return (
+    <div className="bg-gradient-to-r from-purple-900/50 to-pink-900/50 rounded-lg p-6 border border-purple-700">
+      <div className="flex items-center mb-4">
+        <Sparkles className="text-yellow-400 mr-2 animate-pulse" />
+        <h3 className="text-xl font-bold">AI Agents Working</h3>
+      </div>
+      
+      <Progress value={progress.progress} className="mb-4" />
+      
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        {agents.map((agent) => {
+          const Icon = agent.icon;
+          const isActive = progress.agentActive === agent.id;
+          const isComplete = progress.progress > (agents.indexOf(agent) + 1) * 25;
+          
+          return (
+            <div
+              key={agent.id}
+              className={`p-4 rounded-lg border transition-all ${
+                isActive 
+                  ? 'border-yellow-400 bg-yellow-400/10 animate-pulse' 
+                  : isComplete
+                    ? 'border-green-400 bg-green-400/10'
+                    : 'border-gray-600 bg-gray-800/50'
+              }`}
+            >
+              <div className="flex items-center mb-2">
+                <Icon className={`mr-2 ${isActive ? 'text-yellow-400' : isComplete ? 'text-green-400' : 'text-gray-400'}`} />
+                {isComplete && <CheckCircle className="text-green-400 ml-auto" size={16} />}
+                {isActive && <Clock className="text-yellow-400 ml-auto animate-spin" size={16} />}
+              </div>
+              <h4 className="font-semibold text-sm">{agent.name}</h4>
+              <p className="text-xs text-gray-400">{agent.description}</p>
+            </div>
+          );
+        })}
+      </div>
+      
+      <div className="mt-4 text-center">
+        <p className="text-purple-300">{progress.message}</p>
+      </div>
+    </div>
+  );
+};
+
+// Enhanced OOF Card Component with unique voting system
+const OOFCard: React.FC<{ 
+  moment: OOFMoment; 
+  isOwner: boolean; 
+  onInteraction: (type: string, momentId: number) => void;
+}> = ({ moment, isOwner, onInteraction }) => {
+  const [showComments, setShowComments] = useState(false);
+  const [newComment, setNewComment] = useState('');
+  const [userVote, setUserVote] = useState<'up' | 'down' | null>(null);
+
+  const getRarityGlow = (rarity: string) => {
+    switch (rarity) {
+      case 'legendary': return 'shadow-2xl shadow-yellow-500/50';
+      case 'epic': return 'shadow-xl shadow-purple-500/50';
+      case 'rare': return 'shadow-lg shadow-blue-500/50';
+      default: return '';
+    }
+  };
+
+  const handleVote = (voteType: 'up' | 'down') => {
+    setUserVote(userVote === voteType ? null : voteType);
+    onInteraction(voteType === 'up' ? 'upvote' : 'downvote', moment.id);
+  };
+
+  const handleDownloadOrZora = () => {
+    if (isOwner) {
+      // Trigger HD PNG download
+      onInteraction('download', moment.id);
+    } else {
+      // Redirect to Zora token purchase
+      if (moment.zoraAddress) {
+        window.open(`https://zora.co/collect/base:${moment.zoraAddress}`, '_blank');
+      }
+    }
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      className={`bg-gradient-to-br ${moment.cardMetadata.gradientFrom} ${moment.cardMetadata.gradientTo} rounded-xl p-6 text-white ${getRarityGlow(moment.rarity)} border border-white/20`}
+    >
+      {/* Card Header */}
+      <div className="flex items-start justify-between mb-4">
+        <div className="flex items-center space-x-3">
+          <span className="text-4xl">{moment.cardMetadata.emoji}</span>
+          <div>
+            <h3 className="text-xl font-bold flex items-center">
+              {moment.title}
+              {moment.rarity === 'legendary' && <Crown className="ml-2 text-yellow-400" size={20} />}
+            </h3>
+            <p className="text-white/70 text-sm">{moment.description}</p>
+          </div>
+        </div>
+        <Badge variant="secondary" className="bg-white/20">
+          {moment.rarity}
+        </Badge>
+      </div>
+
+      {/* AI-Generated Quote */}
+      <div className="mb-4 p-4 bg-black/20 rounded-lg border-l-4 border-white/50">
+        <p className="text-lg italic">"{moment.quote}"</p>
+      </div>
+
+      {/* Hashtags */}
+      <div className="flex flex-wrap gap-2 mb-4">
+        {moment.hashtags.map((tag) => (
+          <span
+            key={tag}
+            className="bg-white/20 text-white text-xs font-semibold px-2 py-1 rounded-full"
+          >
+            {tag}
+          </span>
+        ))}
+      </div>
+
+      {/* Unique Social Actions */}
+      <div className="flex items-center justify-between pt-4 border-t border-white/20">
+        <div className="flex items-center space-x-4">
+          {/* Unique Rocket/Target Voting System */}
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            onClick={() => handleVote('up')}
+            className={`flex items-center space-x-1 transition-colors ${
+              userVote === 'up' ? 'text-green-400' : 'text-white/60 hover:text-green-400'
+            }`}
+          >
+            <Rocket size={20} />
+            <span>{moment.socialStats.upvotes}</span>
+          </motion.button>
+          
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            onClick={() => handleVote('down')}
+            className={`flex items-center space-x-1 transition-colors ${
+              userVote === 'down' ? 'text-red-400' : 'text-white/60 hover:text-red-400'
+            }`}
+          >
+            <Target size={20} />
+            <span>{moment.socialStats.downvotes}</span>
+          </motion.button>
+
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            onClick={() => setShowComments(!showComments)}
+            className="flex items-center space-x-1 text-white/60 hover:text-blue-400 transition-colors"
+          >
+            <MessageCircle size={20} />
+            <span>{moment.socialStats.comments}</span>
+          </motion.button>
+
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            onClick={() => onInteraction('like', moment.id)}
+            className="flex items-center space-x-1 text-white/60 hover:text-pink-400 transition-colors"
+          >
+            <Heart size={20} />
+            <span>{moment.socialStats.likes}</span>
+          </motion.button>
+        </div>
+
+        <div className="flex items-center space-x-3">
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            onClick={() => onInteraction('share', moment.id)}
+            className="text-white/60 hover:text-white transition-colors"
+          >
+            <Share2 size={20} />
+          </motion.button>
+          
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            onClick={handleDownloadOrZora}
+            className={`transition-colors ${
+              isOwner 
+                ? 'text-white/60 hover:text-green-400' 
+                : 'text-white/60 hover:text-yellow-400'
+            }`}
+            title={isOwner ? 'Download HD PNG' : 'Buy on Zora'}
+          >
+            {isOwner ? <Download size={20} /> : <Coins size={20} />}
+          </motion.button>
+        </div>
+      </div>
+
+      {/* Comments Section */}
+      <AnimatePresence>
+        {showComments && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            className="mt-4 pt-4 border-t border-white/20"
+          >
+            <div className="flex items-center space-x-2 mb-4">
+              <Input
+                value={newComment}
+                onChange={(e) => setNewComment(e.target.value)}
+                placeholder="Share your thoughts..."
+                className="flex-1 bg-white/10 border-white/20 text-white placeholder:text-white/50"
+              />
+              <Button
+                onClick={() => {
+                  if (newComment.trim()) {
+                    onInteraction('comment', moment.id);
+                    setNewComment('');
+                  }
+                }}
+                size="sm"
+                className="bg-white/20 hover:bg-white/30"
+              >
+                <Send size={16} />
+              </Button>
+            </div>
+            
+            {/* Comment list would go here */}
+            <div className="space-y-3">
+              {/* Placeholder for comments */}
+              <div className="text-white/60 text-sm text-center py-4">
+                Be the first to comment on this OOF Moment!
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
+  );
+};
+
+// Real-time Community Feed Component
+const CommunityFeed: React.FC = () => {
+  const { data: publicMoments = [], isLoading } = useQuery({
     queryKey: ['/api/oof-moments/public'],
     queryFn: async () => {
       const response = await fetch('/api/oof-moments/public');
       if (!response.ok) throw new Error('Failed to fetch public moments');
       return response.json();
-    }
+    },
+    refetchInterval: 5000 // Refresh every 5 seconds for real-time updates
   });
+
+  const handleInteraction = (type: string, momentId: number) => {
+    console.log(`${type} interaction on moment ${momentId}`);
+    // Handle social interactions
+  };
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center py-16">
+        <Loader2 className="animate-spin mr-2" />
+        <span>Loading community moments...</span>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-8">
+      <div className="flex items-center justify-between">
+        <h2 className="text-2xl font-bold">Community OOF Moments</h2>
+        <div className="flex items-center space-x-2 text-sm text-purple-300">
+          <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+          <span>Live Feed</span>
+        </div>
+      </div>
+      
+      {publicMoments.length > 0 ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {publicMoments.map((moment: OOFMoment) => (
+            <OOFCard
+              key={moment.id}
+              moment={moment}
+              isOwner={false}
+              onInteraction={handleInteraction}
+            />
+          ))}
+        </div>
+      ) : (
+        <div className="text-center py-16 bg-purple-900/30 rounded-xl border border-purple-700">
+          <Trophy className="mx-auto text-yellow-400 h-16 w-16 mb-4" />
+          <h3 className="text-2xl font-bold mb-2">No OOF Moments Yet</h3>
+          <p className="text-purple-300">Be the first to analyze a wallet and create legendary OOF Moments!</p>
+        </div>
+      )}
+    </div>
+  );
+};
+
+// Main OOF Moments Page Component
+export default function OOFMomentsPage() {
+  const { user } = useDynamicContext();
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
+  
+  const [walletAddress, setWalletAddress] = useState('');
+  const [activeTab, setActiveTab] = useState('discover');
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [generationProgress, setGenerationProgress] = useState<GenerationProgress>({
+    stage: 'analyzing',
+    progress: 0,
+    message: 'Initializing AI agents...',
+    agentActive: 'scout'
+  });
+  const [generatedMoments, setGeneratedMoments] = useState<OOFMoment[]>([]);
 
   // Fetch user's OOF Moments
   const { data: userMoments = [], isLoading: loadingUser } = useQuery({
@@ -108,529 +430,185 @@ export default function OOFMomentsPage() {
     enabled: !!user?.userId
   });
 
-  // Generate OOF Moments mutation
-  const generateMutation = useMutation({
-    mutationFn: async (walletAddr: string) => {
-      setIsAnalyzing(true);
-      const response = await fetch('/api/ai/analyze-wallet', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ walletAddress: walletAddr })
-      });
-      
-      if (!response.ok) {
-        throw new Error('Failed to analyze wallet');
-      }
-      
+  // AI Analysis Mutation
+  const analyzeWalletMutation = useMutation({
+    mutationFn: async (address: string) => {
+      const response = await apiRequest('POST', '/api/ai/analyze-wallet', { walletAddress: address });
       return response.json();
     },
     onSuccess: (data) => {
-      setGeneratedCards(data.cards || {});
-      setIsAnalyzing(false);
+      setGeneratedMoments(data);
+      setActiveTab('my_moments');
       toast({
-        title: "Analysis Complete!",
-        description: "Your OOF Moments have been generated successfully."
+        title: 'Analysis Complete!',
+        description: `Generated ${data.length} legendary OOF Moments`
       });
     },
-    onError: (error: any) => {
-      setIsAnalyzing(false);
+    onError: (error) => {
       toast({
-        title: "Analysis Failed",
-        description: error.message || "Failed to analyze wallet",
-        variant: "destructive"
+        title: 'Analysis Failed',
+        description: 'Unable to analyze wallet. Please try again.',
+        variant: 'destructive'
       });
     }
   });
 
-  // Like mutation
-  const likeMutation = useMutation({
-    mutationFn: async ({ momentId, action }: { momentId: number; action: 'like' | 'unlike' }) => {
-      const response = await fetch(`/api/oof-moments/${momentId}/like`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          userId: user?.userId || 'anonymous',
-          action
-        })
-      });
-      return response.json();
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['/api/oof-moments'] });
-    }
-  });
-
-  // Share mutation
-  const shareMutation = useMutation({
-    mutationFn: async ({ momentId, platform }: { momentId: number; platform: string }) => {
-      const response = await fetch(`/api/oof-moments/${momentId}/share-social`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ platform })
-      });
-      return response.json();
-    },
-    onSuccess: (data) => {
-      if (data.shareUrl) {
-        window.open(data.shareUrl, '_blank');
-        toast({
-          title: "Shared Successfully!",
-          description: `Opened ${data.platform} share dialog`
-        });
-      }
-      queryClient.invalidateQueries({ queryKey: ['/api/oof-moments'] });
-    }
-  });
-
-  // Comment mutation
-  const commentMutation = useMutation({
-    mutationFn: async ({ momentId, comment }: { momentId: number; comment: string }) => {
-      const response = await fetch(`/api/oof-moments/${momentId}/comment`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          userId: user?.userId || 'anonymous',
-          comment
-        })
-      });
-      return response.json();
-    },
-    onSuccess: () => {
-      setCommentText('');
-      setShowCommentDialog(false);
-      toast({
-        title: "Comment Added!",
-        description: "Your comment has been posted successfully."
-      });
-      queryClient.invalidateQueries({ queryKey: ['/api/oof-moments'] });
-    }
-  });
-
-  const handleAnalyze = () => {
+  const handleAnalyze = async () => {
     if (!walletAddress.trim()) {
       toast({
-        title: "Wallet Required",
-        description: "Please enter a Solana wallet address to analyze",
-        variant: "destructive"
+        title: 'Wallet Required',
+        description: 'Please enter a Solana wallet address',
+        variant: 'destructive'
       });
       return;
     }
-    generateMutation.mutate(walletAddress);
-  };
 
-  const handleLaunchTokens = () => {
-    const cards = Object.values(generatedCards).filter(Boolean);
-    if (cards.length === 0) {
-      toast({
-        title: "No Cards Generated",
-        description: "Please generate OOF Moments first",
-        variant: "destructive"
-      });
-      return;
+    setIsGenerating(true);
+    setGenerationProgress({
+      stage: 'analyzing',
+      progress: 10,
+      message: 'Scout Agent scanning wallet history...',
+      agentActive: 'scout'
+    });
+
+    // Simulate multi-agent workflow
+    const progressSteps = [
+      { stage: 'analyzing', progress: 25, message: 'Analyzing transaction patterns...', agentActive: 'scout' },
+      { stage: 'detecting', progress: 50, message: 'Director Agent crafting narratives...', agentActive: 'director' },
+      { stage: 'designing', progress: 75, message: 'Art Agent designing visual themes...', agentActive: 'artist' },
+      { stage: 'posting', progress: 90, message: 'Zora Agent preparing token launch...', agentActive: 'publisher' },
+      { stage: 'complete', progress: 100, message: 'OOF Moments ready!', agentActive: 'publisher' }
+    ] as const;
+
+    for (let i = 0; i < progressSteps.length; i++) {
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      setGenerationProgress(progressSteps[i]);
     }
-    setSelectedCards(cards);
-    setShowZoraLauncher(true);
+
+    // Execute the actual analysis
+    analyzeWalletMutation.mutate(walletAddress);
+    setIsGenerating(false);
   };
 
-  const handleLike = (momentId: number) => {
-    likeMutation.mutate({ momentId, action: 'like' });
+  const handleInteraction = (type: string, momentId: number) => {
+    console.log(`${type} interaction on moment ${momentId}`);
+    // Handle social interactions
   };
-
-  const handleShare = (momentId: number, platform: string) => {
-    shareMutation.mutate({ momentId, platform });
-  };
-
-  const handleComment = (momentId: number) => {
-    setSelectedMomentId(momentId);
-    setShowCommentDialog(true);
-  };
-
-  const submitComment = () => {
-    if (selectedMomentId && commentText.trim()) {
-      commentMutation.mutate({ 
-        momentId: selectedMomentId, 
-        comment: commentText.trim() 
-      });
-    }
-  };
-
-  const getRarityColor = (rarity: string) => {
-    switch (rarity) {
-      case 'legendary': return 'bg-yellow-500';
-      case 'epic': return 'bg-purple-500';
-      case 'rare': return 'bg-blue-500';
-      default: return 'bg-gray-500';
-    }
-  };
-
-  const getMomentTypeEmoji = (type: string) => {
-    switch (type) {
-      case 'paper_hands': return '📄';
-      case 'dust_collector': return '🗑️';
-      case 'gains_master': return '💎';
-      default: return '🚀';
-    }
-  };
-
-  const getMomentTypeColor = (type: string) => {
-    switch (type) {
-      case 'paper_hands': return 'from-red-500 to-red-600';
-      case 'dust_collector': return 'from-gray-500 to-gray-600';
-      case 'gains_master': return 'from-green-500 to-green-600';
-      default: return 'from-blue-500 to-blue-600';
-    }
-  };
-
-  const renderMomentCard = (moment: OOFMoment) => (
-    <motion.div
-      key={moment.id}
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -20 }}
-      className="mb-6"
-    >
-      <Card className="overflow-hidden border-2 hover:border-purple-300 transition-all duration-300">
-        {/* Card Header */}
-        <div className={`h-48 bg-gradient-to-br ${getMomentTypeColor(moment.momentType)} relative overflow-hidden`}>
-          <div className="absolute inset-0 bg-black bg-opacity-20" />
-          <div className="absolute inset-0 flex items-center justify-center">
-            <span className="text-6xl opacity-80">{getMomentTypeEmoji(moment.momentType)}</span>
-          </div>
-          <div className="absolute top-4 left-4">
-            <Badge variant="secondary" className={`${getRarityColor(moment.rarity)} text-white`}>
-              {moment.rarity}
-            </Badge>
-          </div>
-          <div className="absolute top-4 right-4">
-            <Badge variant="outline" className="bg-white/20 text-white border-white/30">
-              {moment.tokenSymbol}
-            </Badge>
-          </div>
-        </div>
-
-        {/* Card Content */}
-        <CardContent className="p-6">
-          <div className="space-y-4">
-            <div>
-              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
-                {moment.title}
-              </h3>
-              <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
-                {moment.description}
-              </p>
-            </div>
-
-            {moment.quote && (
-              <blockquote className="border-l-4 border-purple-500 pl-4 italic text-gray-700 dark:text-gray-300">
-                "{moment.quote}"
-              </blockquote>
-            )}
-
-            {/* Wallet Info */}
-            <div className="flex items-center gap-2 text-xs text-gray-500">
-              <Wallet className="h-3 w-3" />
-              <span className="font-mono">
-                {moment.walletAddress.slice(0, 8)}...{moment.walletAddress.slice(-8)}
-              </span>
-              <span>•</span>
-              <span>{new Date(moment.createdAt).toLocaleDateString()}</span>
-            </div>
-
-            {/* Zora Link */}
-            {moment.zoraUrl && (
-              <div className="flex items-center gap-2 p-2 bg-blue-50 dark:bg-blue-950/20 rounded-lg">
-                <ExternalLink className="h-4 w-4 text-blue-600" />
-                <span className="text-sm text-blue-600 font-medium">Live on Zora</span>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => window.open(moment.zoraUrl, '_blank')}
-                  className="ml-auto"
-                >
-                  View Token
-                </Button>
-              </div>
-            )}
-
-            {/* Social Actions */}
-            <div className="flex items-center justify-between pt-4 border-t">
-              <div className="flex items-center gap-4">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => handleLike(moment.id)}
-                  className="flex items-center gap-2 hover:text-red-500"
-                >
-                  <Heart className="h-4 w-4" />
-                  <span>{moment.socialStats.likes}</span>
-                </Button>
-                
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => handleComment(moment.id)}
-                  className="flex items-center gap-2 hover:text-blue-500"
-                >
-                  <MessageCircle className="h-4 w-4" />
-                  <span>{moment.socialStats.comments}</span>
-                </Button>
-                
-                <div className="flex items-center gap-1">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => handleShare(moment.id, 'twitter')}
-                    className="hover:text-blue-400"
-                  >
-                    <Share2 className="h-4 w-4" />
-                  </Button>
-                  <span className="text-xs text-gray-500">{moment.socialStats.shares}</span>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => {
-                    navigator.clipboard.writeText(moment.walletAddress);
-                    toast({ title: "Copied!", description: "Wallet address copied to clipboard" });
-                  }}
-                >
-                  <Copy className="h-3 w-3" />
-                </Button>
-              </div>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-    </motion.div>
-  );
-
-  const renderGeneratedCard = (card: any, type: string) => (
-    <Card key={type} className="overflow-hidden border-2 hover:border-purple-300 transition-all">
-      <div className={`h-32 bg-gradient-to-br ${getMomentTypeColor(type)} flex items-center justify-center`}>
-        <span className="text-4xl">{getMomentTypeEmoji(type)}</span>
-      </div>
-      <CardContent className="p-4">
-        <div className="space-y-2">
-          <div className="flex items-center justify-between">
-            <h4 className="font-bold text-sm">{card.title}</h4>
-            <Badge variant="outline" className="text-xs">{card.rarity}</Badge>
-          </div>
-          <p className="text-xs text-gray-600 dark:text-gray-300 line-clamp-2">
-            {card.description}
-          </p>
-          <div className="text-xs text-gray-500">
-            Token: {card.tokenSymbol}
-          </div>
-        </div>
-      </CardContent>
-    </Card>
-  );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-purple-800 to-indigo-900">
-      <div className="container mx-auto px-4 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-purple-800 to-pink-900 text-white">
+      <div className="container mx-auto px-6 py-8">
         {/* Header */}
         <div className="text-center mb-12">
-          <motion.div
+          <motion.h1
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="space-y-4"
+            className="text-5xl font-bold bg-gradient-to-r from-yellow-400 to-pink-400 bg-clip-text text-transparent mb-4"
           >
-            <h1 className="text-5xl font-bold text-white mb-4">
-              <span className="bg-gradient-to-r from-yellow-400 to-pink-500 bg-clip-text text-transparent">
-                OOF Moments
-              </span>
-            </h1>
-            <p className="text-xl text-purple-200 max-w-2xl mx-auto">
-              Transform your crypto trading stories into shareable social media moments and launch them as tokens on Zora
-            </p>
-          </motion.div>
+            OOF Moments
+          </motion.h1>
+          <p className="text-xl text-purple-200 max-w-2xl mx-auto">
+            Transform your crypto trading stories into shareable social media moments and launch them as tokens on Zora
+          </p>
         </div>
 
-        {/* Wallet Analyzer */}
-        <Card className="mb-8 bg-white/10 backdrop-blur-sm border-white/20">
-          <CardHeader>
-            <CardTitle className="text-white flex items-center gap-2">
-              <Sparkles className="h-5 w-5 text-yellow-400" />
-              AI-Powered OOF Moments Generator
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex gap-4">
+        {/* AI Generator Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-12"
+        >
+          <div className="bg-gradient-to-r from-purple-900/50 to-pink-900/50 rounded-xl p-8 border border-purple-700">
+            <div className="flex items-center mb-6">
+              <Sparkles className="text-yellow-400 mr-3 text-2xl" />
+              <h2 className="text-2xl font-bold">AI-Powered OOF Moments Generator</h2>
+            </div>
+            
+            <div className="flex items-center space-x-4 mb-6">
               <Input
-                placeholder="Enter Solana wallet address..."
                 value={walletAddress}
                 onChange={(e) => setWalletAddress(e.target.value)}
-                className="flex-1 bg-white/10 border-white/20 text-white placeholder-white/50"
+                placeholder="Enter Solana wallet address here"
+                className="flex-1 bg-purple-800/50 border-purple-600 text-white placeholder:text-purple-300"
+                disabled={isGenerating}
               />
-              <Button 
+              <Button
                 onClick={handleAnalyze}
-                disabled={isAnalyzing || !walletAddress.trim()}
-                className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
+                disabled={isGenerating || !walletAddress.trim()}
+                className="bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-700 hover:to-purple-700 px-8 py-3"
               >
-                {isAnalyzing ? (
-                  <div className="flex items-center gap-2">
-                    <Loader2 className="h-4 w-4 animate-spin" />
+                {isGenerating ? (
+                  <>
+                    <Loader2 className="animate-spin mr-2" />
                     Analyzing...
-                  </div>
+                  </>
                 ) : (
-                  <div className="flex items-center gap-2">
-                    <Zap className="h-4 w-4" />
+                  <>
+                    <Zap className="mr-2" />
                     AI Analyze
-                  </div>
+                  </>
                 )}
               </Button>
             </div>
 
-            {isAnalyzing && (
-              <div className="space-y-2">
-                <Progress value={33} className="h-2" />
-                <p className="text-sm text-purple-200">
-                  AI agents are analyzing your wallet history...
-                </p>
-              </div>
+            {/* AI Agent Status */}
+            {isGenerating && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+              >
+                <AIAgentStatus progress={generationProgress} />
+              </motion.div>
             )}
+          </div>
+        </motion.div>
 
-            {/* Generated Cards Preview */}
-            {Object.keys(generatedCards).length > 0 && (
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-lg font-semibold text-white">Your OOF Moments</h3>
-                  <Button 
-                    onClick={handleLaunchTokens}
-                    className="bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700"
-                  >
-                    <Rocket className="h-4 w-4 mr-2" />
-                    Launch on Zora
-                  </Button>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  {generatedCards.paperHands && renderGeneratedCard(generatedCards.paperHands, 'paper_hands')}
-                  {generatedCards.dustCollector && renderGeneratedCard(generatedCards.dustCollector, 'dust_collector')}
-                  {generatedCards.gainsMaster && renderGeneratedCard(generatedCards.gainsMaster, 'gains_master')}
-                </div>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-
-        {/* Main Content Tabs */}
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-2 bg-white/10 backdrop-blur-sm">
-            <TabsTrigger value="discover" className="text-white data-[state=active]:bg-white/20">
-              <Users className="h-4 w-4 mr-2" />
+        {/* Tabs Section */}
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-8">
+          <TabsList className="grid w-full grid-cols-2 bg-purple-900/50 border border-purple-700">
+            <TabsTrigger value="discover" className="data-[state=active]:bg-purple-700">
+              <Users className="mr-2" size={20} />
               Discover
             </TabsTrigger>
-            <TabsTrigger value="my-moments" className="text-white data-[state=active]:bg-white/20" disabled={!user}>
-              <Star className="h-4 w-4 mr-2" />
+            <TabsTrigger value="my_moments" className="data-[state=active]:bg-purple-700">
+              <Star className="mr-2" size={20} />
               My Moments
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="discover" className="space-y-6">
-            <div className="flex items-center justify-between">
-              <h2 className="text-2xl font-bold text-white">Community OOF Moments</h2>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => queryClient.invalidateQueries({ queryKey: ['/api/oof-moments/public'] })}
-                className="border-white/20 text-white hover:bg-white/10"
-              >
-                <RefreshCw className="h-4 w-4 mr-2" />
-                Refresh
-              </Button>
-            </div>
-
-            {loadingPublic ? (
-              <div className="flex justify-center py-12">
-                <Loader2 className="h-8 w-8 animate-spin text-white" />
-              </div>
-            ) : publicMoments.length > 0 ? (
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {publicMoments.map(renderMomentCard)}
-              </div>
-            ) : (
-              <Card className="p-12 text-center bg-white/5 backdrop-blur-sm border-white/10">
-                <Trophy className="h-16 w-16 mx-auto mb-4 text-yellow-400 opacity-50" />
-                <h3 className="text-xl font-semibold text-white mb-2">No OOF Moments Yet</h3>
-                <p className="text-purple-200">
-                  Be the first to analyze a wallet and create legendary OOF Moments!
-                </p>
-              </Card>
-            )}
+          <TabsContent value="discover">
+            <CommunityFeed />
           </TabsContent>
 
-          <TabsContent value="my-moments" className="space-y-6">
-            <h2 className="text-2xl font-bold text-white">Your OOF Moments</h2>
-            
+          <TabsContent value="my_moments">
             {loadingUser ? (
-              <div className="flex justify-center py-12">
-                <Loader2 className="h-8 w-8 animate-spin text-white" />
+              <div className="flex items-center justify-center py-16">
+                <Loader2 className="animate-spin mr-2" />
+                <span>Loading your moments...</span>
               </div>
-            ) : userMoments.length > 0 ? (
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {userMoments.map(renderMomentCard)}
+            ) : userMoments.length > 0 || generatedMoments.length > 0 ? (
+              <div className="space-y-6">
+                <h2 className="text-2xl font-bold">Your OOF Moments</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {[...generatedMoments, ...userMoments].map((moment: OOFMoment) => (
+                    <OOFCard
+                      key={moment.id}
+                      moment={moment}
+                      isOwner={true}
+                      onInteraction={handleInteraction}
+                    />
+                  ))}
+                </div>
               </div>
             ) : (
-              <Card className="p-12 text-center bg-white/5 backdrop-blur-sm border-white/10">
-                <BarChart3 className="h-16 w-16 mx-auto mb-4 text-blue-400 opacity-50" />
-                <h3 className="text-xl font-semibold text-white mb-2">No Moments Created</h3>
-                <p className="text-purple-200 mb-4">
-                  Analyze your wallet to generate your first OOF Moments!
-                </p>
-                <Button
-                  onClick={() => setActiveTab('discover')}
-                  className="bg-gradient-to-r from-purple-600 to-pink-600"
-                >
-                  Start Analyzing
-                </Button>
-              </Card>
+              <div className="text-center py-16 bg-purple-900/30 rounded-xl border border-purple-700">
+                <Trophy className="mx-auto text-yellow-400 h-16 w-16 mb-4" />
+                <h3 className="text-2xl font-bold mb-2">Analyze a Wallet to See Your Moments!</h3>
+                <p className="text-purple-300">Enter a Solana wallet address above to generate your legendary OOF Moments</p>
+              </div>
             )}
           </TabsContent>
         </Tabs>
-
-        {/* Zora Token Launcher Modal */}
-        <ZoraTokenLauncher
-          isOpen={showZoraLauncher}
-          onClose={() => setShowZoraLauncher(false)}
-          cards={selectedCards}
-          userWallet={primaryWallet?.address}
-        />
-
-        {/* Comment Dialog */}
-        <Dialog open={showCommentDialog} onOpenChange={setShowCommentDialog}>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Add Comment</DialogTitle>
-              <DialogDescription>
-                Share your thoughts on this OOF Moment
-              </DialogDescription>
-            </DialogHeader>
-            <Textarea
-              placeholder="What do you think about this OOF moment?"
-              value={commentText}
-              onChange={(e) => setCommentText(e.target.value)}
-              className="min-h-20"
-            />
-            <DialogFooter>
-              <Button variant="outline" onClick={() => setShowCommentDialog(false)}>
-                Cancel
-              </Button>
-              <Button 
-                onClick={submitComment}
-                disabled={!commentText.trim() || commentMutation.isPending}
-              >
-                {commentMutation.isPending ? (
-                  <Loader2 className="h-4 w-4 animate-spin mr-2" />
-                ) : null}
-                Post Comment
-              </Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
       </div>
     </div>
   );
