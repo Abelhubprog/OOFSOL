@@ -9,6 +9,7 @@ import { solanaTokenService } from '@/services/solanaTokenService';
 import { solanaOnChainService } from '@/services/solanaOnChainService';
 import type { TokenInfo } from '@/services/solanaTokenService';
 import AuthButton from '@/components/AuthButton';
+import { useAchievements } from '@/hooks/useAchievements';
 
 export default function TokenExplorer() {
   const { user, primaryWallet } = useDynamicContext();

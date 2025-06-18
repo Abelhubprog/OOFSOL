@@ -1,13 +1,22 @@
 import { DynamicWidget, useDynamicContext } from '@dynamic-labs/sdk-react-core';
 import { Button } from '@/components/ui/button';
 import { LogOut, User, Wallet } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useAchievements } from '@/hooks/useAchievements';
 
 export default function AuthButton() {
   const { user, primaryWallet, setShowAuthFlow, handleLogOut } = useDynamicContext();
   const [isLoading, setIsLoading] = useState(false);
+  const { trackLogin } = useAchievements();
 
   const isAuthenticated = !!user;
+
+  // Track login achievement when user authenticates
+  useEffect(() => {
+    if (isAuthenticated && user) {
+      trackLogin();
+    }
+  }, [isAuthenticated, user, trackLogin]);
 
   const handleLogin = () => {
     setIsLoading(true);
