@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useDynamicContext } from '@dynamic-labs/sdk-react-core';
 import { solanaService } from '@/lib/solana';
+import AuthButton from '@/components/AuthButton';
 
 // Expanded memecoin database with more detailed stats
 const MEMECOIN_DATABASE = [
