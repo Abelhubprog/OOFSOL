@@ -107,8 +107,9 @@ export default function Sidebar({ className }: SidebarProps) {
             </div>
           ) : (
             <div className="text-center">
-              <p className="text-purple-300 text-sm mb-3">Connect Wallet</p>
-              <DynamicWidget />
+              <div className="w-full">
+                <DynamicWidget />
+              </div>
             </div>
           )}
         </div>
