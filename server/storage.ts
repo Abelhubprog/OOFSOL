@@ -7,6 +7,11 @@ import {
   userAchievements,
   tokenAds,
   adInteractions,
+  oofMoments,
+  walletAnalysis,
+  momentInteractions,
+  splTokenData,
+  walletTransactions,
   type User,
   type UpsertUser,
   type Token,
@@ -23,6 +28,16 @@ import {
   type InsertTokenAd,
   type AdInteraction,
   type InsertAdInteraction,
+  type OOFMoment,
+  type InsertOOFMoment,
+  type WalletAnalysis,
+  type InsertWalletAnalysis,
+  type MomentInteraction,
+  type InsertMomentInteraction,
+  type SPLTokenData,
+  type InsertSPLTokenData,
+  type WalletTransaction,
+  type InsertWalletTransaction,
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, and, sql, gte, lte, gt } from "drizzle-orm";
@@ -70,6 +85,36 @@ export interface IStorage {
   updateTokenAd(id: number, updates: Partial<TokenAd>): Promise<TokenAd>;
   trackAdInteraction(interaction: InsertAdInteraction): Promise<AdInteraction>;
   getAdStats(adId: number): Promise<{ views: number; clicks: number }>;
+  
+  // OOF Moments operations
+  createOOFMoment(moment: InsertOOFMoment): Promise<OOFMoment>;
+  getOOFMoment(id: number): Promise<OOFMoment | undefined>;
+  getOOFMomentsByWallet(walletAddress: string): Promise<OOFMoment[]>;
+  getOOFMomentsByUser(userId: string): Promise<OOFMoment[]>;
+  getPublicOOFMoments(limit?: number, offset?: number): Promise<OOFMoment[]>;
+  updateOOFMoment(id: number, updates: Partial<OOFMoment>): Promise<OOFMoment>;
+  deleteOOFMoment(id: number): Promise<void>;
+  
+  // Wallet analysis operations
+  createWalletAnalysis(analysis: InsertWalletAnalysis): Promise<WalletAnalysis>;
+  getWalletAnalysis(walletAddress: string): Promise<WalletAnalysis | undefined>;
+  updateWalletAnalysis(walletAddress: string, updates: Partial<WalletAnalysis>): Promise<WalletAnalysis>;
+  
+  // Moment interaction operations
+  createMomentInteraction(interaction: InsertMomentInteraction): Promise<MomentInteraction>;
+  getMomentInteractions(momentId: number): Promise<MomentInteraction[]>;
+  getUserMomentInteraction(momentId: number, userId: string): Promise<MomentInteraction | undefined>;
+  updateMomentInteraction(id: number, updates: Partial<MomentInteraction>): Promise<MomentInteraction>;
+  
+  // SPL token data operations
+  upsertSPLTokenData(tokenData: InsertSPLTokenData): Promise<SPLTokenData>;
+  getSPLTokenData(tokenAddress: string): Promise<SPLTokenData | undefined>;
+  updateSPLTokenPrice(tokenAddress: string, price: number): Promise<SPLTokenData>;
+  
+  // Wallet transaction operations
+  createWalletTransaction(transaction: InsertWalletTransaction): Promise<WalletTransaction>;
+  getWalletTransactions(walletAddress: string, limit?: number): Promise<WalletTransaction[]>;
+  getTokenTransactions(walletAddress: string, tokenAddress: string): Promise<WalletTransaction[]>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -273,6 +318,210 @@ export class DatabaseStorage implements IStorage {
     }).from(tokenAds).where(eq(tokenAds.id, adId));
     
     return { views: ad?.views || 0, clicks: ad?.clicks || 0 };
+  }
+
+  // OOF Moments operations
+  async createOOFMoment(moment: InsertOOFMoment): Promise<OOFMoment> {
+    const [createdMoment] = await db
+      .insert(oofMoments)
+      .values(moment)
+      .returning();
+    return createdMoment;
+  }
+
+  async getOOFMoment(id: number): Promise<OOFMoment | undefined> {
+    const [moment] = await db
+      .select()
+      .from(oofMoments)
+      .where(eq(oofMoments.id, id));
+    return moment;
+  }
+
+  async getOOFMomentsByWallet(walletAddress: string): Promise<OOFMoment[]> {
+    return await db
+      .select()
+      .from(oofMoments)
+      .where(eq(oofMoments.walletAddress, walletAddress))
+      .orderBy(desc(oofMoments.createdAt));
+  }
+
+  async getOOFMomentsByUser(userId: string): Promise<OOFMoment[]> {
+    return await db
+      .select()
+      .from(oofMoments)
+      .where(eq(oofMoments.userId, userId))
+      .orderBy(desc(oofMoments.createdAt));
+  }
+
+  async getPublicOOFMoments(limit: number = 50, offset: number = 0): Promise<OOFMoment[]> {
+    return await db
+      .select()
+      .from(oofMoments)
+      .where(eq(oofMoments.isPublic, true))
+      .orderBy(desc(oofMoments.createdAt))
+      .limit(limit)
+      .offset(offset);
+  }
+
+  async updateOOFMoment(id: number, updates: Partial<OOFMoment>): Promise<OOFMoment> {
+    const [updatedMoment] = await db
+      .update(oofMoments)
+      .set({ ...updates, updatedAt: new Date() })
+      .where(eq(oofMoments.id, id))
+      .returning();
+    return updatedMoment;
+  }
+
+  async deleteOOFMoment(id: number): Promise<void> {
+    await db.delete(oofMoments).where(eq(oofMoments.id, id));
+  }
+
+  // Wallet analysis operations
+  async createWalletAnalysis(analysis: InsertWalletAnalysis): Promise<WalletAnalysis> {
+    const [createdAnalysis] = await db
+      .insert(walletAnalysis)
+      .values(analysis)
+      .returning();
+    return createdAnalysis;
+  }
+
+  async getWalletAnalysis(walletAddress: string): Promise<WalletAnalysis | undefined> {
+    const [analysis] = await db
+      .select()
+      .from(walletAnalysis)
+      .where(eq(walletAnalysis.walletAddress, walletAddress));
+    return analysis;
+  }
+
+  async updateWalletAnalysis(walletAddress: string, updates: Partial<WalletAnalysis>): Promise<WalletAnalysis> {
+    const [updatedAnalysis] = await db
+      .update(walletAnalysis)
+      .set(updates)
+      .where(eq(walletAnalysis.walletAddress, walletAddress))
+      .returning();
+    return updatedAnalysis;
+  }
+
+  // Moment interaction operations
+  async createMomentInteraction(interaction: InsertMomentInteraction): Promise<MomentInteraction> {
+    const [createdInteraction] = await db
+      .insert(momentInteractions)
+      .values(interaction)
+      .returning();
+
+    // Update moment social stats
+    if (interaction.interactionType === 'like') {
+      await db.update(oofMoments)
+        .set({ 
+          socialStats: sql`jsonb_set(${oofMoments.socialStats}, '{likes}', (COALESCE(${oofMoments.socialStats}->>'likes', '0')::int + 1)::text::jsonb)`
+        })
+        .where(eq(oofMoments.id, interaction.momentId));
+    } else if (interaction.interactionType === 'share') {
+      await db.update(oofMoments)
+        .set({ 
+          socialStats: sql`jsonb_set(${oofMoments.socialStats}, '{shares}', (COALESCE(${oofMoments.socialStats}->>'shares', '0')::int + 1)::text::jsonb)`
+        })
+        .where(eq(oofMoments.id, interaction.momentId));
+    }
+
+    return createdInteraction;
+  }
+
+  async getMomentInteractions(momentId: number): Promise<MomentInteraction[]> {
+    return await db
+      .select()
+      .from(momentInteractions)
+      .where(eq(momentInteractions.momentId, momentId))
+      .orderBy(desc(momentInteractions.createdAt));
+  }
+
+  async getUserMomentInteraction(momentId: number, userId: string): Promise<MomentInteraction | undefined> {
+    const [interaction] = await db
+      .select()
+      .from(momentInteractions)
+      .where(
+        and(
+          eq(momentInteractions.momentId, momentId),
+          eq(momentInteractions.userId, userId)
+        )
+      );
+    return interaction;
+  }
+
+  async updateMomentInteraction(id: number, updates: Partial<MomentInteraction>): Promise<MomentInteraction> {
+    const [updatedInteraction] = await db
+      .update(momentInteractions)
+      .set(updates)
+      .where(eq(momentInteractions.id, id))
+      .returning();
+    return updatedInteraction;
+  }
+
+  // SPL token data operations
+  async upsertSPLTokenData(tokenData: InsertSPLTokenData): Promise<SPLTokenData> {
+    const [upsertedToken] = await db
+      .insert(splTokenData)
+      .values(tokenData)
+      .onConflictDoUpdate({
+        target: splTokenData.tokenAddress,
+        set: {
+          ...tokenData,
+          lastUpdated: new Date()
+        }
+      })
+      .returning();
+    return upsertedToken;
+  }
+
+  async getSPLTokenData(tokenAddress: string): Promise<SPLTokenData | undefined> {
+    const [token] = await db
+      .select()
+      .from(splTokenData)
+      .where(eq(splTokenData.tokenAddress, tokenAddress));
+    return token;
+  }
+
+  async updateSPLTokenPrice(tokenAddress: string, price: number): Promise<SPLTokenData> {
+    const [updatedToken] = await db
+      .update(splTokenData)
+      .set({ 
+        currentPrice: price.toString(),
+        lastUpdated: new Date()
+      })
+      .where(eq(splTokenData.tokenAddress, tokenAddress))
+      .returning();
+    return updatedToken;
+  }
+
+  // Wallet transaction operations
+  async createWalletTransaction(transaction: InsertWalletTransaction): Promise<WalletTransaction> {
+    const [createdTransaction] = await db
+      .insert(walletTransactions)
+      .values(transaction)
+      .returning();
+    return createdTransaction;
+  }
+
+  async getWalletTransactions(walletAddress: string, limit: number = 100): Promise<WalletTransaction[]> {
+    return await db
+      .select()
+      .from(walletTransactions)
+      .where(eq(walletTransactions.walletAddress, walletAddress))
+      .orderBy(desc(walletTransactions.timestamp))
+      .limit(limit);
+  }
+
+  async getTokenTransactions(walletAddress: string, tokenAddress: string): Promise<WalletTransaction[]> {
+    return await db
+      .select()
+      .from(walletTransactions)
+      .where(
+        and(
+          eq(walletTransactions.walletAddress, walletAddress),
+          eq(walletTransactions.tokenAddress, tokenAddress)
+        )
+      )
+      .orderBy(desc(walletTransactions.timestamp));
   }
 }
 

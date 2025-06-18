@@ -114,7 +114,7 @@ export class ZoraIntegrationService {
         },
         {
           trait_type: "Token Symbol",
-          value: moment.tokenSymbol
+          value: moment.tokenSymbol || "UNKNOWN"
         },
         {
           trait_type: "Token Address",
@@ -126,7 +126,7 @@ export class ZoraIntegrationService {
         },
         {
           trait_type: "Analysis Date",
-          value: new Date(moment.createdAt).toISOString().split('T')[0]
+          value: moment.createdAt ? new Date(moment.createdAt.toString()).toISOString().split('T')[0] : new Date().toISOString().split('T')[0]
         },
         ...this.generateAnalysisAttributes(analysis)
       ]

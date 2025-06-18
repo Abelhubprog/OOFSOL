@@ -235,11 +235,12 @@ export class SolanaWalletAnalysisService {
     }
 
     // Calculate metrics for each token
-    for (const analysis of tokenMap.values()) {
+    const analyses = Array.from(tokenMap.values());
+    for (const analysis of analyses) {
       this.calculateTokenMetrics(analysis);
     }
 
-    return Array.from(tokenMap.values());
+    return analyses;
   }
 
   private extractTokenTransactions(tx: ParsedTransactionWithMeta): TokenTransaction[] {
@@ -269,7 +270,8 @@ export class SolanaWalletAnalysisService {
       }
 
       // Convert balance changes to transactions
-      for (const [mint, change] of balanceChanges) {
+      const balanceEntries = Array.from(balanceChanges.entries());
+      for (const [mint, change] of balanceEntries) {
         if (Math.abs(change) > 0.0001) { // Ignore dust
           transactions.push({
             signature: tx.transaction.signatures[0],
