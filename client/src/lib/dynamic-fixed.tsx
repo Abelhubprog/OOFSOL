@@ -9,11 +9,6 @@ const DynamicProvider = ({ children }: { children: React.ReactNode }) => {
         walletConnectors: [SolanaWalletConnectors],
         appName: 'OOF Platform',
         
-        // Enable embedded wallets for automatic wallet creation
-        embeddedWallets: {
-          createOnSignup: 'users-without-wallets',
-        },
-        
         // Enhanced styling for OOF branding
         cssOverrides: `
           .dynamic-widget-card {
@@ -63,6 +58,17 @@ const DynamicProvider = ({ children }: { children: React.ReactNode }) => {
             console.log('OOF Platform: User authenticated successfully', args);
             if (args.user && args.primaryWallet) {
               console.log('Wallet connected:', args.primaryWallet.address);
+              
+              // Save wallet to backend
+              fetch('/api/save-wallet', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                  email: args.user.email,
+                  walletAddress: args.primaryWallet.address,
+                  userId: args.user.userId
+                }),
+              }).catch(console.error);
             }
           },
           
