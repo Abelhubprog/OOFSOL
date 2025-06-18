@@ -32,8 +32,8 @@ interface SidebarProps {
 const navigationItems = [
   { path: '/', icon: Home, label: 'Home', color: 'text-purple-400' },
   { path: '/dashboard', icon: LayoutDashboard, label: 'Dashboard', color: 'text-blue-400' },
-  { path: '/tokens', icon: TrendingUp, label: 'Token Explorer', color: 'text-green-400' },
-  { path: '/traders-arena', icon: BarChart3, label: 'Traders Arena', color: 'text-indigo-400' },
+  { path: '/token-explorer', icon: TrendingUp, label: 'Token Explorer', color: 'text-green-400' },
+  { path: '/tokens', icon: BarChart3, label: 'Traders Arena', color: 'text-indigo-400' },
   { path: '/campaigns', icon: Target, label: 'OOF Campaigns', color: 'text-green-400' },
   { path: '/moments', icon: Star, label: 'OOF Moments', color: 'text-yellow-400' },
   { path: '/multiverse', icon: Sparkles, label: 'OOF Multiverse', color: 'text-pink-400' },
