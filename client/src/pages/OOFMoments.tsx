@@ -195,21 +195,21 @@ const OOFMoments: React.FC = () => {
   // Share mutation
   const shareMutation = useMutation({
     mutationFn: async ({ momentId, platform }: { momentId: number; platform: string }) => {
-      return apiRequest(`/api/oof-moments/${momentId}/share`, {
+      const response = await fetch(`/api/oof-moments/${momentId}/share-social`, {
         method: 'POST',
-        body: JSON.stringify({
-          userId: user?.userId || 'anonymous',
-          platform
-        })
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ platform })
       });
+      return response.json();
     },
     onSuccess: (data) => {
-      // Copy share URL to clipboard
-      navigator.clipboard.writeText(data.shareUrl);
-      toast({
-        title: "Share Link Copied!",
-        description: "Share URL copied to clipboard"
-      });
+      if (data.shareUrl) {
+        window.open(data.shareUrl, '_blank');
+        toast({
+          title: "Shared Successfully!",
+          description: `Opened ${data.platform} share dialog`
+        });
+      }
       queryClient.invalidateQueries({ queryKey: ['/api/oof-moments'] });
     }
   });

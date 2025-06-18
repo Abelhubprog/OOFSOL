@@ -1236,7 +1236,72 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Mint OOF Moment as NFT on Zora
+  // Launch OOF Moments as Zora Tokens
+  app.post('/api/zora/launch-tokens', async (req, res) => {
+    try {
+      const { cards, oofInvestmentAmount, distribution, userWalletAddress } = req.body;
+      
+      if (!req.user) {
+        return res.status(401).json({ error: 'Authentication required' });
+      }
+
+      // Validate distribution adds up to 100%
+      const total = distribution.reduce((sum: number, val: number) => sum + val, 0);
+      if (Math.abs(total - 100) > 0.01) {
+        return res.status(400).json({ error: 'Distribution must total 100%' });
+      }
+
+      const { ZoraCoinLauncher } = await import('./services/zoraLauncher');
+      const launcher = new ZoraCoinLauncher();
+
+      const result = await launcher.launchOOFMomentsAsTokens({
+        cards,
+        oofInvestmentAmount,
+        distribution,
+        userWalletAddress
+      });
+
+      res.json(result);
+    } catch (error) {
+      console.error('Token launch failed:', error);
+      res.status(500).json({ error: 'Failed to launch tokens on Zora' });
+    }
+  });
+
+  // Share OOF Moment to social platforms
+  app.post('/api/oof-moments/:id/share-social', async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { platform } = req.body;
+
+      const { ZoraCoinLauncher } = await import('./services/zoraLauncher');
+      const launcher = new ZoraCoinLauncher();
+
+      const shareResult = await launcher.shareOOFMoment(id, platform);
+      res.json(shareResult);
+    } catch (error) {
+      console.error('Share failed:', error);
+      res.status(500).json({ error: 'Failed to generate share URL' });
+    }
+  });
+
+  // Get Zora token statistics
+  app.get('/api/zora/token/:address/stats', async (req, res) => {
+    try {
+      const { address } = req.params;
+
+      const { ZoraCoinLauncher } = await import('./services/zoraLauncher');
+      const launcher = new ZoraCoinLauncher();
+
+      const stats = await launcher.getTokenStats(address);
+      res.json(stats);
+    } catch (error) {
+      console.error('Failed to get token stats:', error);
+      res.status(500).json({ error: 'Failed to retrieve token statistics' });
+    }
+  });
+
+  // Legacy mint endpoint for backward compatibility
   app.post('/api/oof-moments/:id/mint', async (req, res) => {
     try {
       const momentId = parseInt(req.params.id);
@@ -1251,34 +1316,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ message: "OOF Moment not found" });
       }
 
-      // Mint on Zora
-      const mintResult = await zoraIntegration.mintOOFMoment(moment, userWalletAddress);
-
-      if (mintResult.success) {
-        // Update moment with NFT information
-        await storage.updateOOFMoment(momentId, {
-          nftMinted: true,
-          nftContractAddress: mintResult.contractAddress,
-          nftTokenId: mintResult.tokenId,
-          nftTransactionHash: mintResult.transactionHash,
-          zoraUrl: mintResult.zoraUrl
-        });
-
-        res.json({
-          message: "OOF Moment minted successfully",
-          mintResult,
-          zoraUrl: mintResult.zoraUrl
-        });
-      } else {
-        res.status(500).json({
-          message: "Failed to mint OOF Moment",
-          error: mintResult.error
-        });
-      }
+      res.json({
+        message: "Use /api/zora/launch-tokens for launching OOF Moments as tokens",
+        redirectTo: "/api/zora/launch-tokens"
+      });
 
     } catch (error) {
-      console.error("Error minting OOF Moment:", error);
-      res.status(500).json({ message: "Failed to mint OOF Moment" });
+      console.error("Error with mint request:", error);
+      res.status(500).json({ message: "Use Zora token launch instead" });
     }
   });
 
