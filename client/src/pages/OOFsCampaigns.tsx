@@ -544,15 +544,15 @@ export default function OOFsCampaigns() {
                   <div className="space-y-2 text-sm">
                     <div className="flex justify-between">
                       <span>Total Engagements:</span>
-                      <span className="font-medium">{campaign.analytics.totalEngagements}</span>
+                      <span className="font-medium">{campaign.analytics?.totalEngagements || 0}</span>
                     </div>
                     <div className="flex justify-between">
                       <span>Conversion Rate:</span>
-                      <span className="font-medium">{campaign.analytics.conversionRate}%</span>
+                      <span className="font-medium">{campaign.analytics?.conversionRate || 0}%</span>
                     </div>
                     <div className="flex justify-between">
                       <span>Avg Reward:</span>
-                      <span className="font-medium">${campaign.analytics.averageReward}</span>
+                      <span className="font-medium">${campaign.analytics?.averageReward || 0}</span>
                     </div>
                   </div>
                 </div>
