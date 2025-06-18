@@ -53,26 +53,53 @@ export class AILOOFMomentsGenerator {
 
   async generateOOFMoments(walletAddress: string): Promise<OOFMomentCard[]> {
     try {
-      // 1. Fetch and analyze wallet transaction history
-      const transactions = await this.fetchWalletTransactions(walletAddress);
+      // Use enhanced multi-agent AI orchestrator for intelligent generation
+      const validatedResults = await this.orchestrator.generateOOFMoments(walletAddress);
       
-      // 2. Use Perplexity AI to analyze trading patterns and generate stories
-      const aiAnalysis = await this.analyzeWithPerplexity(walletAddress, transactions);
+      // Convert orchestrator results to expected format
+      const cards = validatedResults.cards.map(card => this.convertToOOFMomentCard(card));
       
-      // 3. Identify the 3 most significant OOF moments
-      const oofMoments = this.identifyOOFMoments(transactions);
-      
-      // 4. Generate unique cards based on AI analysis
-      const cards = await this.generateUniqueCards(walletAddress, oofMoments, aiAnalysis);
-      
-      // 5. Store analysis in database
-      await this.storeWalletAnalysis(walletAddress, cards, aiAnalysis);
+      // Store enhanced analysis with quality metrics
+      await this.storeWalletAnalysis(walletAddress, cards, {
+        quality: validatedResults.quality,
+        recommendations: validatedResults.recommendations,
+        modelUsage: cards[0]?.uniqueHash || ''
+      });
       
       return cards;
     } catch (error) {
-      console.error('Error generating OOF moments:', error);
-      throw new Error('Failed to generate OOF moments');
+      console.error('Enhanced AI generation failed, using fallback:', error);
+      
+      // Fallback to original method
+      const transactions = await this.fetchWalletTransactions(walletAddress);
+      const aiAnalysis = await this.analyzeWithPerplexity(walletAddress, transactions);
+      const oofMoments = this.identifyOOFMoments(transactions);
+      const cards = await this.generateUniqueCards(walletAddress, oofMoments, aiAnalysis);
+      
+      await this.storeWalletAnalysis(walletAddress, cards, aiAnalysis);
+      return cards;
     }
+  }
+
+  private convertToOOFMomentCard(card: any): OOFMomentCard {
+    return {
+      id: card.id,
+      type: card.type === 'bigGains' ? 'gains_master' : card.type === 'dust' ? 'dust_collector' : 'paper_hands',
+      title: card.title,
+      description: card.narrative,
+      tokenName: card.tokenData.name,
+      tokenSymbol: card.tokenData.symbol,
+      tokenAddress: card.tokenData.address,
+      amount: card.tokenData.amount,
+      currentValue: card.tokenData.currentPrice * card.tokenData.amount,
+      percentage: card.stats.percentage,
+      gradientFrom: card.visualElements.colors[0] || '#ff6b6b',
+      gradientTo: card.visualElements.colors[1] || '#ffa8a8',
+      emoji: card.visualElements.emoji,
+      story: card.quote,
+      timestamp: card.metadata.generatedAt,
+      uniqueHash: card.id
+    };
   }
 
   private async fetchWalletTransactions(walletAddress: string): Promise<WalletTransaction[]> {
