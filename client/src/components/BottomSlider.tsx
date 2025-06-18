@@ -14,15 +14,23 @@ import {
   User,
   Gem,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  Target,
+  Grid3X3
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const navigationItems = [
   { 
-    name: 'Dashboard', 
+    name: 'Home', 
     path: '/', 
     icon: Home,
+    description: 'OOF Platform Home'
+  },
+  { 
+    name: 'Dashboard', 
+    path: '/dashboard', 
+    icon: Grid3X3,
     description: 'Live Memecoin Dashboard'
   },
   { 
@@ -30,6 +38,12 @@ const navigationItems = [
     path: '/tokens', 
     icon: TrendingUp,
     description: 'Token Explorer'
+  },
+  { 
+    name: 'Campaigns', 
+    path: '/campaigns', 
+    icon: Target,
+    description: 'OOF Campaigns'
   },
   { 
     name: 'Moments', 
