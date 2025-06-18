@@ -2,6 +2,9 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { useAchievements } from "@/hooks/useAchievements";
+import ConfettiBurst, { AchievementConfetti } from "@/components/ConfettiBurst";
+import AchievementToast from "@/components/AchievementToast";
 import { 
   Home,
   BarChart3,
@@ -46,12 +49,25 @@ interface GlobalStats {
 
 export default function Dashboard() {
   const { user, isAuthenticated } = useAuth();
+  const { 
+    unlockAchievement, 
+    trackPrediction, 
+    trackTrade, 
+    activeConfetti, 
+    clearConfetti,
+    recentUnlocks,
+    totalPoints
+  } = useAchievements();
+  
   const [globalStats, setGlobalStats] = useState<GlobalStats>({
     totalOOFMoments: 1337575,
     totalUsers: 12450,
     totalRewards: 245780,
     recentActivity: "Tracking every lost chance from the depths of missed opportunities"
   });
+  
+  const [showToast, setShowToast] = useState(false);
+  const [demoConfetti, setDemoConfetti] = useState<string | null>(null);
 
   const { data: tokens } = useQuery({ queryKey: ['/api/tokens'] });
   const { data: predictions } = useQuery({ queryKey: ['/api/predictions'] });
@@ -277,6 +293,72 @@ export default function Dashboard() {
                 <div className="text-xs text-purple-300 mt-2">
                   {globalStats.recentActivity}
                 </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Social Achievement Demo Section */}
+          <div className="max-w-4xl mx-auto mb-8">
+            <Card className="bg-gradient-to-r from-yellow-600/20 to-orange-600/20 border-yellow-500/30 backdrop-blur-lg">
+              <CardContent className="p-6">
+                <div className="text-center mb-6">
+                  <Trophy className="w-12 h-12 mx-auto mb-3 text-yellow-400" />
+                  <h3 className="text-2xl font-bold text-white mb-2">
+                    🎉 Social Achievement Confetti Burst Demo
+                  </h3>
+                  <p className="text-purple-200">
+                    Experience our celebration system - click buttons to trigger different achievement confetti bursts!
+                  </p>
+                </div>
+                
+                <div className="grid md:grid-cols-3 gap-4">
+                  <Button 
+                    onClick={() => {
+                      unlockAchievement('first_login');
+                      setDemoConfetti('first_login');
+                      setTimeout(() => setDemoConfetti(null), 3000);
+                    }}
+                    className="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white p-4 h-auto flex flex-col items-center"
+                  >
+                    <Star className="w-6 h-6 mb-2" />
+                    <span className="font-semibold">First Login</span>
+                    <span className="text-xs opacity-80">Welcome celebration</span>
+                  </Button>
+                  
+                  <Button 
+                    onClick={() => {
+                      trackTrade(100);
+                      setDemoConfetti('trading');
+                      setTimeout(() => setDemoConfetti(null), 3000);
+                    }}
+                    className="bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white p-4 h-auto flex flex-col items-center"
+                  >
+                    <TrendingUp className="w-6 h-6 mb-2" />
+                    <span className="font-semibold">Trade Success</span>
+                    <span className="text-xs opacity-80">Trading milestone</span>
+                  </Button>
+                  
+                  <Button 
+                    onClick={() => {
+                      trackPrediction(true, 500);
+                      setDemoConfetti('prediction');
+                      setTimeout(() => setDemoConfetti(null), 3000);
+                    }}
+                    className="bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white p-4 h-auto flex flex-col items-center"
+                  >
+                    <Crown className="w-6 h-6 mb-2" />
+                    <span className="font-semibold">Perfect Prediction</span>
+                    <span className="text-xs opacity-80">Oracle achievement</span>
+                  </Button>
+                </div>
+
+                {totalPoints > 0 && (
+                  <div className="mt-4 text-center">
+                    <Badge className="bg-yellow-500/20 text-yellow-400 border-yellow-500/30">
+                      Total Achievement Points: {totalPoints}
+                    </Badge>
+                  </div>
+                )}
               </CardContent>
             </Card>
           </div>

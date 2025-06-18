@@ -13,6 +13,7 @@ import { useAchievements } from '@/hooks/useAchievements';
 
 export default function TokenExplorer() {
   const { user, primaryWallet } = useDynamicContext();
+  const { trackTrade } = useAchievements();
   const [tokens, setTokens] = useState<TokenInfo[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(true);
@@ -63,6 +64,8 @@ export default function TokenExplorer() {
       );
 
       if (result.success) {
+        // Track trading achievement
+        trackTrade(parseFloat(tradingAmount));
         alert(`Buy order successful! Transaction: ${result.signature}`);
       } else {
         alert(`Buy failed: ${result.error}`);
