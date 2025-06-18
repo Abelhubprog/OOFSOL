@@ -340,7 +340,7 @@ export default function Dashboard() {
                   
                   <Button 
                     onClick={() => {
-                      trackPrediction(true, 500);
+                      trackPrediction();
                       setDemoConfetti('prediction');
                       setTimeout(() => setDemoConfetti(null), 3000);
                     }}
@@ -564,6 +564,28 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
+
+      {/* Achievement System Components */}
+      {(demoConfetti || activeConfetti) && (
+        <ConfettiBurst 
+          isActive={true}
+          intensity="high"
+          duration={3000}
+          onComplete={() => {
+            setDemoConfetti(null);
+            clearConfetti();
+          }}
+        />
+      )}
+
+      {recentUnlocks.map((achievement, index) => (
+        <AchievementToast
+          key={`${achievement.id}-${index}`}
+          achievement={achievement}
+          isVisible={true}
+          onClose={() => {}}
+        />
+      ))}
     </div>
   );
 }
