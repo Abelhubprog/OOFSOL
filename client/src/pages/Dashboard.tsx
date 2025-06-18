@@ -117,7 +117,9 @@ export default function Dashboard() {
               </div>
             </div>
             <div className="w-full">
-              <DynamicWidget />
+              <div className="text-center text-purple-300 text-xs">
+                Wallet connected
+              </div>
             </div>
           </div>
 
