@@ -99,28 +99,78 @@ const OOFMoments: React.FC = () => {
     enabled: activeTab === 'my-moments' && !!user?.userId
   });
 
-  // Wallet analysis mutation
-  const analyzeMutation = useMutation({
-    mutationFn: async (walletAddress: string) => {
-      return apiRequest('/api/oof-moments/analyze', {
+  // AI-powered wallet analysis mutation
+  const aiAnalyzeMutation = useMutation({
+    mutationFn: async ({ walletAddress, useAI }: { walletAddress: string; useAI: boolean }) => {
+      const endpoint = useAI ? '/api/oof-moments/ai-analyze' : '/api/oof-moments/analyze';
+      const response = await fetch(endpoint, {
         method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
         body: JSON.stringify({
           walletAddress,
           userId: user?.userId || null
         })
       });
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      return response.json();
     },
     onSuccess: (data) => {
+      const moments = data.moments || [];
+      setGeneratedMoments(moments);
       toast({
-        title: "Analysis Complete!",
-        description: `Generated ${data.moments.length} OOF Moments from wallet analysis.`
+        title: data.aiGenerated ? "AI Analysis Complete!" : "Analysis Complete!",
+        description: `Generated ${moments.length} unique OOF moment cards${data.aiGenerated ? ' using AI analysis' : ''}.`
       });
       queryClient.invalidateQueries({ queryKey: ['/api/oof-moments'] });
+      setActiveTab('discover');
     },
     onError: (error: any) => {
       toast({
         title: "Analysis Failed",
         description: error.message || "Failed to analyze wallet",
+        variant: "destructive"
+      });
+    }
+  });
+
+  // Cross-chain purchase mutation
+  const purchaseMutation = useMutation({
+    mutationFn: async ({ oofAmount, cardDistribution }: { oofAmount: number; cardDistribution: any }) => {
+      const response = await fetch('/api/oof-moments/cross-chain-purchase', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          walletAddress: primaryWallet?.address,
+          oofAmount,
+          cardDistribution
+        })
+      });
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      return response.json();
+    },
+    onSuccess: (data) => {
+      toast({
+        title: "Purchase Initiated!",
+        description: `Cross-chain purchase of $${oofAmount} OOF tokens initiated successfully.`
+      });
+      setShowPurchaseDialog(false);
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Purchase Failed",
+        description: error.message || "Failed to process purchase",
         variant: "destructive"
       });
     }
@@ -410,7 +460,23 @@ const OOFMoments: React.FC = () => {
               Analyze Wallet
             </CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="space-y-4">
+            {/* AI Toggle */}
+            <div className="flex items-center justify-between p-3 bg-gradient-to-r from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20 rounded-lg">
+              <div className="flex items-center gap-2">
+                <Sparkles className="w-5 h-5 text-purple-600" />
+                <span className="font-medium">AI-Powered Analysis</span>
+                <span className="text-sm text-muted-foreground">(Using Perplexity AI)</span>
+              </div>
+              <Button
+                variant={useAI ? "default" : "outline"}
+                size="sm"
+                onClick={() => setUseAI(!useAI)}
+              >
+                {useAI ? "AI Mode" : "Standard"}
+              </Button>
+            </div>
+
             <div className="flex gap-4">
               <Input
                 placeholder="Enter Solana wallet address..."
@@ -419,28 +485,42 @@ const OOFMoments: React.FC = () => {
                 className="flex-1"
               />
               <Button 
-                onClick={handleAnalyzeWallet}
-                disabled={isAnalyzing || analyzeMutation.isPending}
+                onClick={() => aiAnalyzeMutation.mutate({ walletAddress: walletInput.trim(), useAI })}
+                disabled={!walletInput.trim() || aiAnalyzeMutation.isPending}
                 className="min-w-[120px]"
               >
-                {isAnalyzing || analyzeMutation.isPending ? (
+                {aiAnalyzeMutation.isPending ? (
                   <Loader2 className="w-4 h-4 animate-spin mr-2" />
                 ) : (
                   <Search className="w-4 h-4 mr-2" />
                 )}
-                Analyze
+                {useAI ? "AI Analyze" : "Analyze"}
               </Button>
             </div>
-            {primaryWallet && (
-              <Button
-                variant="outline"
-                size="sm"
-                className="mt-2"
-                onClick={() => setWalletInput(primaryWallet.address)}
-              >
-                Use My Wallet
-              </Button>
-            )}
+
+            <div className="flex items-center justify-between">
+              {primaryWallet && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setWalletInput(primaryWallet.address)}
+                >
+                  Use My Wallet
+                </Button>
+              )}
+              
+              {generatedMoments.length > 0 && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setShowPurchaseDialog(true)}
+                  className="ml-auto"
+                >
+                  <Star className="w-4 h-4 mr-2" />
+                  Purchase with $OOF
+                </Button>
+              )}
+            </div>
           </CardContent>
         </Card>
       </motion.div>
@@ -603,6 +683,128 @@ const OOFMoments: React.FC = () => {
               </div>
             </div>
           )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Cross-chain Purchase Dialog */}
+      <Dialog open={showPurchaseDialog} onOpenChange={setShowPurchaseDialog}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Star className="w-5 h-5 text-yellow-500" />
+              Purchase with $OOF Tokens
+            </DialogTitle>
+            <DialogDescription>
+              Use $OOF tokens (Solana) to buy initial token percentages on Zora for your AI-generated OOF moment cards.
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="space-y-4">
+            {/* OOF Amount Input */}
+            <div>
+              <label className="text-sm font-medium mb-2 block">
+                OOF Amount ($1-100)
+              </label>
+              <Input
+                type="number"
+                min="1"
+                max="100"
+                value={oofAmount}
+                onChange={(e) => setOofAmount(Number(e.target.value))}
+                placeholder="Enter amount"
+              />
+              <p className="text-xs text-muted-foreground mt-1">
+                ≈ {(oofAmount * exchangeRate).toFixed(4)} USD
+              </p>
+            </div>
+
+            {/* Card Distribution */}
+            <div>
+              <label className="text-sm font-medium mb-2 block">
+                Card Distribution (%)
+              </label>
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm">📄 Paper Hands</span>
+                  <Input
+                    type="number"
+                    className="w-20"
+                    value={cardDistribution.paperHands}
+                    onChange={(e) => setCardDistribution(prev => ({
+                      ...prev,
+                      paperHands: Number(e.target.value)
+                    }))}
+                  />
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm">🗑️ Dust Collector</span>
+                  <Input
+                    type="number"
+                    className="w-20"
+                    value={cardDistribution.dustCollector}
+                    onChange={(e) => setCardDistribution(prev => ({
+                      ...prev,
+                      dustCollector: Number(e.target.value)
+                    }))}
+                  />
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm">💎 Gains Master</span>
+                  <Input
+                    type="number"
+                    className="w-20"
+                    value={cardDistribution.gainsMaster}
+                    onChange={(e) => setCardDistribution(prev => ({
+                      ...prev,
+                      gainsMaster: Number(e.target.value)
+                    }))}
+                  />
+                </div>
+              </div>
+              <p className="text-xs text-muted-foreground mt-1">
+                Total: {cardDistribution.paperHands + cardDistribution.dustCollector + cardDistribution.gainsMaster}%
+              </p>
+            </div>
+
+            {/* Purchase Summary */}
+            <div className="p-3 bg-muted rounded-lg">
+              <h4 className="font-medium mb-2">Purchase Summary</h4>
+              <div className="space-y-1 text-sm">
+                <div className="flex justify-between">
+                  <span>Total $OOF:</span>
+                  <span>${oofAmount}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Bridge Fee (3%):</span>
+                  <span>${(oofAmount * 0.03).toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between font-medium">
+                  <span>Est. Zora Tokens:</span>
+                  <span>{((oofAmount * 0.97) * 1000).toFixed(0)}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setShowPurchaseDialog(false)}
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={() => purchaseMutation.mutate({ oofAmount, cardDistribution })}
+              disabled={purchaseMutation.isPending || Math.abs((cardDistribution.paperHands + cardDistribution.dustCollector + cardDistribution.gainsMaster) - 100) > 0.01}
+            >
+              {purchaseMutation.isPending ? (
+                <Loader2 className="w-4 h-4 animate-spin mr-2" />
+              ) : (
+                <Star className="w-4 h-4 mr-2" />
+              )}
+              Purchase
+            </Button>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
     </div>
