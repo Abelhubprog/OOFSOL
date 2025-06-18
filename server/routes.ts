@@ -6,6 +6,8 @@ import { solanaService } from "./services/solanaService";
 import { rugDetectionService } from "./services/rugDetectionService";
 import { solanaWalletAnalysis } from "./services/solanaWalletAnalysis";
 import { oofMomentsGenerator } from "./services/oofMomentsGenerator";
+import { aiOOFGenerator } from "./services/aiOOFMomentsGenerator";
+import { crossChainBridge } from "./services/crossChainBridge";
 import { zoraIntegration } from "./services/zoraIntegration";
 import { 
   insertPredictionSchema, 
@@ -899,7 +901,146 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // OOF MOMENTS API ROUTES
   // ========================
 
-  // Analyze wallet and generate OOF Moments
+  // AI-Powered OOF Moments Analysis
+  app.post('/api/oof-moments/ai-analyze', async (req, res) => {
+    try {
+      const { walletAddress, userId } = req.body;
+
+      if (!walletAddress) {
+        return res.status(400).json({ message: "Wallet address is required" });
+      }
+
+      // Check if AI analysis already exists and is recent (cache for 1 hour)
+      const existingAnalysis = await storage.getWalletAnalysis(walletAddress);
+      const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000);
+      
+      if (existingAnalysis && existingAnalysis.lastAnalyzed && existingAnalysis.lastAnalyzed > oneHourAgo) {
+        const moments = await storage.getOOFMomentsByWallet(walletAddress);
+        return res.json({
+          analysis: existingAnalysis,
+          moments,
+          fromCache: true,
+          aiGenerated: true
+        });
+      }
+
+      // Generate AI-powered OOF Moments using Perplexity
+      const aiMoments = await aiOOFGenerator.generateOOFMoments(walletAddress);
+      
+      // Store AI-generated moments in database
+      const savedMoments = [];
+      for (const card of aiMoments) {
+        const momentData = {
+          walletAddress,
+          userId: userId || null,
+          title: card.title,
+          description: card.description,
+          tokenAddress: card.tokenAddress,
+          tokenName: card.tokenName,
+          tokenSymbol: card.tokenSymbol,
+          cardType: card.type,
+          amount: card.amount,
+          currentValue: card.currentValue,
+          percentage: card.percentage,
+          story: card.story,
+          isPublic: true,
+          aiGenerated: true,
+          uniqueHash: card.uniqueHash
+        };
+
+        const savedMoment = await storage.createOOFMoment(momentData);
+        savedMoments.push(savedMoment);
+      }
+
+      res.json({
+        success: true,
+        moments: savedMoments,
+        aiGenerated: true,
+        walletAddress,
+        totalCards: aiMoments.length
+      });
+
+    } catch (error) {
+      console.error("AI OOF Moments generation error:", error);
+      res.status(500).json({ message: "Failed to generate AI OOF moments" });
+    }
+  });
+
+  // Cross-chain bridge for purchasing with OOF tokens
+  app.post('/api/oof-moments/cross-chain-purchase', async (req, res) => {
+    try {
+      const { walletAddress, oofAmount, cardDistribution } = req.body;
+
+      if (!walletAddress || !oofAmount || !cardDistribution) {
+        return res.status(400).json({ message: "Missing required parameters" });
+      }
+
+      if (oofAmount < 1 || oofAmount > 100) {
+        return res.status(400).json({ message: "OOF amount must be between $1-100" });
+      }
+
+      // Validate distribution adds up to 100%
+      const totalDistribution = cardDistribution.paperHands + cardDistribution.dustCollector + cardDistribution.gainsMaster;
+      if (Math.abs(totalDistribution - 100) > 0.01) {
+        return res.status(400).json({ message: "Card distribution must total 100%" });
+      }
+
+      // Process cross-chain purchase
+      const purchaseResult = await crossChainBridge.processCrossChainPurchase({
+        walletAddress,
+        oofAmount,
+        cardDistribution
+      });
+
+      if (purchaseResult.success) {
+        res.json({
+          success: true,
+          transactions: purchaseResult.transactions,
+          message: "Cross-chain purchase initiated successfully"
+        });
+      } else {
+        res.status(400).json({
+          success: false,
+          message: purchaseResult.errorMessage || "Purchase failed"
+        });
+      }
+
+    } catch (error) {
+      console.error("Cross-chain purchase error:", error);
+      res.status(500).json({ message: "Failed to process cross-chain purchase" });
+    }
+  });
+
+  // Get exchange rate for OOF tokens
+  app.get('/api/oof-moments/exchange-rate', async (req, res) => {
+    try {
+      const rate = await crossChainBridge.getExchangeRate();
+      res.json({ oofToUsd: rate });
+    } catch (error) {
+      console.error("Exchange rate error:", error);
+      res.status(500).json({ message: "Failed to get exchange rate" });
+    }
+  });
+
+  // Estimate purchase with OOF tokens
+  app.post('/api/oof-moments/estimate-purchase', async (req, res) => {
+    try {
+      const { oofAmount } = req.body;
+
+      if (!oofAmount || oofAmount <= 0) {
+        return res.status(400).json({ message: "Valid OOF amount required" });
+      }
+
+      const estimate = await crossChainBridge.estimatePurchase(oofAmount);
+      res.json(estimate);
+
+    } catch (error) {
+      console.error("Purchase estimation error:", error);
+      res.status(500).json({ message: "Failed to estimate purchase" });
+    }
+  });
+
+  // Legacy analyze route (preserving existing functionality)
   app.post('/api/oof-moments/analyze', async (req, res) => {
     try {
       const { walletAddress, userId } = req.body;
@@ -912,7 +1053,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const existingAnalysis = await storage.getWalletAnalysis(walletAddress);
       const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000);
       
-      if (existingAnalysis && existingAnalysis.lastAnalyzed > oneHourAgo) {
+      if (existingAnalysis && existingAnalysis.lastAnalyzed && existingAnalysis.lastAnalyzed > oneHourAgo) {
         const moments = await storage.getOOFMomentsByWallet(walletAddress);
         return res.json({
           analysis: existingAnalysis,
@@ -937,8 +1078,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         dustTokensCount: analysis.dustTokens.length,
         paperHandsCount: analysis.paperHandsMoments.length,
         profitableTokensCount: analysis.profitableTokens.length,
-        analysisData: analysis,
-        lastAnalyzed: new Date()
+        lastAnalyzed: new Date(),
+        oofScore: analysis.oofScore || 0
       };
 
       const savedAnalysis = await storage.createWalletAnalysis(analysisData);

@@ -76,6 +76,16 @@ const OOFMoments: React.FC = () => {
   const [selectedMoment, setSelectedMoment] = useState<OOFMoment | null>(null);
   const [showMintDialog, setShowMintDialog] = useState(false);
   const [activeTab, setActiveTab] = useState('discover');
+  const [useAI, setUseAI] = useState(true);
+  const [oofAmount, setOofAmount] = useState(10);
+  const [cardDistribution, setCardDistribution] = useState({
+    paperHands: 33,
+    dustCollector: 33,
+    gainsMaster: 34
+  });
+  const [exchangeRate, setExchangeRate] = useState(0.001);
+  const [showPurchaseDialog, setShowPurchaseDialog] = useState(false);
+  const [generatedMoments, setGeneratedMoments] = useState<any[]>([]);
 
   // Fetch public OOF Moments
   const { data: publicMoments, isLoading: loadingPublic } = useQuery({
