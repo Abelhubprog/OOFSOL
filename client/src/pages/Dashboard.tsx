@@ -159,6 +159,19 @@ export default function Dashboard() {
 
             <div>
               <h3 className="text-purple-300 text-xs font-semibold uppercase tracking-wider mb-3">
+                Campaigns & Engagement
+              </h3>
+              <div className="space-y-1">
+                <Link href="/campaigns" className="flex items-center space-x-3 px-3 py-2 rounded-lg bg-gradient-to-r from-green-500/20 to-blue-500/20 border border-green-500/30 text-white group">
+                  <Target className="w-5 h-5 text-green-400" />
+                  <span className="text-white text-sm font-medium">OOF Campaigns</span>
+                  <Badge className="ml-auto bg-green-500 text-white text-xs">NEW</Badge>
+                </Link>
+              </div>
+            </div>
+
+            <div>
+              <h3 className="text-purple-300 text-xs font-semibold uppercase tracking-wider mb-3">
                 Features
               </h3>
               <div className="space-y-1">
@@ -169,10 +182,6 @@ export default function Dashboard() {
                 <Link href="/multiverse" className="flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-purple-500/20 transition-colors group">
                   <Layers className="w-5 h-5 text-purple-300 group-hover:text-white" />
                   <span className="text-purple-200 group-hover:text-white text-sm">OOF Multiverse</span>
-                </Link>
-                <Link href="/campaigns" className="flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-purple-500/20 transition-colors group">
-                  <Target className="w-5 h-5 text-purple-300 group-hover:text-white" />
-                  <span className="text-purple-200 group-hover:text-white text-sm">OOF Campaigns</span>
                 </Link>
               </div>
             </div>
@@ -285,7 +294,13 @@ export default function Dashboard() {
           </div>
 
           {/* Action Buttons */}
-          <div className="flex justify-center space-x-4 mb-8">
+          <div className="flex justify-center space-x-3 mb-8 flex-wrap gap-3">
+            <Link href="/campaigns">
+              <Button className="bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 text-white px-6 py-3">
+                <Target className="w-5 h-5 mr-2" />
+                Launch Campaign
+              </Button>
+            </Link>
             <Link href="/wallet-analyzer">
               <Button className="bg-yellow-600 hover:bg-yellow-700 text-white px-6 py-3">
                 <Calculator className="w-5 h-5 mr-2" />
@@ -304,6 +319,59 @@ export default function Dashboard() {
                 Buy $OOF
               </Button>
             </Link>
+          </div>
+
+          {/* OOF Campaigns Feature Section */}
+          <div className="max-w-4xl mx-auto mb-8">
+            <Card className="bg-gradient-to-r from-green-600/20 to-blue-600/20 border-green-500/30 backdrop-blur-lg">
+              <CardContent className="p-8">
+                <div className="text-center mb-6">
+                  <div className="w-20 h-20 mx-auto mb-4 bg-gradient-to-r from-green-500 to-blue-500 rounded-full flex items-center justify-center">
+                    <Target className="w-10 h-10 text-white" />
+                  </div>
+                  <h3 className="text-3xl font-bold text-white mb-3">
+                    OOF Campaigns - Social Media Engagement Platform
+                  </h3>
+                  <p className="text-purple-200 text-lg mb-6">
+                    Create viral social media campaigns with crypto rewards. Engage audiences across Twitter, 
+                    Farcaster, TikTok, and Arena with automated USDC payouts and OOF token rewards.
+                  </p>
+                </div>
+                
+                <div className="grid md:grid-cols-3 gap-6 mb-8">
+                  <div className="bg-purple-700/30 p-6 rounded-lg text-center">
+                    <MessageCircle className="w-10 h-10 text-green-400 mx-auto mb-3" />
+                    <h4 className="font-semibold text-white mb-2">Multi-Platform</h4>
+                    <p className="text-sm text-purple-300">Support for Twitter, Farcaster, TikTok, and Arena platforms</p>
+                  </div>
+                  <div className="bg-purple-700/30 p-6 rounded-lg text-center">
+                    <Coins className="w-10 h-10 text-green-400 mx-auto mb-3" />
+                    <h4 className="font-semibold text-white mb-2">Crypto Rewards</h4>
+                    <p className="text-sm text-purple-300">Automated USDC payments and OOF token distribution</p>
+                  </div>
+                  <div className="bg-purple-700/30 p-6 rounded-lg text-center">
+                    <BarChart3 className="w-10 h-10 text-green-400 mx-auto mb-3" />
+                    <h4 className="font-semibold text-white mb-2">Real-time Analytics</h4>
+                    <p className="text-sm text-purple-300">Track engagement, conversions, and campaign performance</p>
+                  </div>
+                </div>
+
+                <div className="flex justify-center space-x-4">
+                  <Link href="/campaigns">
+                    <Button className="bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 text-white px-8 py-3 text-lg">
+                      <Target className="w-6 h-6 mr-2" />
+                      Launch Campaigns
+                    </Button>
+                  </Link>
+                  <Link href="/campaigns">
+                    <Button variant="outline" className="border-green-400 text-green-400 hover:bg-green-500/20 px-8 py-3 text-lg">
+                      <Activity className="w-6 h-6 mr-2" />
+                      View Analytics
+                    </Button>
+                  </Link>
+                </div>
+              </CardContent>
+            </Card>
           </div>
 
           {/* OOF Bot Section */}
