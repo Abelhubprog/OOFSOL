@@ -124,7 +124,91 @@ export const userAchievements = pgTable("user_achievements", {
   unlockedAt: timestamp("unlocked_at").defaultNow(),
 });
 
-// NFT Collections for rare slot moments
+// Enhanced OOF Moments for wallet analysis
+export const oofMoments = pgTable("oof_moments", {
+  id: serial("id").primaryKey(),
+  userId: varchar("user_id").references(() => users.id),
+  walletAddress: varchar("wallet_address").notNull(),
+  momentType: varchar("moment_type").notNull(), // "paper_hands", "dust_collector", "gains_master"
+  title: varchar("title").notNull(),
+  description: text("description"),
+  quote: text("quote"),
+  rarity: varchar("rarity").notNull(), // "legendary", "epic", "rare"
+  tokenAddress: varchar("token_address").notNull(),
+  tokenSymbol: varchar("token_symbol").notNull(),
+  tokenName: varchar("token_name").notNull(),
+  analysis: jsonb("analysis").notNull(), // Detailed trading analysis
+  cardMetadata: jsonb("card_metadata").notNull(), // Card design and styling
+  socialStats: jsonb("social_stats").default({}),
+  tags: text("tags").array().default([]),
+  mintedOnPhantom: boolean("minted_on_phantom").default(false),
+  mintedOnZora: boolean("minted_on_zora").default(false),
+  phantomMintHash: varchar("phantom_mint_hash"),
+  zoraMintUrl: varchar("zora_mint_url"),
+  zoraTokenId: varchar("zora_token_id"),
+  imageUrl: varchar("image_url"),
+  isPublic: boolean("is_public").default(true),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const walletAnalysis = pgTable("wallet_analysis", {
+  id: serial("id").primaryKey(),
+  walletAddress: varchar("wallet_address").notNull().unique(),
+  lastAnalyzed: timestamp("last_analyzed").defaultNow(),
+  totalTransactions: integer("total_transactions").default(0),
+  totalTokensTraded: integer("total_tokens_traded").default(0),
+  biggestGain: jsonb("biggest_gain"), // Token and amount data
+  biggestLoss: jsonb("biggest_loss"), // Token and amount data
+  dustTokens: jsonb("dust_tokens").default([]), // Array of dust token data
+  paperHandsMoments: jsonb("paper_hands_moments").default([]), // Array of missed opportunities
+  profitableTokens: jsonb("profitable_tokens").default([]), // Array of profitable trades
+  analysisMetrics: jsonb("analysis_metrics").default({}),
+  status: varchar("status").default("pending"), // "pending", "analyzing", "completed", "error"
+  errorMessage: text("error_message"),
+});
+
+export const momentInteractions = pgTable("moment_interactions", {
+  id: serial("id").primaryKey(),
+  momentId: integer("moment_id").references(() => oofMoments.id),
+  userId: varchar("user_id").references(() => users.id),
+  interactionType: varchar("interaction_type").notNull(), // "like", "share", "comment"
+  comment: text("comment"), // For comment interactions
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const splTokenData = pgTable("spl_token_data", {
+  id: serial("id").primaryKey(),
+  tokenAddress: varchar("token_address").notNull().unique(),
+  symbol: varchar("symbol"),
+  name: varchar("name"),
+  decimals: integer("decimals"),
+  supply: bigint("supply", { mode: "bigint" }),
+  currentPrice: decimal("current_price", { precision: 20, scale: 10 }),
+  priceChange24h: decimal("price_change_24h", { precision: 10, scale: 4 }),
+  marketCap: bigint("market_cap", { mode: "bigint" }),
+  volume24h: bigint("volume_24h", { mode: "bigint" }),
+  holders: integer("holders"),
+  lastUpdated: timestamp("last_updated").defaultNow(),
+  isActive: boolean("is_active").default(true),
+});
+
+export const walletTransactions = pgTable("wallet_transactions", {
+  id: serial("id").primaryKey(),
+  walletAddress: varchar("wallet_address").notNull(),
+  signature: varchar("signature").notNull().unique(),
+  tokenAddress: varchar("token_address").notNull(),
+  transactionType: varchar("transaction_type").notNull(), // "buy", "sell", "transfer"
+  amount: bigint("amount", { mode: "bigint" }).notNull(),
+  price: decimal("price", { precision: 20, scale: 10 }),
+  solAmount: bigint("sol_amount", { mode: "bigint" }),
+  timestamp: timestamp("timestamp").notNull(),
+  blockHeight: integer("block_height"),
+  processed: boolean("processed").default(false),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// NFT Collections for rare slot moments (keeping original for backward compatibility)
 export const nftMoments = pgTable("nft_moments", {
   id: serial("id").primaryKey(),
   userId: varchar("user_id").notNull().references(() => users.id),
@@ -264,6 +348,18 @@ export type RevenuePool = typeof revenuePools.$inferSelect;
 export type InsertRevenuePool = typeof revenuePools.$inferInsert;
 export type UserPurchase = typeof userPurchases.$inferSelect;
 export type InsertUserPurchase = typeof userPurchases.$inferInsert;
+
+// Enhanced OOF Moments types
+export type OOFMoment = typeof oofMoments.$inferSelect;
+export type InsertOOFMoment = typeof oofMoments.$inferInsert;
+export type WalletAnalysis = typeof walletAnalysis.$inferSelect;
+export type InsertWalletAnalysis = typeof walletAnalysis.$inferInsert;
+export type MomentInteraction = typeof momentInteractions.$inferSelect;
+export type InsertMomentInteraction = typeof momentInteractions.$inferInsert;
+export type SPLTokenData = typeof splTokenData.$inferSelect;
+export type InsertSPLTokenData = typeof splTokenData.$inferInsert;
+export type WalletTransaction = typeof walletTransactions.$inferSelect;
+export type InsertWalletTransaction = typeof walletTransactions.$inferInsert;
 
 // Zod schemas
 export const insertTokenSchema = createInsertSchema(tokens).omit({
