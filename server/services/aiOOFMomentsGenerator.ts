@@ -1,5 +1,6 @@
 import { Connection, PublicKey } from '@solana/web3.js';
 import { storage } from '../storage';
+import { OOFOrchestrator } from '../agents/orchestrator/coordinator';
 
 interface WalletTransaction {
   signature: string;
@@ -42,10 +43,12 @@ interface PerplexityAnalysis {
 export class AILOOFMomentsGenerator {
   private connection: Connection;
   private perplexityApiKey: string;
+  private orchestrator: OOFOrchestrator;
 
   constructor() {
     this.connection = new Connection('https://api.mainnet-beta.solana.com');
     this.perplexityApiKey = process.env.PERPLEXITY_API_KEY || '';
+    this.orchestrator = new OOFOrchestrator();
   }
 
   async generateOOFMoments(walletAddress: string): Promise<OOFMomentCard[]> {
