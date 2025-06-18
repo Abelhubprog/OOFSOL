@@ -1364,6 +1364,108 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // One-Click Zora Token Minting - Cost Estimation
+  app.post('/api/zora/estimate-cost', async (req, res) => {
+    try {
+      const { momentId, mintingOptions } = req.body;
+
+      if (!momentId || !mintingOptions) {
+        return res.status(400).json({ error: 'Moment ID and minting options required' });
+      }
+
+      const moment = await storage.getOOFMoment(momentId);
+      if (!moment) {
+        return res.status(404).json({ error: 'OOF Moment not found' });
+      }
+
+      const { zoraTokenMinter } = await import('./services/zoraTokenMinter');
+      const costEstimate = await zoraTokenMinter.estimateMintingCost(moment, mintingOptions);
+
+      res.json(costEstimate);
+    } catch (error) {
+      console.error('Cost estimation error:', error);
+      res.status(500).json({ error: 'Failed to estimate minting cost' });
+    }
+  });
+
+  // One-Click Zora Token Minting - Execute Mint
+  app.post('/api/zora/mint-token', async (req, res) => {
+    try {
+      const { momentId, userWalletAddress, oofTokenAmount, mintingOptions } = req.body;
+      const userId = req.user?.userId;
+
+      if (!userId) {
+        return res.status(401).json({ error: 'Authentication required' });
+      }
+
+      if (!momentId || !userWalletAddress || !oofTokenAmount || !mintingOptions) {
+        return res.status(400).json({ error: 'Missing required minting parameters' });
+      }
+
+      const moment = await storage.getOOFMoment(momentId);
+      if (!moment) {
+        return res.status(404).json({ error: 'OOF Moment not found' });
+      }
+
+      // Check if user owns this moment
+      if (moment.userId !== userId) {
+        return res.status(403).json({ error: 'Only the moment creator can mint this token' });
+      }
+
+      const { zoraTokenMinter } = await import('./services/zoraTokenMinter');
+      
+      // Start minting process (async)
+      const mintRequest = {
+        moment,
+        userWalletAddress,
+        oofTokenAmount,
+        mintingOptions
+      };
+
+      // Execute minting in background with real-time updates
+      zoraTokenMinter.mintOOFMomentAsToken(mintRequest)
+        .then(async (result) => {
+          if (result.success && result.zoraAddress) {
+            // Update moment with Zora information
+            await storage.updateOOFMoment(momentId, {
+              zoraAddress: result.zoraAddress
+            });
+          }
+        })
+        .catch((error) => {
+          console.error('Background minting error:', error);
+        });
+
+      res.json({ 
+        message: 'Minting process started',
+        status: 'processing'
+      });
+
+    } catch (error) {
+      console.error('Minting initiation error:', error);
+      res.status(500).json({ error: 'Failed to start minting process' });
+    }
+  });
+
+  // Get user's Zora minting history
+  app.get('/api/zora/minting-history', async (req, res) => {
+    try {
+      const userId = req.user?.userId;
+
+      if (!userId) {
+        return res.status(401).json({ error: 'Authentication required' });
+      }
+
+      const { zoraTokenMinter } = await import('./services/zoraTokenMinter');
+      const mintingHistory = await zoraTokenMinter.getUserMintingHistory(userId);
+
+      res.json(mintingHistory);
+    } catch (error) {
+      console.error('Minting history error:', error);
+      res.status(500).json({ error: 'Failed to fetch minting history' });
+    }
+  });
+
   // Launch OOF Moments as Zora Tokens
   app.post('/api/zora/launch-tokens', async (req, res) => {
     try {

@@ -13,6 +13,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Textarea } from '@/components/ui/textarea';
 import { Progress } from '@/components/ui/progress';
+import { ZoraOneClickMinter } from '@/components/ZoraOneClickMinter';
 import { 
   Sparkles, 
   Brain,
@@ -297,6 +298,17 @@ const OOFCard: React.FC<{
           >
             {isOwner ? <Download size={20} /> : <Coins size={20} />}
           </motion.button>
+
+          {isOwner && (
+            <ZoraOneClickMinter
+              moment={moment}
+              userWalletAddress="9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM"
+              onMintComplete={(result) => {
+                console.log('Zora minting completed:', result);
+                onInteraction('zora_mint', moment.id);
+              }}
+            />
+          )}
         </div>
       </div>
 
