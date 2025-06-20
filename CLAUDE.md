@@ -2,266 +2,200 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## 🎯 OOF Platform - Production-Ready Development Guide
+## 🎯 OOF Platform - Production-Ready Development Guide (Updated)
 
-The OOF Platform is a revolutionary Solana-based social media engagement platform that transforms crypto trading failures into shareable, monetizable content through AI-powered "OOF Moments" and cross-chain NFT integration.
+The OOF Platform is a revolutionary Solana-based social media engagement platform that transforms crypto trading failures ("OOF Moments") into shareable, monetizable, and gamified content. It leverages AI for personalized experiences and cross-chain technology (Zora Protocol on Base) for NFT minting, aiming to create a "Regret Economy".
 
 ## 📋 Quick Commands
 
-**Development:**
+**Development (Windows):**
 ```bash
-npm run dev       # Start development server on port 5000 with hot reload
-npm run check     # TypeScript type checking
-npm run db:push   # Push database schema changes using Drizzle
+dev-win.bat         # Recommended: Starts full dev server (API + Vite) with DB skip for Windows
+npm run dev:safe    # Cross-platform safe mode, skips DB check
+npm run dev:win     # PowerShell alternative, skips DB check
+npm run dev         # Standard cross-platform, may have DB WebSocket issues on Windows
+npm run dev:simple  # API only with basic HTML serving (no Vite)
+```
+
+**General Development:**
+```bash
+npm run check       # TypeScript type checking
+npm run db:generate # Generate Drizzle migration (after schema changes)
+npm run db:migrate  # Apply database migrations
+npm run db:push     # Push schema changes (dev only, careful)
+npm run db:studio   # Open Drizzle Studio (database admin)
 ```
 
 **Production:**
 ```bash
-npm run build     # Build both client (Vite) and server (esbuild)
-npm run start     # Run production build
+npm run build       # Build client (Vite) and server (esbuild)
+npm run start       # Run production build (after building)
 ```
 
 ## 🏗️ Architecture Overview
 
-### **Current Implementation Status: 75% Complete**
+### **Current Implementation Status: ~60% to Production-Ready Vision**
 
-**✅ Production-Ready Components:**
-- Complete React frontend with 25+ pages and 30+ components
-- Comprehensive database schema (20+ tables) with Drizzle ORM
-- Wallet integration via Dynamic Labs (Solana + multi-chain)
-- Professional UI system (shadcn/ui + Tailwind CSS)
-- Complete routing and navigation system
+**✅ Strong Foundations & Partially Implemented Frontend:**
+- **Frontend (`client/`):** React 18, TypeScript, Vite, Wouter, TanStack Query, Tailwind CSS, shadcn/ui. Many pages (25+) and components (30+) exist, with some recent UI/UX overhaul (e.g., `Landing.tsx`, `OOFMoments.tsx`). Dynamic Labs for wallet connections.
+- **Backend (`server/`):** Express.js, TypeScript. Structures for services, AI, middleware are present. WebSocket manager (`server/websocket/websocketManager.ts`) exists.
+- **Database (`shared/schema.ts`, `server/db.ts`):** Comprehensive Drizzle ORM schema for PostgreSQL (Neon). Database connection and basic utility functions (`server/db/utils.ts`) are set up. Windows compatibility for Neon driver addressed.
+- **AI Concepts:** Multi-agent (Scout, Director, Artist, Publisher) architecture conceptualized (`server/ai/orchestrator.ts`, `server/ai/config.ts`).
+- **Strategic Vision:** Strong "Regret Economy" concept outlined in `STRATEGIC_ANALYSIS.md` and `BREAKTHROUGH_FEATURES.md`.
 
-**⚠️ Partially Implemented:**
-- Basic Express.js API with mock endpoints
-- AI service integration (structure exists, needs implementation)
-- Blockchain service layer (connections ready, logic partial)
+**⚠️ Partially Implemented & Needs Significant Work:**
+- **Backend Services & APIs:** Many API endpoints in `server/routes.ts` are placeholders, use mock data, or are incomplete. `server/routes-clean.ts` and `server/routes/simple.ts` reflect ongoing refactoring. Critical services like `oofMomentsService.ts`, `walletAnalysisService.ts`, `tokenAdvertisingService.ts` need full implementation and connection to live data/AI.
+- **AI Agent System:** LangGraph integration and the actual logic for each AI agent (analysis, narrative, visual, publishing) are not implemented. Current AI generation is basic.
+- **Blockchain Integration:** Solana on-chain data fetching (`server/services/solanaService.ts`, `productionSolanaService.ts`) and Zora NFT minting (`server/services/zoraIntegration.ts`) logic needs to be robust, fully tested, and integrated end-to-end.
+- **Core Features:** While UI for many features exists, the backend logic, data flow, and AI integration are often missing or incomplete for OOF Moments, Token Ads, Campaigns, Gaming elements.
+- **Mobile-First UI/UX:** Initial UI overhaul on some pages, but a consistent, polished, mobile-first experience across all 25+ pages is needed. Many pages still have MVP-level UI.
 
-**❌ Missing for Production:**
-- Database implementation (currently file-based storage)
-- AI agent orchestrator (LangGraph integration needed)
-- Real-time WebSocket system
-- Payment processing integration
-- Comprehensive error handling and monitoring
+**❌ Critical Missing Pieces for Production:**
+- **Fully Functional APIs:** Most APIs are not production-ready and need data validation, error handling, and connection to real services.
+- **Complete AI Pipeline:** The AI agent orchestrator and individual agent logic for generating high-quality OOF moments.
+- **Payment Processing:** Stripe/crypto payments for Token Advertising and other potential revenue streams.
+- **Comprehensive Testing:** Unit, integration, and E2E tests are largely absent.
+- **Data Integrity & Seeding:** Production data seeding and robust data management practices.
+- **Security Hardening:** Thorough security review, CSP, advanced rate limiting, etc.
+- **Performance Optimization:** Bundle optimization, lazy loading, caching across the application.
 
-## 🧠 Core Features & Business Model
+## 🧠 Core Features & Business Model (Target Vision)
 
-### **Primary Features:**
-
-1. **OOF Moments (85% Complete)**
-   - AI-powered wallet analysis generating personalized trading stories
-   - Visual card creation with rarity system (Legendary, Epic, Rare)
-   - Cross-chain NFT minting via Zora Protocol integration
-   - Social interactions: likes, shares, comments, viral mechanics
-
-2. **Token Advertising Marketplace (95% Complete)**
-   - 30-minute rotating ad slots for Solana tokens
-   - $10 USDC fee structure with revenue sharing
-   - Performance analytics and click tracking
-   - 6-slot rotating display system
-
-3. **Campaign Management System (90% Complete)**
-   - Multi-platform social media engagement (Twitter, Farcaster, TikTok)
-   - Verification system for completed actions
-   - USDC rewards with OOF point multipliers
-   - Analytics dashboard for campaign performance
-
-4. **Advanced Gaming Features (70% Complete)**
-   - Slot machine with NFT generation
-   - Battle Royale trading competitions
-   - Achievement system with unlockable content
-   - Time Machine for historical "what-if" analysis
-
-### **Revenue Streams:**
-- Token advertising fees ($10 per 30-min slot)
-- Premium AI features and advanced analytics
-- Cross-chain token launch fees via Zora integration
-- Social media campaign management fees
+Reference `STRATEGIC_ANALYSIS.md` for the "Regret Economy" vision.
+1.  **AI-Powered OOF Moments:**
+    *   Personalized trading stories from wallet analysis (Solana, potentially multi-chain).
+    *   Visually stunning cards with rarity, gamification, and emotional AI.
+    *   Cross-chain NFT minting (Zora on Base).
+    *   Advanced social interactions, viral mechanics, "shared trauma bonds".
+2.  **Token Advertising Marketplace:**
+    *   Automated, rotating ad slots for Solana tokens ($10 USDC/30-min).
+    *   Payment processing, performance analytics, revenue sharing.
+3.  **Campaign Management System:**
+    *   Multi-platform social engagement (Twitter, Farcaster, etc.).
+    *   Automated verification and reward distribution (USDC, OOF points).
+4.  **Advanced Gaming & Gamified Therapy:**
+    *   Slots, Battle Royale, Time Machine, Achievements.
+    *   Leaderboards, OOF Score, "Achievement Therapy" mechanics.
+5.  **Revenue Streams:** Ad fees, premium AI, NFT minting fees, campaign fees, data licensing.
 
 ## 🔧 Technical Stack
 
-**Frontend:**
-- React 18 + TypeScript + Vite
-- Wouter (routing) + TanStack Query (state)
-- Tailwind CSS + shadcn/ui components
-- Framer Motion (animations) + Radix UI (primitives)
+Identical to the previous version of this file, but verify all integrations are complete.
+**Frontend:** React 18, TypeScript, Vite, Wouter, TanStack Query, Tailwind CSS, shadcn/ui, Framer Motion.
+**Backend:** Express.js, TypeScript, Drizzle ORM, PostgreSQL (Neon), WebSocket.
+**AI:** LangGraph, OpenAI, Perplexity API, other models as per `server/ai/config.ts`.
+**Blockchain:** Solana Web3.js, Dynamic Labs, Zora Protocol, Jupiter/Raydium.
 
-**Backend:**
-- Express.js + TypeScript
-- Drizzle ORM + PostgreSQL (Neon)
-- OpenAI + Perplexity AI integration
-- WebSocket support for real-time features
+## 📊 Database Schema
 
-**Blockchain:**
-- Solana Web3.js for primary blockchain operations
-- Dynamic Labs for wallet connections (multi-chain support)
-- Zora Protocol for cross-chain NFT minting
-- Jupiter/Raydium integration for token data
-
-**AI Infrastructure:**
-- Multi-agent architecture using LangGraph
-- Cost-optimized model routing (Claude, GPT-4, Gemini, DeepSeek)
-- Perplexity API for real-time analysis
-- Progressive enhancement with fallback systems
-
-## 📊 Database Schema (Production-Ready)
-
-**Key Tables:**
-- `users` - Wallet-based user management with OOF scores
-- `oof_moments` - AI-generated moments with social stats
-- `token_ads` - Advertising marketplace with payment tracking
-- `campaigns` - Social media campaign management
-- `wallet_analysis` - Cached wallet transaction analysis
-- `moment_interactions` - Social engagement tracking
+Located at `shared/schema.ts`. Key tables: `users`, `oofMoments`, `tokenAds`, `campaigns`, `walletAnalysis`, `momentInteractions`, etc. Schema is comprehensive and largely production-ready but ensure all services utilize it correctly.
 
 **File Path Aliases:**
 - `@/` → `client/src/`
 - `@shared/` → `shared/`
-- `@assets/` → `attached_assets/`
+- `@assets/` → `client/public/assets/` (updated after cleanup)
 
-## 🚀 Production Deployment Roadmap
+## 🚀 Production Deployment Roadmap (High-Level Focus Areas)
 
-### **Phase 1: Core Infrastructure (Weeks 1-2)**
+This replaces the previous phased roadmap with a focus on current gaps. See `Todo.md` for detailed tasks.
 
-**Critical Blockers:**
-1. **Database Migration** - Convert from file storage to PostgreSQL
-   ```bash
-   # Create production database
-   npm run db:migrate
-   npm run db:seed
-   ```
+### **Focus Area 1: Stabilize & Complete Backend Core**
+1.  **Solidify APIs:** Implement all API endpoints in `server/routes.ts` with proper data validation (Zod), error handling, and connection to services. Remove mock logic.
+2.  **Full Database Integration:** Ensure all services use PostgreSQL via Drizzle and `DatabaseUtils`. Complete any pending data migrations and ensure data integrity.
+3.  **Robust Authentication & Security:** Enhance JWT validation, implement CSRF protection if applicable, refine rate limiting, ensure all inputs are sanitized.
 
-2. **AI Agent Implementation** - LangGraph multi-agent system
-   - Implement wallet analysis agent
-   - Add narrative generation agent
-   - Create visual design agent
-   - Build publisher agent for cross-chain minting
+### **Focus Area 2: Implement Breakthrough AI & Blockchain Features**
+1.  **AI Agent System (LangGraph):**
+    *   Implement `WalletAnalysisAgent` (Scout) for deep psychological insights.
+    *   Implement `StoryGenerationAgent` (Director) for compelling narratives.
+    *   Implement `VisualDesignAgent` (Artist) for dynamic, high-quality card visuals.
+    *   Implement `CrossChainAgent` (Publisher) for seamless Zora minting.
+2.  **End-to-End OOF Moments Flow:** From wallet input to AI generation, card display, social interaction, and Zora NFT minting.
+3.  **Solana Data Integration:** Ensure `walletAnalysisService.ts` uses real-time, accurate Solana on-chain data.
+4.  **Zora Minting Workflow:** Complete and test the NFT minting process on Base via Zora, including potential fee structures.
 
-3. **Authentication & Security**
-   - JWT token validation middleware
-   - Rate limiting (Redis-based)
-   - CORS configuration
-   - Input sanitization
+### **Focus Area 3: Elevate Frontend to "1000x Stunning Product"**
+1.  **Mobile-First UI/UX Overhaul:** Apply the new design language (seen in `Landing.tsx` overhaul) consistently across all 25+ pages. Ensure responsiveness and excellent mobile experience.
+2.  **Gamification & Viral Mechanics:** Integrate achievements, leaderboards, OOF score, social sharing incentives, and "shared trauma bond" features.
+3.  **Performance Optimization:** Implement lazy loading, bundle splitting, image optimization, and caching as per `FRONTEND_OPTIMIZATION.md`.
+4.  **Complete Feature Pages:** Ensure all pages listed in `client/src/pages/` are fully functional, visually polished, and connected to backend services.
 
-### **Phase 2: Core Features (Weeks 3-4)**
+### **Focus Area 4: Implement Revenue Streams & Productionize**
+1.  **Token Advertising System:** Implement payment processing (Stripe/USDC) and ad rotation logic.
+2.  **Campaign Platform:** Complete multi-platform integrations and reward system.
+3.  **Testing:** Implement comprehensive unit, integration, and E2E tests.
+4.  **Monitoring & Logging:** Set up Sentry/DataDog for error tracking and performance monitoring.
+5.  **Deployment:** Finalize Docker setup (`Dockerfile`, `docker-compose.yml`) and Nginx configuration (`nginx/nginx.conf`) for production.
 
-1. **OOF Moments Generation**
-   - Real-time wallet transaction analysis
-   - AI-powered story generation with multiple personas
-   - Dynamic SVG/image generation system
-   - Zora Protocol NFT minting workflow
+## 🔥 Competitive Advantages & Strategic Goals
 
-2. **Token Advertising System**
-   - Payment processing (Stripe + crypto payments)
-   - Real-time ad rotation system
-   - Analytics dashboard
-   - Revenue sharing automation
-
-### **Phase 3: Advanced Features (Weeks 5-8)**
-
-1. **Social Media Campaign Platform**
-   - Twitter/X API integration
-   - Farcaster protocol integration
-   - Verification system with proof-of-completion
-   - Automated reward distribution
-
-2. **Real-time Gaming Features**
-   - WebSocket implementation for live interactions
-   - Battle Royale trading game mechanics
-   - Achievement system with NFT rewards
-   - Leaderboard and ranking system
-
-### **Phase 4: Scale & Optimize (Weeks 9-12)**
-
-1. **Performance & Monitoring**
-   - Redis caching layer
-   - API response optimization
-   - Error tracking (Sentry)
-   - Performance monitoring (DataDog)
-
-2. **Mobile & PWA**
-   - Progressive Web App features
-   - Mobile-optimized interface
-   - Push notifications
-   - Offline functionality
-
-## 🔥 Competitive Advantages
-
-1. **First-Mover in "Regret Economy"** - No direct competitors turning trading failures into social content
-2. **AI-Powered Personalization** - Each user gets truly unique, generated content
-3. **Cross-Chain Innovation** - Seamless bridge from Solana social content to Base NFTs
-4. **Viral Social Mechanics** - Built-in shareability with crypto reward incentives
-
-## 📈 Market Opportunity
-
-**Target Addressable Market:**
-- 50M+ crypto traders globally experiencing "OOF moments"
-- $2B+ social media crypto content market
-- Growing demand for AI-generated personalized content
-- Cross-chain DeFi user base expanding rapidly
+Refer to `STRATEGIC_ANALYSIS.md` and `BREAKTHROUGH_FEATURES.md`. Key goals:
+- Establish the "Regret Economy" as a new market category.
+- Leverage "Emotional AI" for deep user engagement and data monetization.
+- Create viral loops through "Shared Trauma Bonds" and gamified therapy.
+- Achieve market domination through unique cross-chain emotional asset bridging.
 
 ## 🛠️ Development Guidelines
 
 ### **Code Standards:**
-- TypeScript throughout (strict mode enabled)
-- Comprehensive error boundaries and handling
-- Performance monitoring on all critical paths
-- Security-first approach (no private keys in code)
+- TypeScript throughout (strict mode). Adhere to ESLint rules.
+- Follow patterns in `FRONTEND_OPTIMIZATION.md` for UI/UX.
+- Use `DatabaseUtils` for all database interactions.
+- Implement comprehensive error handling (see `server/middleware/errorHandler.ts`).
 
-### **Feature Development Process:**
-1. Database schema updates in `shared/schema.ts`
-2. API endpoint creation in `server/routes.ts`
-3. Service layer implementation in `server/services/`
-4. Frontend integration in `client/src/`
-5. Testing and validation
+### **Feature Development Process (Revised):**
+1. Define feature requirements based on `Todo.md` and strategic documents.
+2. Update/verify database schema in `shared/schema.ts`.
+3. Implement backend service logic in `server/services/`.
+4. Create/update API endpoint in `server/routes.ts` with Zod validation.
+5. Develop/enhance frontend components in `client/src/` (mobile-first, stunning UI).
+6. Integrate frontend with API using TanStack Query.
+7. Write tests (unit, integration).
+8. Ensure functionality aligns with the "Regret Economy" vision.
 
-### **AI Integration Pattern:**
+### **AI Integration Pattern (Target):**
 ```typescript
-// Multi-agent orchestrator pattern
-const orchestrator = new AIOrchestrator({
-  scout: new WalletAnalysisAgent(),
-  director: new StoryGenerationAgent(), 
-  artist: new VisualDesignAgent(),
-  publisher: new CrossChainAgent()
+// server/ai/orchestrator.ts
+// Target: A fully functional LangGraph multi-agent system
+const oofOrchestrator = new AIOrchestrator({
+  scout: new WalletAnalysisAgent(db, solanaService), // Real dependencies
+  director: new StoryGenerationAgent(aiModels),      // Configured AI models
+  artist: new VisualDesignAgent(templateEngine),   // Dynamic image generation
+  publisher: new CrossChainAgent(zoraService)       // Zora integration
 });
-```
 
-### **Error Handling:**
-All API endpoints must include comprehensive error handling with proper HTTP status codes and user-friendly messages.
+// Example usage in oofMomentsService.ts
+const momentData = await oofOrchestrator.generateOOFMoment(walletAddress, { /* user preferences */ });
+await DatabaseUtils.saveOOFMoment(userId, momentData);
+```
 
 ## 🔧 Reference Implementations
 
-**Solana App Kit Integration:**
-- The `solana-app-kit-main/` directory contains a production-ready React Native reference
-- Use transaction handling patterns from `src/shared/services/transactions/`
-- Wallet provider patterns in `src/modules/wallet-providers/`
+- **Solana App Kit (`solana-app-kit-main/`):** Useful for React Native mobile patterns if pursued later, but current focus is web.
+- **AI Agent Architecture (`gemini-fullstack-langgraph-quickstart/`):** Key reference for building the LangGraph-based multi-agent system in `server/ai/`.
 
-**AI Agent Architecture:**
-- The `gemini-fullstack-langgraph-quickstart/` shows LangGraph implementation patterns
-- Multi-agent coordination using Send/Receive patterns
-- Structured output with retry logic and error handling
-
-## 🎯 Success Metrics
+## 🎯 Success Metrics (Target)
 
 **Technical KPIs:**
-- API response time < 200ms (95th percentile)
-- AI generation success rate > 95%
-- Cross-chain transaction success rate > 98%
-- Zero-downtime deployment capability
+- API response time < 150ms (P95).
+- AI moment generation success > 98%; average generation time < 30 seconds.
+- Zora NFT minting success > 99%.
+- Lighthouse scores > 90 for performance, accessibility, best practices, SEO.
 
 **Business KPIs:**
-- User engagement: Time on platform, shares per moment
-- Revenue: Ad slot utilization, campaign booking rate
-- Growth: Viral coefficient, user acquisition cost
-- Retention: Daily/Monthly active users, moment creation rate
+- User Engagement: Daily Active Users (DAU), OOF moments created/shared per user, time on platform.
+- Revenue: Ad slot fill rate, campaign bookings, premium feature subscriptions, NFT minting volume.
+- Virality: Viral coefficient (k-factor), social media mentions, user-generated content volume.
+- Market Penetration: Percentage of active crypto traders using the platform.
 
-## 🚨 Critical Production Requirements
+## 🚨 Critical Production Requirements (Reiteration)
 
-1. **Security:** All private keys in environment variables, rate limiting on all endpoints
-2. **Monitoring:** Real-time error tracking, performance metrics, uptime monitoring  
-3. **Scalability:** Database read replicas, CDN for static assets, horizontal API scaling
-4. **Compliance:** GDPR compliance for user data, crypto regulation compliance
+1.  **Security:** Robust auth, input validation, rate limiting, secret management, regular audits.
+2.  **Scalability:** Horizontally scalable services, database read replicas, CDN, load balancing.
+3.  **Reliability:** Comprehensive monitoring, alerting, automated recovery, 99.9%+ uptime.
+4.  **Data Integrity:** Transactional database operations, backups, GDPR/CCPA compliance.
+5.  **Performance:** Optimized frontend/backend, efficient database queries, fast AI responses.
 
 ---
 
-**The OOF Platform represents a unique convergence of AI, social media, DeFi, and emotional technology that can capture significant market share in the growing crypto social space. The vision is sound, the architecture is well-planned, and the UI is production-ready. Focus on systematic completion of the backend infrastructure to match the ambitious frontend implementation.**
+**The OOF Platform's vision of a "Regret Economy" is highly innovative. Achieving this requires diligent implementation of the backend systems, AI capabilities, and a truly exceptional UI/UX that resonates emotionally with users. This updated `CLAUDE.md` and the forthcoming `Todo.md` will guide this transformation.**
