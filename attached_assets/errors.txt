@@ -1,0 +1,2045 @@
+[vite] connecting...
+client:618 [vite] connected.
+chunk-NFC5BX5N.js?v=4fd6a621:21551 Download the React DevTools for a better development experience: https://reactjs.org/link/react-devtools
+chunk-SP2Y26ZJ.js?v=4fd6a621:1070 [utils] [ERROR]: Error while parsing dynamic_device_fingerprint from local storage Object
+log @ chunk-SP2Y26ZJ.js?v=4fd6a621:1070
+content.js:208 Object
+api/oof-moments/public:1 
+            
+            
+           Failed to load resource: the server responded with a status of 500 (Internal Server Error)
+api/oof-moments/public:1 
+            
+            
+           Failed to load resource: the server responded with a status of 500 (Internal Server Error)
+api/oof-moments/public:1 
+            
+            
+           Failed to load resource: the server responded with a status of 500 (Internal Server Error)
+api/ai/analyze-wallet:1 
+            
+            
+           Failed to load resource: the server responded with a status of 500 (Internal Server Error)
+api/oof-moments/public:1 
+            
+            
+           Failed to load resource: the server responded with a status of 500 (Internal Server Error)
+api/oof-moments/public:1 
+            
+            
+           Failed to load resource: the server responded with a status of 500 (Internal Server Error)
+api/oof-moments/public:1 
+            
+            
+           Failed to load resource: the server responded with a status of 500 (Internal Server Error)
+OOFMoments.tsx:364 
+            
+            
+           GET http://localhost:5000/api/oof-moments/public 500 (Internal Server Error)
+queryFn @ OOFMoments.tsx:364
+fetchFn @ @tanstack_react-query.js?v=4fd6a621:840
+run @ @tanstack_react-query.js?v=4fd6a621:494
+start @ @tanstack_react-query.js?v=4fd6a621:536
+fetch @ @tanstack_react-query.js?v=4fd6a621:926
+executeFetch_fn @ @tanstack_react-query.js?v=4fd6a621:2211
+(anonymous) @ @tanstack_react-query.js?v=4fd6a621:2245
+OOFMoments.tsx:364 
+            
+            
+           GET http://localhost:5000/api/oof-moments/public 500 (Internal Server Error)
+queryFn @ OOFMoments.tsx:364
+fetchFn @ @tanstack_react-query.js?v=4fd6a621:840
+run @ @tanstack_react-query.js?v=4fd6a621:494
+start @ @tanstack_react-query.js?v=4fd6a621:536
+fetch @ @tanstack_react-query.js?v=4fd6a621:926
+executeFetch_fn @ @tanstack_react-query.js?v=4fd6a621:2211
+(anonymous) @ @tanstack_react-query.js?v=4fd6a621:2245
+setInterval
+updateRefetchInterval_fn @ @tanstack_react-query.js?v=4fd6a621:2243
+updateTimers_fn @ @tanstack_react-query.js?v=4fd6a621:2250
+onQueryUpdate @ @tanstack_react-query.js?v=4fd6a621:2206
+(anonymous) @ @tanstack_react-query.js?v=4fd6a621:998
+(anonymous) @ @tanstack_react-query.js?v=4fd6a621:997
+batch @ @tanstack_react-query.js?v=4fd6a621:583
+dispatch_fn @ @tanstack_react-query.js?v=4fd6a621:996
+onError @ @tanstack_react-query.js?v=4fd6a621:861
+reject @ @tanstack_react-query.js?v=4fd6a621:465
+(anonymous) @ @tanstack_react-query.js?v=4fd6a621:508
+Promise.catch
+run @ @tanstack_react-query.js?v=4fd6a621:498
+start @ @tanstack_react-query.js?v=4fd6a621:536
+fetch @ @tanstack_react-query.js?v=4fd6a621:926
+executeFetch_fn @ @tanstack_react-query.js?v=4fd6a621:2211
+(anonymous) @ @tanstack_react-query.js?v=4fd6a621:2245
+OOFMoments.tsx:364 
+            
+            
+           GET http://localhost:5000/api/oof-moments/public 500 (Internal Server Error)
+queryFn @ OOFMoments.tsx:364
+fetchFn @ @tanstack_react-query.js?v=4fd6a621:840
+run @ @tanstack_react-query.js?v=4fd6a621:494
+start @ @tanstack_react-query.js?v=4fd6a621:536
+fetch @ @tanstack_react-query.js?v=4fd6a621:926
+executeFetch_fn @ @tanstack_react-query.js?v=4fd6a621:2211
+(anonymous) @ @tanstack_react-query.js?v=4fd6a621:2245
+setInterval
+updateRefetchInterval_fn @ @tanstack_react-query.js?v=4fd6a621:2243
+updateTimers_fn @ @tanstack_react-query.js?v=4fd6a621:2250
+onQueryUpdate @ @tanstack_react-query.js?v=4fd6a621:2206
+(anonymous) @ @tanstack_react-query.js?v=4fd6a621:998
+(anonymous) @ @tanstack_react-query.js?v=4fd6a621:997
+batch @ @tanstack_react-query.js?v=4fd6a621:583
+dispatch_fn @ @tanstack_react-query.js?v=4fd6a621:996
+onError @ @tanstack_react-query.js?v=4fd6a621:861
+reject @ @tanstack_react-query.js?v=4fd6a621:465
+(anonymous) @ @tanstack_react-query.js?v=4fd6a621:508
+Promise.catch
+run @ @tanstack_react-query.js?v=4fd6a621:498
+start @ @tanstack_react-query.js?v=4fd6a621:536
+fetch @ @tanstack_react-query.js?v=4fd6a621:926
+executeFetch_fn @ @tanstack_react-query.js?v=4fd6a621:2211
+(anonymous) @ @tanstack_react-query.js?v=4fd6a621:2245
+setInterval
+updateRefetchInterval_fn @ @tanstack_react-query.js?v=4fd6a621:2243
+updateTimers_fn @ @tanstack_react-query.js?v=4fd6a621:2250
+onQueryUpdate @ @tanstack_react-query.js?v=4fd6a621:2206
+(anonymous) @ @tanstack_react-query.js?v=4fd6a621:998
+(anonymous) @ @tanstack_react-query.js?v=4fd6a621:997
+batch @ @tanstack_react-query.js?v=4fd6a621:583
+dispatch_fn @ @tanstack_react-query.js?v=4fd6a621:996
+onError @ @tanstack_react-query.js?v=4fd6a621:861
+reject @ @tanstack_react-query.js?v=4fd6a621:465
+(anonymous) @ @tanstack_react-query.js?v=4fd6a621:508
+Promise.catch
+run @ @tanstack_react-query.js?v=4fd6a621:498
+start @ @tanstack_react-query.js?v=4fd6a621:536
+fetch @ @tanstack_react-query.js?v=4fd6a621:926
+executeFetch_fn @ @tanstack_react-query.js?v=4fd6a621:2211
+(anonymous) @ @tanstack_react-query.js?v=4fd6a621:2245
+OOFMoments.tsx:364 
+            
+            
+           GET http://localhost:5000/api/oof-moments/public 500 (Internal Server Error)
+queryFn @ OOFMoments.tsx:364
+fetchFn @ @tanstack_react-query.js?v=4fd6a621:840
+run @ @tanstack_react-query.js?v=4fd6a621:494
+start @ @tanstack_react-query.js?v=4fd6a621:536
+fetch @ @tanstack_react-query.js?v=4fd6a621:926
+executeFetch_fn @ @tanstack_react-query.js?v=4fd6a621:2211
+(anonymous) @ @tanstack_react-query.js?v=4fd6a621:2245
+setInterval
+updateRefetchInterval_fn @ @tanstack_react-query.js?v=4fd6a621:2243
+updateTimers_fn @ @tanstack_react-query.js?v=4fd6a621:2250
+onQueryUpdate @ @tanstack_react-query.js?v=4fd6a621:2206
+(anonymous) @ @tanstack_react-query.js?v=4fd6a621:998
+(anonymous) @ @tanstack_react-query.js?v=4fd6a621:997
+batch @ @tanstack_react-query.js?v=4fd6a621:583
+dispatch_fn @ @tanstack_react-query.js?v=4fd6a621:996
+onError @ @tanstack_react-query.js?v=4fd6a621:861
+reject @ @tanstack_react-query.js?v=4fd6a621:465
+(anonymous) @ @tanstack_react-query.js?v=4fd6a621:508
+Promise.catch
+run @ @tanstack_react-query.js?v=4fd6a621:498
+start @ @tanstack_react-query.js?v=4fd6a621:536
+fetch @ @tanstack_react-query.js?v=4fd6a621:926
+executeFetch_fn @ @tanstack_react-query.js?v=4fd6a621:2211
+(anonymous) @ @tanstack_react-query.js?v=4fd6a621:2245
+setInterval
+updateRefetchInterval_fn @ @tanstack_react-query.js?v=4fd6a621:2243
+updateTimers_fn @ @tanstack_react-query.js?v=4fd6a621:2250
+onQueryUpdate @ @tanstack_react-query.js?v=4fd6a621:2206
+(anonymous) @ @tanstack_react-query.js?v=4fd6a621:998
+(anonymous) @ @tanstack_react-query.js?v=4fd6a621:997
+batch @ @tanstack_react-query.js?v=4fd6a621:583
+dispatch_fn @ @tanstack_react-query.js?v=4fd6a621:996
+onError @ @tanstack_react-query.js?v=4fd6a621:861
+reject @ @tanstack_react-query.js?v=4fd6a621:465
+(anonymous) @ @tanstack_react-query.js?v=4fd6a621:508
+Promise.catch
+run @ @tanstack_react-query.js?v=4fd6a621:498
+start @ @tanstack_react-query.js?v=4fd6a621:536
+fetch @ @tanstack_react-query.js?v=4fd6a621:926
+executeFetch_fn @ @tanstack_react-query.js?v=4fd6a621:2211
+(anonymous) @ @tanstack_react-query.js?v=4fd6a621:2245
+setInterval
+updateRefetchInterval_fn @ @tanstack_react-query.js?v=4fd6a621:2243
+updateTimers_fn @ @tanstack_react-query.js?v=4fd6a621:2250
+onQueryUpdate @ @tanstack_react-query.js?v=4fd6a621:2206
+(anonymous) @ @tanstack_react-query.js?v=4fd6a621:998
+(anonymous) @ @tanstack_react-query.js?v=4fd6a621:997
+batch @ @tanstack_react-query.js?v=4fd6a621:583
+dispatch_fn @ @tanstack_react-query.js?v=4fd6a621:996
+onError @ @tanstack_react-query.js?v=4fd6a621:861
+reject @ @tanstack_react-query.js?v=4fd6a621:465
+(anonymous) @ @tanstack_react-query.js?v=4fd6a621:508
+Promise.catch
+run @ @tanstack_react-query.js?v=4fd6a621:498
+start @ @tanstack_react-query.js?v=4fd6a621:536
+fetch @ @tanstack_react-query.js?v=4fd6a621:926
+executeFetch_fn @ @tanstack_react-query.js?v=4fd6a621:2211
+(anonymous) @ @tanstack_react-query.js?v=4fd6a621:2245
+
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:30:27.463Z] cc2af5d2-0502-4cd3-a98a-b178609dc184 200 - 120ms
+[2025-06-19T01:30:27.492Z] a4f78a10-c921-4030-a744-12ee9a55e573 GET /@fs/C:/OOFSOL/node_modules/.vite/deps/framer-motion.js {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:30:27.510Z] 3acd485e-b578-42d6-b9fb-cdf405ea034e GET /src/components/ZoraOneClickMinter.tsx {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:30:27.527Z] 16c305ed-2ef8-4fb4-ac0c-1cff8caa0e3c 200 - 106ms
+[2025-06-19T01:30:27.539Z] 27868c38-4cdd-4e60-9cf6-402ec2531324 GET /src/lib/solana.ts {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:30:27.561Z] e6d17c1c-0695-47db-871e-d060405265ec GET /src/components/ui/switch.tsx {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:30:27.593Z] fd59f203-4f98-49f8-9833-15cf1cbc2661 200 - 652ms
+[2025-06-19T01:30:27.603Z] 27868c38-4cdd-4e60-9cf6-402ec2531324 200 - 65ms
+[2025-06-19T01:30:27.643Z] 3acd485e-b578-42d6-b9fb-cdf405ea034e 200 - 135ms
+[2025-06-19T01:30:27.644Z] e6d17c1c-0695-47db-871e-d060405265ec 200 - 83ms
+[2025-06-19T01:30:27.650Z] ee007319-166b-4fb2-8fa8-a8ceb6fa6748 GET /@fs/C:/OOFSOL/node_modules/.vite/deps/clsx.js {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:30:27.658Z] ee007319-166b-4fb2-8fa8-a8ceb6fa6748 200 - 8ms
+[2025-06-19T01:30:27.669Z] 4ec40c58-54fb-48c8-b588-6d197938082e GET /@fs/C:/OOFSOL/node_modules/.vite/deps/tailwind-merge.js {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:30:27.692Z] 1d1a29f1-2017-45b5-a643-0024c5c103c3 GET /@fs/C:/OOFSOL/node_modules/.vite/deps/@radix-ui_react-toast.js {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:30:27.696Z] 8016a1d6-8f21-417b-b2f5-a552a532dbde GET /@fs/C:/OOFSOL/node_modules/.vite/deps/class-variance-authority.js {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:30:27.709Z] c575bf5f-c335-4884-af3a-ee540930d4f3 GET /@fs/C:/OOFSOL/node_modules/.vite/deps/chunk-SJ25FVX6.js {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:30:27.725Z] 04e4233d-0989-4dcb-83fd-056c23c44464 200 - 618ms
+[2025-06-19T01:30:27.754Z] 4ec40c58-54fb-48c8-b588-6d197938082e 200 - 85ms
+[2025-06-19T01:30:27.770Z] 8016a1d6-8f21-417b-b2f5-a552a532dbde 200 - 74ms
+[2025-06-19T01:30:27.774Z] d23239cb-9c95-4321-bf7e-b247c581113b GET /@fs/C:/OOFSOL/node_modules/.vite/deps/chunk-LWBOKLM5.js {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:30:27.918Z] 1d1a29f1-2017-45b5-a643-0024c5c103c3 200 - 226ms
+[2025-06-19T01:30:28.043Z] a4f78a10-c921-4030-a744-12ee9a55e573 200 - 551ms
+[2025-06-19T01:30:28.077Z] bf9fd0e5-a2a4-4789-a962-acd10341e1b2 GET /@fs/C:/OOFSOL/node_modules/.vite/deps/chunk-U3D62SZL.js {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:30:28.123Z] a6349ba9-f894-4acc-b7a8-878765b909bf GET /@fs/C:/OOFSOL/node_modules/.vite/deps/chunk-PQVMZH32.js {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:30:28.145Z] cf27e4a0-b8d1-4038-9850-81e5b556b59a GET /@fs/C:/OOFSOL/node_modules/.vite/deps/chunk-TUAUAKXB.js {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:30:28.163Z] cf27e4a0-b8d1-4038-9850-81e5b556b59a 200 - 18ms
+[2025-06-19T01:30:28.172Z] c575bf5f-c335-4884-af3a-ee540930d4f3 200 - 463ms
+[2025-06-19T01:30:28.184Z] d23239cb-9c95-4321-bf7e-b247c581113b 200 - 410ms
+[2025-06-19T01:30:28.207Z] 1607ccbf-7954-493b-bf7a-b34609ab7470 GET /@fs/C:/OOFSOL/node_modules/.vite/deps/chunk-SL37WC3A.js {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:30:28.253Z] fcdb00b3-f65d-42c1-bcc4-ef7db008b90f GET /@fs/C:/OOFSOL/node_modules/.vite/deps/chunk-BDOG6NI5.js {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:30:28.285Z] 1a577d5c-eaf7-4c35-843a-ac066e0ad271 GET /@fs/C:/OOFSOL/node_modules/.vite/deps/chunk-DIFDMMXX.js {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:30:28.290Z] 1a577d5c-eaf7-4c35-843a-ac066e0ad271 200 - 5ms
+[2025-06-19T01:30:28.297Z] e2044e1c-97f9-48c5-b09e-9b77f1a21760 GET /@fs/C:/OOFSOL/node_modules/.vite/deps/chunk-XOUBXFGS.js {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:30:28.309Z] bf9fd0e5-a2a4-4789-a962-acd10341e1b2 200 - 232ms
+[2025-06-19T01:30:28.320Z] a6349ba9-f894-4acc-b7a8-878765b909bf 200 - 197ms
+[2025-06-19T01:30:28.323Z] 91fe34b6-abcb-4ab6-a699-29b5251a844c GET /@fs/C:/OOFSOL/node_modules/.vite/deps/chunk-YJ4I7EP3.js {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:30:28.342Z] 78951ad6-fc0a-42f1-a0a0-cb98b0472b59 GET /@fs/C:/OOFSOL/node_modules/.vite/deps/chunk-K5NAPJIX.js {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:30:28.351Z] 75e76424-bc04-40eb-a743-3f6a577d6a19 GET /@fs/C:/OOFSOL/node_modules/.vite/deps/@radix-ui_react-slot.js {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:30:28.389Z] 75e76424-bc04-40eb-a743-3f6a577d6a19 200 - 38ms
+[2025-06-19T01:30:28.399Z] fcdb00b3-f65d-42c1-bcc4-ef7db008b90f 200 - 146ms
+[2025-06-19T01:30:28.419Z] 1607ccbf-7954-493b-bf7a-b34609ab7470 200 - 212ms
+[2025-06-19T01:30:28.424Z] e2044e1c-97f9-48c5-b09e-9b77f1a21760 200 - 127ms
+[2025-06-19T01:30:28.428Z] 8b15bc15-caa5-44ef-ad63-49c5d4867bf4 GET /@fs/C:/OOFSOL/node_modules/.vite/deps/@solana_web3__js.js {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:30:28.438Z] 9e448611-6ed4-49e0-b59d-4bf9f4c49439 GET /@fs/C:/OOFSOL/node_modules/.vite/deps/@solana_spl-token.js {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:30:28.445Z] 22124cb3-8119-4f51-b70c-2a0789709abf GET /@fs/C:/OOFSOL/node_modules/.vite/deps/chunk-4AFBZRUU.js {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:30:28.459Z] 91fe34b6-abcb-4ab6-a699-29b5251a844c 200 - 136ms
+[2025-06-19T01:30:28.463Z] 78951ad6-fc0a-42f1-a0a0-cb98b0472b59 200 - 121ms
+[2025-06-19T01:30:28.470Z] ad082452-3852-498d-8155-466120caf39a GET /src/components/ui/dialog.tsx {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:30:28.474Z] ba3b5ab4-c870-476d-b5a7-a61dc3b278d0 GET /@fs/C:/OOFSOL/node_modules/.vite/deps/@radix-ui_react-label.js {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:30:28.487Z] bdc14980-2046-45f2-ad8e-082a17fe1361 GET /@fs/C:/OOFSOL/node_modules/.vite/deps/@radix-ui_react-select.js {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:30:28.521Z] 8b15bc15-caa5-44ef-ad63-49c5d4867bf4 200 - 93ms
+[2025-06-19T01:30:28.552Z] 22124cb3-8119-4f51-b70c-2a0789709abf 200 - 107ms
+[2025-06-19T01:30:28.595Z] ae787427-ba94-4a45-91bb-9096b36c1f3e GET /@fs/C:/OOFSOL/node_modules/.vite/deps/@radix-ui_react-progress.js {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:30:28.669Z] 9e448611-6ed4-49e0-b59d-4bf9f4c49439 200 - 231ms
+[2025-06-19T01:30:28.678Z] ad082452-3852-498d-8155-466120caf39a 200 - 208ms
+[2025-06-19T01:30:28.691Z] ba3b5ab4-c870-476d-b5a7-a61dc3b278d0 200 - 217ms
+[2025-06-19T01:30:28.724Z] bdc14980-2046-45f2-ad8e-082a17fe1361 200 - 237ms
+[2025-06-19T01:30:28.729Z] b5b84143-6076-4edd-b807-c1b630dd5451 GET /@fs/C:/OOFSOL/node_modules/.vite/deps/@radix-ui_react-tabs.js {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:30:28.735Z] d161e29f-9038-486e-a1c4-28f934ab56f9 GET /@fs/C:/OOFSOL/node_modules/.vite/deps/@radix-ui_react-avatar.js {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:30:28.739Z] c7f1293b-f50d-4050-ac79-64e7a20048ad GET /@fs/C:/OOFSOL/node_modules/.vite/deps/@radix-ui_react-switch.js {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:30:28.743Z] 1652a4b8-3628-4efd-99a4-c2abac4c35ef GET /@fs/C:/OOFSOL/node_modules/.vite/deps/chunk-U7P2NEEE.js {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:30:28.779Z] 1652a4b8-3628-4efd-99a4-c2abac4c35ef 200 - 36ms
+[2025-06-19T01:30:28.790Z] ae787427-ba94-4a45-91bb-9096b36c1f3e 200 - 195ms
+[2025-06-19T01:30:28.795Z] d161e29f-9038-486e-a1c4-28f934ab56f9 200 - 60ms
+[2025-06-19T01:30:28.802Z] b5b84143-6076-4edd-b807-c1b630dd5451 200 - 73ms
+[2025-06-19T01:30:28.805Z] c7f1293b-f50d-4050-ac79-64e7a20048ad 200 - 66ms
+[2025-06-19T01:30:28.839Z] c26d3b35-404c-416e-9b4a-1c845178e223 GET /@fs/C:/OOFSOL/node_modules/.vite/deps/chunk-BGVHOPFI.js {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:30:28.843Z] f3db903c-aa16-4323-b25e-601651ace690 GET /@fs/C:/OOFSOL/node_modules/.vite/deps/@radix-ui_react-dialog.js {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:30:28.848Z] 5c7a15fd-7047-45a3-973b-4c70e6cbe4c7 GET /@fs/C:/OOFSOL/node_modules/.vite/deps/chunk-INF4E6IS.js {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:30:28.855Z] c26d3b35-404c-416e-9b4a-1c845178e223 200 - 16ms
+[2025-06-19T01:30:28.857Z] f3db903c-aa16-4323-b25e-601651ace690 200 - 14ms
+[2025-06-19T01:30:28.861Z] 5c7a15fd-7047-45a3-973b-4c70e6cbe4c7 200 - 13ms
+[2025-06-19T01:30:28.881Z] 370e11b0-f97b-47d9-8c5b-6381b1892230 GET /@fs/C:/OOFSOL/node_modules/.vite/deps/chunk-3MC66YHI.js {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:30:28.887Z] 370e11b0-f97b-47d9-8c5b-6381b1892230 200 - 6ms
+[2025-06-19T01:30:28.888Z] f4a6de10-91f0-4c67-b39d-38c1a17c3d5c GET /@fs/C:/OOFSOL/node_modules/.vite/deps/chunk-EOLSW7PA.js {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:30:28.891Z] f4a6de10-91f0-4c67-b39d-38c1a17c3d5c 200 - 3ms
+[2025-06-19T01:30:29.831Z] a575a6eb-49e2-42e7-9001-aec596183f33 GET /favicon.ico {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:30:29.863Z] a575a6eb-49e2-42e7-9001-aec596183f33 200 - 32ms
+[2025-06-19T01:30:30.241Z] 2330080e-f7d7-4b6b-b48e-cb96d0ce0521 GET /api/token-ads/current {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:30:30.600Z] ceda4fd0-090b-4aff-b685-559dfc3d38f3 GET /@fs/C:/OOFSOL/node_modules/.vite/deps/thumbmark.esm-NSFA2BR4.js {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:30:30.638Z] ceda4fd0-090b-4aff-b685-559dfc3d38f3 200 - 38ms
+[2025-06-19T01:30:31.034Z] d60b34e7-e02f-4ff0-bd70-21dc70c39832 GET /favicon.ico {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:30:31.045Z] d60b34e7-e02f-4ff0-bd70-21dc70c39832 200 - 11ms
+⚠️ Windows WebSocket compatibility issue detected and handled
+💡 This is a known issue with Neon serverless driver on Windows
+🔄 Continuing operation...
+[2025-06-19T01:34:27.126Z] a1a3e07e-e2aa-4eae-b538-60a1553398af GET /api/oof-moments/public {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+🚨 Error: Route /api/oof-moments/public not found - GET /api/oof-moments/public
+Error: Route /api/oof-moments/public not found
+    at createError (C:\OOFSOL\server\middleware\errorHandler.ts:25:10)
+    at notFound (C:\OOFSOL\server\middleware\errorHandler.ts:35:17)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at param (C:\OOFSOL\node_modules\express\lib\router\index.js:365:14)
+    at param (C:\OOFSOL\node_modules\express\lib\router\index.js:376:14)
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:421:3)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:646:15
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:265:14)
+    at Function.handle (C:\OOFSOL\node_modules\express\lib\router\index.js:175:3)
+    at router (C:\OOFSOL\node_modules\express\lib\router\index.js:47:12)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:346:12)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at <anonymous> (C:\OOFSOL\server\index.ts:125:3)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:346:12)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at file:///C:/OOFSOL/node_modules/express-rate-limit/dist/index.mjs:794:7
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///C:/OOFSOL/node_modules/express-rate-limit/dist/index.mjs:676:5
+🚨 Error: HTTP 500 - GET /api/oof-moments/public
+[2025-06-19T01:34:27.189Z] 17e8b7c4-31c8-44c2-b8be-6b6cff07ea06 GET /favicon.ico {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:34:27.197Z] a1a3e07e-e2aa-4eae-b538-60a1553398af 500 - 71ms
+🚨 GET /api/oof-moments/public 500 73ms 127.0.0.1 {
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined,
+  query: {}
+}
+[2025-06-19T01:34:27.228Z] 17e8b7c4-31c8-44c2-b8be-6b6cff07ea06 200 - 40ms
+[2025-06-19T01:34:32.229Z] 4d2096df-20b4-4497-a254-135e4ad79bca GET /api/oof-moments/public {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+🚨 Error: Route /api/oof-moments/public not found - GET /api/oof-moments/public
+Error: Route /api/oof-moments/public not found
+    at createError (C:\OOFSOL\server\middleware\errorHandler.ts:25:10)
+    at notFound (C:\OOFSOL\server\middleware\errorHandler.ts:35:17)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at param (C:\OOFSOL\node_modules\express\lib\router\index.js:365:14)
+    at param (C:\OOFSOL\node_modules\express\lib\router\index.js:376:14)
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:421:3)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:646:15
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:265:14)
+    at Function.handle (C:\OOFSOL\node_modules\express\lib\router\index.js:175:3)
+    at router (C:\OOFSOL\node_modules\express\lib\router\index.js:47:12)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:346:12)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at <anonymous> (C:\OOFSOL\server\index.ts:125:3)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:346:12)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at file:///C:/OOFSOL/node_modules/express-rate-limit/dist/index.mjs:794:7
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///C:/OOFSOL/node_modules/express-rate-limit/dist/index.mjs:676:5
+🚨 Error: HTTP 500 - GET /api/oof-moments/public
+[2025-06-19T01:34:32.263Z] 4d2096df-20b4-4497-a254-135e4ad79bca 500 - 34ms
+🚨 GET /api/oof-moments/public 500 32ms 127.0.0.1 {
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined,
+  query: {}
+}
+[2025-06-19T01:34:37.588Z] bf5bd415-09df-4856-a69c-748dee12f587 GET /api/oof-moments/public {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+🚨 Error: Route /api/oof-moments/public not found - GET /api/oof-moments/public
+Error: Route /api/oof-moments/public not found
+    at createError (C:\OOFSOL\server\middleware\errorHandler.ts:25:10)
+    at notFound (C:\OOFSOL\server\middleware\errorHandler.ts:35:17)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at param (C:\OOFSOL\node_modules\express\lib\router\index.js:365:14)
+    at param (C:\OOFSOL\node_modules\express\lib\router\index.js:376:14)
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:421:3)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:646:15
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:265:14)
+    at Function.handle (C:\OOFSOL\node_modules\express\lib\router\index.js:175:3)
+    at router (C:\OOFSOL\node_modules\express\lib\router\index.js:47:12)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:346:12)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at <anonymous> (C:\OOFSOL\server\index.ts:125:3)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:346:12)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at file:///C:/OOFSOL/node_modules/express-rate-limit/dist/index.mjs:794:7
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///C:/OOFSOL/node_modules/express-rate-limit/dist/index.mjs:676:5
+🚨 Error: HTTP 500 - GET /api/oof-moments/public
+[2025-06-19T01:34:37.625Z] bf5bd415-09df-4856-a69c-748dee12f587 500 - 37ms
+🚨 GET /api/oof-moments/public 500 29ms 127.0.0.1 {
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined,
+  query: {}
+}
+[2025-06-19T01:34:41.716Z] 7750c788-74b4-4df5-8da4-b90f0fcba825 POST /api/ai/analyze-wallet {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: { walletAddress: '9nR99dnbB1xEdGxfHNdRHmjyHJoZsWzZqNjgop3CzvnM' }
+}
+🚨 Error: Route /api/ai/analyze-wallet not found - POST /api/ai/analyze-wallet
+Error: Route /api/ai/analyze-wallet not found
+    at createError (C:\OOFSOL\server\middleware\errorHandler.ts:25:10)
+    at notFound (C:\OOFSOL\server\middleware\errorHandler.ts:35:17)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at param (C:\OOFSOL\node_modules\express\lib\router\index.js:365:14)
+    at param (C:\OOFSOL\node_modules\express\lib\router\index.js:376:14)
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:421:3)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:646:15
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:265:14)
+    at Function.handle (C:\OOFSOL\node_modules\express\lib\router\index.js:175:3)
+    at router (C:\OOFSOL\node_modules\express\lib\router\index.js:47:12)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:346:12)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at <anonymous> (C:\OOFSOL\server\index.ts:125:3)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:346:12)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at file:///C:/OOFSOL/node_modules/express-rate-limit/dist/index.mjs:794:7
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///C:/OOFSOL/node_modules/express-rate-limit/dist/index.mjs:676:5
+🚨 Error: HTTP 500 - POST /api/ai/analyze-wallet
+[2025-06-19T01:34:41.733Z] 7750c788-74b4-4df5-8da4-b90f0fcba825 500 - 17ms
+🚨 POST /api/ai/analyze-wallet 500 14ms 127.0.0.1 {
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: { walletAddress: '9nR99dnbB1xEdGxfHNdRHmjyHJoZsWzZqNjgop3CzvnM' },
+  query: {}
+}
+[2025-06-19T01:34:43.186Z] 2782b58a-ce01-47df-8d2f-e364edd7ba71 GET /api/oof-moments/public {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+🚨 Error: Route /api/oof-moments/public not found - GET /api/oof-moments/public
+Error: Route /api/oof-moments/public not found
+    at createError (C:\OOFSOL\server\middleware\errorHandler.ts:25:10)
+    at notFound (C:\OOFSOL\server\middleware\errorHandler.ts:35:17)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at param (C:\OOFSOL\node_modules\express\lib\router\index.js:365:14)
+    at param (C:\OOFSOL\node_modules\express\lib\router\index.js:376:14)
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:421:3)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:646:15
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:265:14)
+    at Function.handle (C:\OOFSOL\node_modules\express\lib\router\index.js:175:3)
+    at router (C:\OOFSOL\node_modules\express\lib\router\index.js:47:12)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:346:12)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at <anonymous> (C:\OOFSOL\server\index.ts:125:3)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:346:12)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at file:///C:/OOFSOL/node_modules/express-rate-limit/dist/index.mjs:794:7
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///C:/OOFSOL/node_modules/express-rate-limit/dist/index.mjs:676:5
+🚨 Error: HTTP 500 - GET /api/oof-moments/public
+[2025-06-19T01:34:43.308Z] 2782b58a-ce01-47df-8d2f-e364edd7ba71 500 - 122ms
+🚨 GET /api/oof-moments/public 500 128ms 127.0.0.1 {
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined,
+  query: {}
+}
+Running WebSocket cleanup...
+WebSocket cleanup completed. Active connections: 0
+[2025-06-19T01:34:48.677Z] 3e1ec8a4-a647-44de-85de-018e36031597 GET /api/oof-moments/public {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+🚨 Error: Route /api/oof-moments/public not found - GET /api/oof-moments/public
+Error: Route /api/oof-moments/public not found
+    at createError (C:\OOFSOL\server\middleware\errorHandler.ts:25:10)
+    at notFound (C:\OOFSOL\server\middleware\errorHandler.ts:35:17)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at param (C:\OOFSOL\node_modules\express\lib\router\index.js:365:14)
+    at param (C:\OOFSOL\node_modules\express\lib\router\index.js:376:14)
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:421:3)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:646:15
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:265:14)
+    at Function.handle (C:\OOFSOL\node_modules\express\lib\router\index.js:175:3)
+    at router (C:\OOFSOL\node_modules\express\lib\router\index.js:47:12)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:346:12)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at <anonymous> (C:\OOFSOL\server\index.ts:125:3)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:346:12)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at file:///C:/OOFSOL/node_modules/express-rate-limit/dist/index.mjs:794:7
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///C:/OOFSOL/node_modules/express-rate-limit/dist/index.mjs:676:5
+🚨 Error: HTTP 500 - GET /api/oof-moments/public
+[2025-06-19T01:34:48.689Z] 3e1ec8a4-a647-44de-85de-018e36031597 500 - 12ms
+🚨 GET /api/oof-moments/public 500 11ms 127.0.0.1 {
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined,
+  query: {}
+}
+[2025-06-19T01:34:53.714Z] fd44fc46-f281-4454-8d16-2d9e492aa2c0 GET /api/oof-moments/public {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+🚨 Error: Route /api/oof-moments/public not found - GET /api/oof-moments/public
+Error: Route /api/oof-moments/public not found
+    at createError (C:\OOFSOL\server\middleware\errorHandler.ts:25:10)
+    at notFound (C:\OOFSOL\server\middleware\errorHandler.ts:35:17)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at param (C:\OOFSOL\node_modules\express\lib\router\index.js:365:14)
+    at param (C:\OOFSOL\node_modules\express\lib\router\index.js:376:14)
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:421:3)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:646:15
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:265:14)
+    at Function.handle (C:\OOFSOL\node_modules\express\lib\router\index.js:175:3)
+    at router (C:\OOFSOL\node_modules\express\lib\router\index.js:47:12)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:346:12)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at <anonymous> (C:\OOFSOL\server\index.ts:125:3)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:346:12)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at file:///C:/OOFSOL/node_modules/express-rate-limit/dist/index.mjs:794:7
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///C:/OOFSOL/node_modules/express-rate-limit/dist/index.mjs:676:5
+🚨 Error: HTTP 500 - GET /api/oof-moments/public
+[2025-06-19T01:34:53.734Z] fd44fc46-f281-4454-8d16-2d9e492aa2c0 500 - 21ms
+🚨 GET /api/oof-moments/public 500 19ms 127.0.0.1 {
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined,
+  query: {}
+}
+[2025-06-19T01:34:57.987Z] 2472bd10-b69a-4d41-b9a3-8185e273019e GET /.well-known/appspecific/com.chrome.devtools.json {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:34:58.021Z] 2472bd10-b69a-4d41-b9a3-8185e273019e 200 - 34ms
+[2025-06-19T01:34:59.565Z] 7e58ffce-e5a8-4fd1-b0af-8a240c95fb39 GET /api/oof-moments/public {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+🚨 Error: Route /api/oof-moments/public not found - GET /api/oof-moments/public
+Error: Route /api/oof-moments/public not found
+    at createError (C:\OOFSOL\server\middleware\errorHandler.ts:25:10)
+    at notFound (C:\OOFSOL\server\middleware\errorHandler.ts:35:17)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at param (C:\OOFSOL\node_modules\express\lib\router\index.js:365:14)
+    at param (C:\OOFSOL\node_modules\express\lib\router\index.js:376:14)
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:421:3)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:646:15
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:265:14)
+    at Function.handle (C:\OOFSOL\node_modules\express\lib\router\index.js:175:3)
+    at router (C:\OOFSOL\node_modules\express\lib\router\index.js:47:12)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:346:12)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at <anonymous> (C:\OOFSOL\server\index.ts:125:3)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:346:12)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at file:///C:/OOFSOL/node_modules/express-rate-limit/dist/index.mjs:794:7
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///C:/OOFSOL/node_modules/express-rate-limit/dist/index.mjs:676:5
+🚨 Error: HTTP 500 - GET /api/oof-moments/public
+[2025-06-19T01:34:59.594Z] 7e58ffce-e5a8-4fd1-b0af-8a240c95fb39 500 - 29ms
+🚨 GET /api/oof-moments/public 500 28ms 127.0.0.1 {
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined,
+  query: {}
+}
+[2025-06-19T01:34:59.673Z] d97afee1-f56a-4088-95b2-1090f2456011 GET /index.iife.min.js.map {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:34:59.722Z] d97afee1-f56a-4088-95b2-1090f2456011 200 - 49ms
+[2025-06-19T01:35:04.932Z] 47be32d9-6138-41cf-b12c-d97ce1263cd0 GET /api/oof-moments/public {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+🚨 Error: Route /api/oof-moments/public not found - GET /api/oof-moments/public
+Error: Route /api/oof-moments/public not found
+    at createError (C:\OOFSOL\server\middleware\errorHandler.ts:25:10)
+    at notFound (C:\OOFSOL\server\middleware\errorHandler.ts:35:17)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at param (C:\OOFSOL\node_modules\express\lib\router\index.js:365:14)
+    at param (C:\OOFSOL\node_modules\express\lib\router\index.js:376:14)
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:421:3)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:646:15
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:265:14)
+    at Function.handle (C:\OOFSOL\node_modules\express\lib\router\index.js:175:3)
+    at router (C:\OOFSOL\node_modules\express\lib\router\index.js:47:12)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:346:12)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at <anonymous> (C:\OOFSOL\server\index.ts:125:3)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:346:12)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at file:///C:/OOFSOL/node_modules/express-rate-limit/dist/index.mjs:794:7
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///C:/OOFSOL/node_modules/express-rate-limit/dist/index.mjs:676:5
+🚨 Error: HTTP 500 - GET /api/oof-moments/public
+[2025-06-19T01:35:04.961Z] 47be32d9-6138-41cf-b12c-d97ce1263cd0 500 - 29ms
+🚨 GET /api/oof-moments/public 500 26ms 127.0.0.1 {
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined,
+  query: {}
+}
+[2025-06-19T01:35:10.021Z] f2b31d1c-cf53-4303-adae-518d5e143f02 GET /api/oof-moments/public {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+🚨 Error: Route /api/oof-moments/public not found - GET /api/oof-moments/public
+Error: Route /api/oof-moments/public not found
+    at createError (C:\OOFSOL\server\middleware\errorHandler.ts:25:10)
+    at notFound (C:\OOFSOL\server\middleware\errorHandler.ts:35:17)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at param (C:\OOFSOL\node_modules\express\lib\router\index.js:365:14)
+    at param (C:\OOFSOL\node_modules\express\lib\router\index.js:376:14)
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:421:3)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:646:15
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:265:14)
+    at Function.handle (C:\OOFSOL\node_modules\express\lib\router\index.js:175:3)
+    at router (C:\OOFSOL\node_modules\express\lib\router\index.js:47:12)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:346:12)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at <anonymous> (C:\OOFSOL\server\index.ts:125:3)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:346:12)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at file:///C:/OOFSOL/node_modules/express-rate-limit/dist/index.mjs:794:7
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///C:/OOFSOL/node_modules/express-rate-limit/dist/index.mjs:676:5
+🚨 Error: HTTP 500 - GET /api/oof-moments/public
+[2025-06-19T01:35:10.039Z] f2b31d1c-cf53-4303-adae-518d5e143f02 500 - 18ms
+🚨 GET /api/oof-moments/public 500 11ms 127.0.0.1 {
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined,
+  query: {}
+}
+[2025-06-19T01:35:15.683Z] fdc1dfc6-fde0-4a84-88fa-20a77bc6883a GET /api/oof-moments/public {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+🚨 Error: Route /api/oof-moments/public not found - GET /api/oof-moments/public
+Error: Route /api/oof-moments/public not found
+    at createError (C:\OOFSOL\server\middleware\errorHandler.ts:25:10)
+    at notFound (C:\OOFSOL\server\middleware\errorHandler.ts:35:17)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at param (C:\OOFSOL\node_modules\express\lib\router\index.js:365:14)
+    at param (C:\OOFSOL\node_modules\express\lib\router\index.js:376:14)
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:421:3)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:646:15
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:265:14)
+    at Function.handle (C:\OOFSOL\node_modules\express\lib\router\index.js:175:3)
+    at router (C:\OOFSOL\node_modules\express\lib\router\index.js:47:12)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:346:12)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at <anonymous> (C:\OOFSOL\server\index.ts:125:3)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:346:12)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at file:///C:/OOFSOL/node_modules/express-rate-limit/dist/index.mjs:794:7
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///C:/OOFSOL/node_modules/express-rate-limit/dist/index.mjs:676:5
+🚨 Error: HTTP 500 - GET /api/oof-moments/public
+[2025-06-19T01:35:15.731Z] fdc1dfc6-fde0-4a84-88fa-20a77bc6883a 500 - 48ms
+🚨 GET /api/oof-moments/public 500 33ms 127.0.0.1 {
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined,
+  query: {}
+}
+[2025-06-19T01:35:21.075Z] 25e88462-17b7-4b9e-a7f3-dd203d421846 GET /api/oof-moments/public {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+🚨 Error: Route /api/oof-moments/public not found - GET /api/oof-moments/public
+Error: Route /api/oof-moments/public not found
+    at createError (C:\OOFSOL\server\middleware\errorHandler.ts:25:10)
+    at notFound (C:\OOFSOL\server\middleware\errorHandler.ts:35:17)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at param (C:\OOFSOL\node_modules\express\lib\router\index.js:365:14)
+    at param (C:\OOFSOL\node_modules\express\lib\router\index.js:376:14)
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:421:3)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:646:15
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:265:14)
+    at Function.handle (C:\OOFSOL\node_modules\express\lib\router\index.js:175:3)
+    at router (C:\OOFSOL\node_modules\express\lib\router\index.js:47:12)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:346:12)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at <anonymous> (C:\OOFSOL\server\index.ts:125:3)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:346:12)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at file:///C:/OOFSOL/node_modules/express-rate-limit/dist/index.mjs:794:7
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///C:/OOFSOL/node_modules/express-rate-limit/dist/index.mjs:676:5
+🚨 Error: HTTP 500 - GET /api/oof-moments/public
+[2025-06-19T01:35:21.091Z] 25e88462-17b7-4b9e-a7f3-dd203d421846 500 - 16ms
+🚨 GET /api/oof-moments/public 500 16ms 127.0.0.1 {
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined,
+  query: {}
+}
+[2025-06-19T01:35:26.114Z] 2dc880d9-649d-47c3-a281-3ad65906fcfc GET /api/oof-moments/public {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+🚨 Error: Route /api/oof-moments/public not found - GET /api/oof-moments/public
+Error: Route /api/oof-moments/public not found
+    at createError (C:\OOFSOL\server\middleware\errorHandler.ts:25:10)
+    at notFound (C:\OOFSOL\server\middleware\errorHandler.ts:35:17)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at param (C:\OOFSOL\node_modules\express\lib\router\index.js:365:14)
+    at param (C:\OOFSOL\node_modules\express\lib\router\index.js:376:14)
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:421:3)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:646:15
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:265:14)
+    at Function.handle (C:\OOFSOL\node_modules\express\lib\router\index.js:175:3)
+    at router (C:\OOFSOL\node_modules\express\lib\router\index.js:47:12)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:346:12)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at <anonymous> (C:\OOFSOL\server\index.ts:125:3)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:346:12)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at file:///C:/OOFSOL/node_modules/express-rate-limit/dist/index.mjs:794:7
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///C:/OOFSOL/node_modules/express-rate-limit/dist/index.mjs:676:5
+🚨 Error: HTTP 500 - GET /api/oof-moments/public
+[2025-06-19T01:35:26.124Z] 2dc880d9-649d-47c3-a281-3ad65906fcfc 500 - 10ms
+🚨 GET /api/oof-moments/public 500 16ms 127.0.0.1 {
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined,
+  query: {}
+}
+[2025-06-19T01:35:31.512Z] 5c2c1c9b-2cf2-47de-8716-64677b4a0451 GET /api/oof-moments/public {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+🚨 Error: Route /api/oof-moments/public not found - GET /api/oof-moments/public
+Error: Route /api/oof-moments/public not found
+    at createError (C:\OOFSOL\server\middleware\errorHandler.ts:25:10)
+    at notFound (C:\OOFSOL\server\middleware\errorHandler.ts:35:17)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at param (C:\OOFSOL\node_modules\express\lib\router\index.js:365:14)
+    at param (C:\OOFSOL\node_modules\express\lib\router\index.js:376:14)
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:421:3)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:646:15
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:265:14)
+    at Function.handle (C:\OOFSOL\node_modules\express\lib\router\index.js:175:3)
+    at router (C:\OOFSOL\node_modules\express\lib\router\index.js:47:12)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:346:12)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at <anonymous> (C:\OOFSOL\server\index.ts:125:3)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:346:12)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at file:///C:/OOFSOL/node_modules/express-rate-limit/dist/index.mjs:794:7
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///C:/OOFSOL/node_modules/express-rate-limit/dist/index.mjs:676:5
+🚨 Error: HTTP 500 - GET /api/oof-moments/public
+[2025-06-19T01:35:31.545Z] 5c2c1c9b-2cf2-47de-8716-64677b4a0451 500 - 33ms
+🚨 GET /api/oof-moments/public 500 23ms 127.0.0.1 {
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined,
+  query: {}
+}
+[2025-06-19T01:35:36.600Z] 36043d79-cfc9-44a8-bd3c-c96e91dd1d17 GET /api/oof-moments/public {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+🚨 Error: Route /api/oof-moments/public not found - GET /api/oof-moments/public
+Error: Route /api/oof-moments/public not found
+    at createError (C:\OOFSOL\server\middleware\errorHandler.ts:25:10)
+    at notFound (C:\OOFSOL\server\middleware\errorHandler.ts:35:17)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at param (C:\OOFSOL\node_modules\express\lib\router\index.js:365:14)
+    at param (C:\OOFSOL\node_modules\express\lib\router\index.js:376:14)
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:421:3)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:646:15
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:265:14)
+    at Function.handle (C:\OOFSOL\node_modules\express\lib\router\index.js:175:3)
+    at router (C:\OOFSOL\node_modules\express\lib\router\index.js:47:12)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:346:12)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at <anonymous> (C:\OOFSOL\server\index.ts:125:3)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:346:12)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at file:///C:/OOFSOL/node_modules/express-rate-limit/dist/index.mjs:794:7
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///C:/OOFSOL/node_modules/express-rate-limit/dist/index.mjs:676:5
+🚨 Error: HTTP 500 - GET /api/oof-moments/public
+[2025-06-19T01:35:36.643Z] 36043d79-cfc9-44a8-bd3c-c96e91dd1d17 500 - 43ms
+🚨 GET /api/oof-moments/public 500 21ms 127.0.0.1 {
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined,
+  query: {}
+}
+[2025-06-19T01:35:41.977Z] 8dcba392-8124-4791-b649-52a6f5b25207 GET /api/oof-moments/public {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+🚨 Error: Route /api/oof-moments/public not found - GET /api/oof-moments/public
+Error: Route /api/oof-moments/public not found
+    at createError (C:\OOFSOL\server\middleware\errorHandler.ts:25:10)
+    at notFound (C:\OOFSOL\server\middleware\errorHandler.ts:35:17)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at param (C:\OOFSOL\node_modules\express\lib\router\index.js:365:14)
+    at param (C:\OOFSOL\node_modules\express\lib\router\index.js:376:14)
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:421:3)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:646:15
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:265:14)
+    at Function.handle (C:\OOFSOL\node_modules\express\lib\router\index.js:175:3)
+    at router (C:\OOFSOL\node_modules\express\lib\router\index.js:47:12)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:346:12)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at <anonymous> (C:\OOFSOL\server\index.ts:125:3)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:346:12)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at file:///C:/OOFSOL/node_modules/express-rate-limit/dist/index.mjs:794:7
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///C:/OOFSOL/node_modules/express-rate-limit/dist/index.mjs:676:5
+🚨 Error: HTTP 500 - GET /api/oof-moments/public
+[2025-06-19T01:35:42.021Z] 8dcba392-8124-4791-b649-52a6f5b25207 500 - 44ms
+🚨 GET /api/oof-moments/public 500 32ms 127.0.0.1 {
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined,
+  query: {}
+}
+📊 Received SIGINT, starting graceful shutdown...
+📊 Final Stats - Uptime: 383s, Memory: 128MB
+📊 Total Requests: 140
+📊 Total Errors: 32
+PS C:\OOFSOL> 
+
+
+ ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:30:27.463Z] cc2af5d2-0502-4cd3-a98a-b178609dc184 200 - 120ms
+[2025-06-19T01:30:27.492Z] a4f78a10-c921-4030-a744-12ee9a55e573 GET /@fs/C:/OOFSOL/node_modules/.vite/deps/framer-motion.js {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:30:27.510Z] 3acd485e-b578-42d6-b9fb-cdf405ea034e GET /src/components/ZoraOneClickMinter.tsx {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:30:27.527Z] 16c305ed-2ef8-4fb4-ac0c-1cff8caa0e3c 200 - 106ms
+[2025-06-19T01:30:27.539Z] 27868c38-4cdd-4e60-9cf6-402ec2531324 GET /src/lib/solana.ts {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:30:27.561Z] e6d17c1c-0695-47db-871e-d060405265ec GET /src/components/ui/switch.tsx {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:30:27.593Z] fd59f203-4f98-49f8-9833-15cf1cbc2661 200 - 652ms
+[2025-06-19T01:30:27.603Z] 27868c38-4cdd-4e60-9cf6-402ec2531324 200 - 65ms
+[2025-06-19T01:30:27.643Z] 3acd485e-b578-42d6-b9fb-cdf405ea034e 200 - 135ms
+[2025-06-19T01:30:27.644Z] e6d17c1c-0695-47db-871e-d060405265ec 200 - 83ms
+[2025-06-19T01:30:27.650Z] ee007319-166b-4fb2-8fa8-a8ceb6fa6748 GET /@fs/C:/OOFSOL/node_modules/.vite/deps/clsx.js {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:30:27.658Z] ee007319-166b-4fb2-8fa8-a8ceb6fa6748 200 - 8ms
+[2025-06-19T01:30:27.669Z] 4ec40c58-54fb-48c8-b588-6d197938082e GET /@fs/C:/OOFSOL/node_modules/.vite/deps/tailwind-merge.js {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:30:27.692Z] 1d1a29f1-2017-45b5-a643-0024c5c103c3 GET /@fs/C:/OOFSOL/node_modules/.vite/deps/@radix-ui_react-toast.js {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:30:27.696Z] 8016a1d6-8f21-417b-b2f5-a552a532dbde GET /@fs/C:/OOFSOL/node_modules/.vite/deps/class-variance-authority.js {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:30:27.709Z] c575bf5f-c335-4884-af3a-ee540930d4f3 GET /@fs/C:/OOFSOL/node_modules/.vite/deps/chunk-SJ25FVX6.js {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:30:27.725Z] 04e4233d-0989-4dcb-83fd-056c23c44464 200 - 618ms
+[2025-06-19T01:30:27.754Z] 4ec40c58-54fb-48c8-b588-6d197938082e 200 - 85ms
+[2025-06-19T01:30:27.770Z] 8016a1d6-8f21-417b-b2f5-a552a532dbde 200 - 74ms
+[2025-06-19T01:30:27.774Z] d23239cb-9c95-4321-bf7e-b247c581113b GET /@fs/C:/OOFSOL/node_modules/.vite/deps/chunk-LWBOKLM5.js {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:30:27.918Z] 1d1a29f1-2017-45b5-a643-0024c5c103c3 200 - 226ms
+[2025-06-19T01:30:28.043Z] a4f78a10-c921-4030-a744-12ee9a55e573 200 - 551ms
+[2025-06-19T01:30:28.077Z] bf9fd0e5-a2a4-4789-a962-acd10341e1b2 GET /@fs/C:/OOFSOL/node_modules/.vite/deps/chunk-U3D62SZL.js {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:30:28.123Z] a6349ba9-f894-4acc-b7a8-878765b909bf GET /@fs/C:/OOFSOL/node_modules/.vite/deps/chunk-PQVMZH32.js {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:30:28.145Z] cf27e4a0-b8d1-4038-9850-81e5b556b59a GET /@fs/C:/OOFSOL/node_modules/.vite/deps/chunk-TUAUAKXB.js {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:30:28.163Z] cf27e4a0-b8d1-4038-9850-81e5b556b59a 200 - 18ms
+[2025-06-19T01:30:28.172Z] c575bf5f-c335-4884-af3a-ee540930d4f3 200 - 463ms
+[2025-06-19T01:30:28.184Z] d23239cb-9c95-4321-bf7e-b247c581113b 200 - 410ms
+[2025-06-19T01:30:28.207Z] 1607ccbf-7954-493b-bf7a-b34609ab7470 GET /@fs/C:/OOFSOL/node_modules/.vite/deps/chunk-SL37WC3A.js {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:30:28.253Z] fcdb00b3-f65d-42c1-bcc4-ef7db008b90f GET /@fs/C:/OOFSOL/node_modules/.vite/deps/chunk-BDOG6NI5.js {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:30:28.285Z] 1a577d5c-eaf7-4c35-843a-ac066e0ad271 GET /@fs/C:/OOFSOL/node_modules/.vite/deps/chunk-DIFDMMXX.js {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:30:28.290Z] 1a577d5c-eaf7-4c35-843a-ac066e0ad271 200 - 5ms
+[2025-06-19T01:30:28.297Z] e2044e1c-97f9-48c5-b09e-9b77f1a21760 GET /@fs/C:/OOFSOL/node_modules/.vite/deps/chunk-XOUBXFGS.js {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:30:28.309Z] bf9fd0e5-a2a4-4789-a962-acd10341e1b2 200 - 232ms
+[2025-06-19T01:30:28.320Z] a6349ba9-f894-4acc-b7a8-878765b909bf 200 - 197ms
+[2025-06-19T01:30:28.323Z] 91fe34b6-abcb-4ab6-a699-29b5251a844c GET /@fs/C:/OOFSOL/node_modules/.vite/deps/chunk-YJ4I7EP3.js {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:30:28.342Z] 78951ad6-fc0a-42f1-a0a0-cb98b0472b59 GET /@fs/C:/OOFSOL/node_modules/.vite/deps/chunk-K5NAPJIX.js {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:30:28.351Z] 75e76424-bc04-40eb-a743-3f6a577d6a19 GET /@fs/C:/OOFSOL/node_modules/.vite/deps/@radix-ui_react-slot.js {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:30:28.389Z] 75e76424-bc04-40eb-a743-3f6a577d6a19 200 - 38ms
+[2025-06-19T01:30:28.399Z] fcdb00b3-f65d-42c1-bcc4-ef7db008b90f 200 - 146ms
+[2025-06-19T01:30:28.419Z] 1607ccbf-7954-493b-bf7a-b34609ab7470 200 - 212ms
+[2025-06-19T01:30:28.424Z] e2044e1c-97f9-48c5-b09e-9b77f1a21760 200 - 127ms
+[2025-06-19T01:30:28.428Z] 8b15bc15-caa5-44ef-ad63-49c5d4867bf4 GET /@fs/C:/OOFSOL/node_modules/.vite/deps/@solana_web3__js.js {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:30:28.438Z] 9e448611-6ed4-49e0-b59d-4bf9f4c49439 GET /@fs/C:/OOFSOL/node_modules/.vite/deps/@solana_spl-token.js {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:30:28.445Z] 22124cb3-8119-4f51-b70c-2a0789709abf GET /@fs/C:/OOFSOL/node_modules/.vite/deps/chunk-4AFBZRUU.js {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:30:28.459Z] 91fe34b6-abcb-4ab6-a699-29b5251a844c 200 - 136ms
+[2025-06-19T01:30:28.463Z] 78951ad6-fc0a-42f1-a0a0-cb98b0472b59 200 - 121ms
+[2025-06-19T01:30:28.470Z] ad082452-3852-498d-8155-466120caf39a GET /src/components/ui/dialog.tsx {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:30:28.474Z] ba3b5ab4-c870-476d-b5a7-a61dc3b278d0 GET /@fs/C:/OOFSOL/node_modules/.vite/deps/@radix-ui_react-label.js {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:30:28.487Z] bdc14980-2046-45f2-ad8e-082a17fe1361 GET /@fs/C:/OOFSOL/node_modules/.vite/deps/@radix-ui_react-select.js {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:30:28.521Z] 8b15bc15-caa5-44ef-ad63-49c5d4867bf4 200 - 93ms
+[2025-06-19T01:30:28.552Z] 22124cb3-8119-4f51-b70c-2a0789709abf 200 - 107ms
+[2025-06-19T01:30:28.595Z] ae787427-ba94-4a45-91bb-9096b36c1f3e GET /@fs/C:/OOFSOL/node_modules/.vite/deps/@radix-ui_react-progress.js {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:30:28.669Z] 9e448611-6ed4-49e0-b59d-4bf9f4c49439 200 - 231ms
+[2025-06-19T01:30:28.678Z] ad082452-3852-498d-8155-466120caf39a 200 - 208ms
+[2025-06-19T01:30:28.691Z] ba3b5ab4-c870-476d-b5a7-a61dc3b278d0 200 - 217ms
+[2025-06-19T01:30:28.724Z] bdc14980-2046-45f2-ad8e-082a17fe1361 200 - 237ms
+[2025-06-19T01:30:28.729Z] b5b84143-6076-4edd-b807-c1b630dd5451 GET /@fs/C:/OOFSOL/node_modules/.vite/deps/@radix-ui_react-tabs.js {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:30:28.735Z] d161e29f-9038-486e-a1c4-28f934ab56f9 GET /@fs/C:/OOFSOL/node_modules/.vite/deps/@radix-ui_react-avatar.js {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:30:28.739Z] c7f1293b-f50d-4050-ac79-64e7a20048ad GET /@fs/C:/OOFSOL/node_modules/.vite/deps/@radix-ui_react-switch.js {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:30:28.743Z] 1652a4b8-3628-4efd-99a4-c2abac4c35ef GET /@fs/C:/OOFSOL/node_modules/.vite/deps/chunk-U7P2NEEE.js {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:30:28.779Z] 1652a4b8-3628-4efd-99a4-c2abac4c35ef 200 - 36ms
+[2025-06-19T01:30:28.790Z] ae787427-ba94-4a45-91bb-9096b36c1f3e 200 - 195ms
+[2025-06-19T01:30:28.795Z] d161e29f-9038-486e-a1c4-28f934ab56f9 200 - 60ms
+[2025-06-19T01:30:28.802Z] b5b84143-6076-4edd-b807-c1b630dd5451 200 - 73ms
+[2025-06-19T01:30:28.805Z] c7f1293b-f50d-4050-ac79-64e7a20048ad 200 - 66ms
+[2025-06-19T01:30:28.839Z] c26d3b35-404c-416e-9b4a-1c845178e223 GET /@fs/C:/OOFSOL/node_modules/.vite/deps/chunk-BGVHOPFI.js {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:30:28.843Z] f3db903c-aa16-4323-b25e-601651ace690 GET /@fs/C:/OOFSOL/node_modules/.vite/deps/@radix-ui_react-dialog.js {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:30:28.848Z] 5c7a15fd-7047-45a3-973b-4c70e6cbe4c7 GET /@fs/C:/OOFSOL/node_modules/.vite/deps/chunk-INF4E6IS.js {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:30:28.855Z] c26d3b35-404c-416e-9b4a-1c845178e223 200 - 16ms
+[2025-06-19T01:30:28.857Z] f3db903c-aa16-4323-b25e-601651ace690 200 - 14ms
+[2025-06-19T01:30:28.861Z] 5c7a15fd-7047-45a3-973b-4c70e6cbe4c7 200 - 13ms
+[2025-06-19T01:30:28.881Z] 370e11b0-f97b-47d9-8c5b-6381b1892230 GET /@fs/C:/OOFSOL/node_modules/.vite/deps/chunk-3MC66YHI.js {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:30:28.887Z] 370e11b0-f97b-47d9-8c5b-6381b1892230 200 - 6ms
+[2025-06-19T01:30:28.888Z] f4a6de10-91f0-4c67-b39d-38c1a17c3d5c GET /@fs/C:/OOFSOL/node_modules/.vite/deps/chunk-EOLSW7PA.js {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:30:28.891Z] f4a6de10-91f0-4c67-b39d-38c1a17c3d5c 200 - 3ms
+[2025-06-19T01:30:29.831Z] a575a6eb-49e2-42e7-9001-aec596183f33 GET /favicon.ico {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:30:29.863Z] a575a6eb-49e2-42e7-9001-aec596183f33 200 - 32ms
+[2025-06-19T01:30:30.241Z] 2330080e-f7d7-4b6b-b48e-cb96d0ce0521 GET /api/token-ads/current {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:30:30.600Z] ceda4fd0-090b-4aff-b685-559dfc3d38f3 GET /@fs/C:/OOFSOL/node_modules/.vite/deps/thumbmark.esm-NSFA2BR4.js {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:30:30.638Z] ceda4fd0-090b-4aff-b685-559dfc3d38f3 200 - 38ms
+[2025-06-19T01:30:31.034Z] d60b34e7-e02f-4ff0-bd70-21dc70c39832 GET /favicon.ico {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:30:31.045Z] d60b34e7-e02f-4ff0-bd70-21dc70c39832 200 - 11ms
+⚠️ Windows WebSocket compatibility issue detected and handled
+💡 This is a known issue with Neon serverless driver on Windows
+🔄 Continuing operation...
+[2025-06-19T01:34:27.126Z] a1a3e07e-e2aa-4eae-b538-60a1553398af GET /api/oof-moments/public {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+🚨 Error: Route /api/oof-moments/public not found - GET /api/oof-moments/public
+Error: Route /api/oof-moments/public not found
+    at createError (C:\OOFSOL\server\middleware\errorHandler.ts:25:10)
+    at notFound (C:\OOFSOL\server\middleware\errorHandler.ts:35:17)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at param (C:\OOFSOL\node_modules\express\lib\router\index.js:365:14)
+    at param (C:\OOFSOL\node_modules\express\lib\router\index.js:376:14)
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:421:3)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:646:15
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:265:14)
+    at Function.handle (C:\OOFSOL\node_modules\express\lib\router\index.js:175:3)
+    at router (C:\OOFSOL\node_modules\express\lib\router\index.js:47:12)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:346:12)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at <anonymous> (C:\OOFSOL\server\index.ts:125:3)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:346:12)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at file:///C:/OOFSOL/node_modules/express-rate-limit/dist/index.mjs:794:7
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///C:/OOFSOL/node_modules/express-rate-limit/dist/index.mjs:676:5
+🚨 Error: HTTP 500 - GET /api/oof-moments/public
+[2025-06-19T01:34:27.189Z] 17e8b7c4-31c8-44c2-b8be-6b6cff07ea06 GET /favicon.ico {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:34:27.197Z] a1a3e07e-e2aa-4eae-b538-60a1553398af 500 - 71ms
+🚨 GET /api/oof-moments/public 500 73ms 127.0.0.1 {
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined,
+  query: {}
+}
+[2025-06-19T01:34:27.228Z] 17e8b7c4-31c8-44c2-b8be-6b6cff07ea06 200 - 40ms
+[2025-06-19T01:34:32.229Z] 4d2096df-20b4-4497-a254-135e4ad79bca GET /api/oof-moments/public {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+🚨 Error: Route /api/oof-moments/public not found - GET /api/oof-moments/public
+Error: Route /api/oof-moments/public not found
+    at createError (C:\OOFSOL\server\middleware\errorHandler.ts:25:10)
+    at notFound (C:\OOFSOL\server\middleware\errorHandler.ts:35:17)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at param (C:\OOFSOL\node_modules\express\lib\router\index.js:365:14)
+    at param (C:\OOFSOL\node_modules\express\lib\router\index.js:376:14)
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:421:3)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:646:15
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:265:14)
+    at Function.handle (C:\OOFSOL\node_modules\express\lib\router\index.js:175:3)
+    at router (C:\OOFSOL\node_modules\express\lib\router\index.js:47:12)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:346:12)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at <anonymous> (C:\OOFSOL\server\index.ts:125:3)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:346:12)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at file:///C:/OOFSOL/node_modules/express-rate-limit/dist/index.mjs:794:7
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///C:/OOFSOL/node_modules/express-rate-limit/dist/index.mjs:676:5
+🚨 Error: HTTP 500 - GET /api/oof-moments/public
+[2025-06-19T01:34:32.263Z] 4d2096df-20b4-4497-a254-135e4ad79bca 500 - 34ms
+🚨 GET /api/oof-moments/public 500 32ms 127.0.0.1 {
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined,
+  query: {}
+}
+[2025-06-19T01:34:37.588Z] bf5bd415-09df-4856-a69c-748dee12f587 GET /api/oof-moments/public {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+🚨 Error: Route /api/oof-moments/public not found - GET /api/oof-moments/public
+Error: Route /api/oof-moments/public not found
+    at createError (C:\OOFSOL\server\middleware\errorHandler.ts:25:10)
+    at notFound (C:\OOFSOL\server\middleware\errorHandler.ts:35:17)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at param (C:\OOFSOL\node_modules\express\lib\router\index.js:365:14)
+    at param (C:\OOFSOL\node_modules\express\lib\router\index.js:376:14)
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:421:3)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:646:15
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:265:14)
+    at Function.handle (C:\OOFSOL\node_modules\express\lib\router\index.js:175:3)
+    at router (C:\OOFSOL\node_modules\express\lib\router\index.js:47:12)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:346:12)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at <anonymous> (C:\OOFSOL\server\index.ts:125:3)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:346:12)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at file:///C:/OOFSOL/node_modules/express-rate-limit/dist/index.mjs:794:7
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///C:/OOFSOL/node_modules/express-rate-limit/dist/index.mjs:676:5
+🚨 Error: HTTP 500 - GET /api/oof-moments/public
+[2025-06-19T01:34:37.625Z] bf5bd415-09df-4856-a69c-748dee12f587 500 - 37ms
+🚨 GET /api/oof-moments/public 500 29ms 127.0.0.1 {
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined,
+  query: {}
+}
+[2025-06-19T01:34:41.716Z] 7750c788-74b4-4df5-8da4-b90f0fcba825 POST /api/ai/analyze-wallet {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: { walletAddress: '9nR99dnbB1xEdGxfHNdRHmjyHJoZsWzZqNjgop3CzvnM' }
+}
+🚨 Error: Route /api/ai/analyze-wallet not found - POST /api/ai/analyze-wallet
+Error: Route /api/ai/analyze-wallet not found
+    at createError (C:\OOFSOL\server\middleware\errorHandler.ts:25:10)
+    at notFound (C:\OOFSOL\server\middleware\errorHandler.ts:35:17)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at param (C:\OOFSOL\node_modules\express\lib\router\index.js:365:14)
+    at param (C:\OOFSOL\node_modules\express\lib\router\index.js:376:14)
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:421:3)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:646:15
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:265:14)
+    at Function.handle (C:\OOFSOL\node_modules\express\lib\router\index.js:175:3)
+    at router (C:\OOFSOL\node_modules\express\lib\router\index.js:47:12)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:346:12)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at <anonymous> (C:\OOFSOL\server\index.ts:125:3)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:346:12)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at file:///C:/OOFSOL/node_modules/express-rate-limit/dist/index.mjs:794:7
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///C:/OOFSOL/node_modules/express-rate-limit/dist/index.mjs:676:5
+🚨 Error: HTTP 500 - POST /api/ai/analyze-wallet
+[2025-06-19T01:34:41.733Z] 7750c788-74b4-4df5-8da4-b90f0fcba825 500 - 17ms
+🚨 POST /api/ai/analyze-wallet 500 14ms 127.0.0.1 {
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: { walletAddress: '9nR99dnbB1xEdGxfHNdRHmjyHJoZsWzZqNjgop3CzvnM' },
+  query: {}
+}
+[2025-06-19T01:34:43.186Z] 2782b58a-ce01-47df-8d2f-e364edd7ba71 GET /api/oof-moments/public {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+🚨 Error: Route /api/oof-moments/public not found - GET /api/oof-moments/public
+Error: Route /api/oof-moments/public not found
+    at createError (C:\OOFSOL\server\middleware\errorHandler.ts:25:10)
+    at notFound (C:\OOFSOL\server\middleware\errorHandler.ts:35:17)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at param (C:\OOFSOL\node_modules\express\lib\router\index.js:365:14)
+    at param (C:\OOFSOL\node_modules\express\lib\router\index.js:376:14)
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:421:3)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:646:15
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:265:14)
+    at Function.handle (C:\OOFSOL\node_modules\express\lib\router\index.js:175:3)
+    at router (C:\OOFSOL\node_modules\express\lib\router\index.js:47:12)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:346:12)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at <anonymous> (C:\OOFSOL\server\index.ts:125:3)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:346:12)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at file:///C:/OOFSOL/node_modules/express-rate-limit/dist/index.mjs:794:7
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///C:/OOFSOL/node_modules/express-rate-limit/dist/index.mjs:676:5
+🚨 Error: HTTP 500 - GET /api/oof-moments/public
+[2025-06-19T01:34:43.308Z] 2782b58a-ce01-47df-8d2f-e364edd7ba71 500 - 122ms
+🚨 GET /api/oof-moments/public 500 128ms 127.0.0.1 {
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined,
+  query: {}
+}
+Running WebSocket cleanup...
+WebSocket cleanup completed. Active connections: 0
+[2025-06-19T01:34:48.677Z] 3e1ec8a4-a647-44de-85de-018e36031597 GET /api/oof-moments/public {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+🚨 Error: Route /api/oof-moments/public not found - GET /api/oof-moments/public
+Error: Route /api/oof-moments/public not found
+    at createError (C:\OOFSOL\server\middleware\errorHandler.ts:25:10)
+    at notFound (C:\OOFSOL\server\middleware\errorHandler.ts:35:17)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at param (C:\OOFSOL\node_modules\express\lib\router\index.js:365:14)
+    at param (C:\OOFSOL\node_modules\express\lib\router\index.js:376:14)
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:421:3)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:646:15
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:265:14)
+    at Function.handle (C:\OOFSOL\node_modules\express\lib\router\index.js:175:3)
+    at router (C:\OOFSOL\node_modules\express\lib\router\index.js:47:12)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:346:12)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at <anonymous> (C:\OOFSOL\server\index.ts:125:3)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:346:12)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at file:///C:/OOFSOL/node_modules/express-rate-limit/dist/index.mjs:794:7
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///C:/OOFSOL/node_modules/express-rate-limit/dist/index.mjs:676:5
+🚨 Error: HTTP 500 - GET /api/oof-moments/public
+[2025-06-19T01:34:48.689Z] 3e1ec8a4-a647-44de-85de-018e36031597 500 - 12ms
+🚨 GET /api/oof-moments/public 500 11ms 127.0.0.1 {
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined,
+  query: {}
+}
+[2025-06-19T01:34:53.714Z] fd44fc46-f281-4454-8d16-2d9e492aa2c0 GET /api/oof-moments/public {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+🚨 Error: Route /api/oof-moments/public not found - GET /api/oof-moments/public
+Error: Route /api/oof-moments/public not found
+    at createError (C:\OOFSOL\server\middleware\errorHandler.ts:25:10)
+    at notFound (C:\OOFSOL\server\middleware\errorHandler.ts:35:17)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at param (C:\OOFSOL\node_modules\express\lib\router\index.js:365:14)
+    at param (C:\OOFSOL\node_modules\express\lib\router\index.js:376:14)
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:421:3)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:646:15
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:265:14)
+    at Function.handle (C:\OOFSOL\node_modules\express\lib\router\index.js:175:3)
+    at router (C:\OOFSOL\node_modules\express\lib\router\index.js:47:12)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:346:12)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at <anonymous> (C:\OOFSOL\server\index.ts:125:3)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:346:12)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at file:///C:/OOFSOL/node_modules/express-rate-limit/dist/index.mjs:794:7
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///C:/OOFSOL/node_modules/express-rate-limit/dist/index.mjs:676:5
+🚨 Error: HTTP 500 - GET /api/oof-moments/public
+[2025-06-19T01:34:53.734Z] fd44fc46-f281-4454-8d16-2d9e492aa2c0 500 - 21ms
+🚨 GET /api/oof-moments/public 500 19ms 127.0.0.1 {
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined,
+  query: {}
+}
+[2025-06-19T01:34:57.987Z] 2472bd10-b69a-4d41-b9a3-8185e273019e GET /.well-known/appspecific/com.chrome.devtools.json {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:34:58.021Z] 2472bd10-b69a-4d41-b9a3-8185e273019e 200 - 34ms
+[2025-06-19T01:34:59.565Z] 7e58ffce-e5a8-4fd1-b0af-8a240c95fb39 GET /api/oof-moments/public {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+🚨 Error: Route /api/oof-moments/public not found - GET /api/oof-moments/public
+Error: Route /api/oof-moments/public not found
+    at createError (C:\OOFSOL\server\middleware\errorHandler.ts:25:10)
+    at notFound (C:\OOFSOL\server\middleware\errorHandler.ts:35:17)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at param (C:\OOFSOL\node_modules\express\lib\router\index.js:365:14)
+    at param (C:\OOFSOL\node_modules\express\lib\router\index.js:376:14)
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:421:3)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:646:15
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:265:14)
+    at Function.handle (C:\OOFSOL\node_modules\express\lib\router\index.js:175:3)
+    at router (C:\OOFSOL\node_modules\express\lib\router\index.js:47:12)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:346:12)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at <anonymous> (C:\OOFSOL\server\index.ts:125:3)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:346:12)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at file:///C:/OOFSOL/node_modules/express-rate-limit/dist/index.mjs:794:7
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///C:/OOFSOL/node_modules/express-rate-limit/dist/index.mjs:676:5
+🚨 Error: HTTP 500 - GET /api/oof-moments/public
+[2025-06-19T01:34:59.594Z] 7e58ffce-e5a8-4fd1-b0af-8a240c95fb39 500 - 29ms
+🚨 GET /api/oof-moments/public 500 28ms 127.0.0.1 {
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined,
+  query: {}
+}
+[2025-06-19T01:34:59.673Z] d97afee1-f56a-4088-95b2-1090f2456011 GET /index.iife.min.js.map {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+[2025-06-19T01:34:59.722Z] d97afee1-f56a-4088-95b2-1090f2456011 200 - 49ms
+[2025-06-19T01:35:04.932Z] 47be32d9-6138-41cf-b12c-d97ce1263cd0 GET /api/oof-moments/public {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+🚨 Error: Route /api/oof-moments/public not found - GET /api/oof-moments/public
+Error: Route /api/oof-moments/public not found
+    at createError (C:\OOFSOL\server\middleware\errorHandler.ts:25:10)
+    at notFound (C:\OOFSOL\server\middleware\errorHandler.ts:35:17)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at param (C:\OOFSOL\node_modules\express\lib\router\index.js:365:14)
+    at param (C:\OOFSOL\node_modules\express\lib\router\index.js:376:14)
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:421:3)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:646:15
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:265:14)
+    at Function.handle (C:\OOFSOL\node_modules\express\lib\router\index.js:175:3)
+    at router (C:\OOFSOL\node_modules\express\lib\router\index.js:47:12)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:346:12)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at <anonymous> (C:\OOFSOL\server\index.ts:125:3)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:346:12)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at file:///C:/OOFSOL/node_modules/express-rate-limit/dist/index.mjs:794:7
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///C:/OOFSOL/node_modules/express-rate-limit/dist/index.mjs:676:5
+🚨 Error: HTTP 500 - GET /api/oof-moments/public
+[2025-06-19T01:35:04.961Z] 47be32d9-6138-41cf-b12c-d97ce1263cd0 500 - 29ms
+🚨 GET /api/oof-moments/public 500 26ms 127.0.0.1 {
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined,
+  query: {}
+}
+[2025-06-19T01:35:10.021Z] f2b31d1c-cf53-4303-adae-518d5e143f02 GET /api/oof-moments/public {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+🚨 Error: Route /api/oof-moments/public not found - GET /api/oof-moments/public
+Error: Route /api/oof-moments/public not found
+    at createError (C:\OOFSOL\server\middleware\errorHandler.ts:25:10)
+    at notFound (C:\OOFSOL\server\middleware\errorHandler.ts:35:17)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at param (C:\OOFSOL\node_modules\express\lib\router\index.js:365:14)
+    at param (C:\OOFSOL\node_modules\express\lib\router\index.js:376:14)
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:421:3)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:646:15
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:265:14)
+    at Function.handle (C:\OOFSOL\node_modules\express\lib\router\index.js:175:3)
+    at router (C:\OOFSOL\node_modules\express\lib\router\index.js:47:12)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:346:12)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at <anonymous> (C:\OOFSOL\server\index.ts:125:3)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:346:12)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at file:///C:/OOFSOL/node_modules/express-rate-limit/dist/index.mjs:794:7
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///C:/OOFSOL/node_modules/express-rate-limit/dist/index.mjs:676:5
+🚨 Error: HTTP 500 - GET /api/oof-moments/public
+[2025-06-19T01:35:10.039Z] f2b31d1c-cf53-4303-adae-518d5e143f02 500 - 18ms
+🚨 GET /api/oof-moments/public 500 11ms 127.0.0.1 {
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined,
+  query: {}
+}
+[2025-06-19T01:35:15.683Z] fdc1dfc6-fde0-4a84-88fa-20a77bc6883a GET /api/oof-moments/public {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+🚨 Error: Route /api/oof-moments/public not found - GET /api/oof-moments/public
+Error: Route /api/oof-moments/public not found
+    at createError (C:\OOFSOL\server\middleware\errorHandler.ts:25:10)
+    at notFound (C:\OOFSOL\server\middleware\errorHandler.ts:35:17)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at param (C:\OOFSOL\node_modules\express\lib\router\index.js:365:14)
+    at param (C:\OOFSOL\node_modules\express\lib\router\index.js:376:14)
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:421:3)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:646:15
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:265:14)
+    at Function.handle (C:\OOFSOL\node_modules\express\lib\router\index.js:175:3)
+    at router (C:\OOFSOL\node_modules\express\lib\router\index.js:47:12)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:346:12)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at <anonymous> (C:\OOFSOL\server\index.ts:125:3)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:346:12)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at file:///C:/OOFSOL/node_modules/express-rate-limit/dist/index.mjs:794:7
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///C:/OOFSOL/node_modules/express-rate-limit/dist/index.mjs:676:5
+🚨 Error: HTTP 500 - GET /api/oof-moments/public
+[2025-06-19T01:35:15.731Z] fdc1dfc6-fde0-4a84-88fa-20a77bc6883a 500 - 48ms
+🚨 GET /api/oof-moments/public 500 33ms 127.0.0.1 {
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined,
+  query: {}
+}
+[2025-06-19T01:35:21.075Z] 25e88462-17b7-4b9e-a7f3-dd203d421846 GET /api/oof-moments/public {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+🚨 Error: Route /api/oof-moments/public not found - GET /api/oof-moments/public
+Error: Route /api/oof-moments/public not found
+    at createError (C:\OOFSOL\server\middleware\errorHandler.ts:25:10)
+    at notFound (C:\OOFSOL\server\middleware\errorHandler.ts:35:17)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at param (C:\OOFSOL\node_modules\express\lib\router\index.js:365:14)
+    at param (C:\OOFSOL\node_modules\express\lib\router\index.js:376:14)
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:421:3)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:646:15
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:265:14)
+    at Function.handle (C:\OOFSOL\node_modules\express\lib\router\index.js:175:3)
+    at router (C:\OOFSOL\node_modules\express\lib\router\index.js:47:12)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:346:12)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at <anonymous> (C:\OOFSOL\server\index.ts:125:3)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:346:12)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at file:///C:/OOFSOL/node_modules/express-rate-limit/dist/index.mjs:794:7
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///C:/OOFSOL/node_modules/express-rate-limit/dist/index.mjs:676:5
+🚨 Error: HTTP 500 - GET /api/oof-moments/public
+[2025-06-19T01:35:21.091Z] 25e88462-17b7-4b9e-a7f3-dd203d421846 500 - 16ms
+🚨 GET /api/oof-moments/public 500 16ms 127.0.0.1 {
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined,
+  query: {}
+}
+[2025-06-19T01:35:26.114Z] 2dc880d9-649d-47c3-a281-3ad65906fcfc GET /api/oof-moments/public {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+🚨 Error: Route /api/oof-moments/public not found - GET /api/oof-moments/public
+Error: Route /api/oof-moments/public not found
+    at createError (C:\OOFSOL\server\middleware\errorHandler.ts:25:10)
+    at notFound (C:\OOFSOL\server\middleware\errorHandler.ts:35:17)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at param (C:\OOFSOL\node_modules\express\lib\router\index.js:365:14)
+    at param (C:\OOFSOL\node_modules\express\lib\router\index.js:376:14)
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:421:3)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:646:15
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:265:14)
+    at Function.handle (C:\OOFSOL\node_modules\express\lib\router\index.js:175:3)
+    at router (C:\OOFSOL\node_modules\express\lib\router\index.js:47:12)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:346:12)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at <anonymous> (C:\OOFSOL\server\index.ts:125:3)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:346:12)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at file:///C:/OOFSOL/node_modules/express-rate-limit/dist/index.mjs:794:7
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///C:/OOFSOL/node_modules/express-rate-limit/dist/index.mjs:676:5
+🚨 Error: HTTP 500 - GET /api/oof-moments/public
+[2025-06-19T01:35:26.124Z] 2dc880d9-649d-47c3-a281-3ad65906fcfc 500 - 10ms
+🚨 GET /api/oof-moments/public 500 16ms 127.0.0.1 {
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined,
+  query: {}
+}
+[2025-06-19T01:35:31.512Z] 5c2c1c9b-2cf2-47de-8716-64677b4a0451 GET /api/oof-moments/public {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+🚨 Error: Route /api/oof-moments/public not found - GET /api/oof-moments/public
+Error: Route /api/oof-moments/public not found
+    at createError (C:\OOFSOL\server\middleware\errorHandler.ts:25:10)
+    at notFound (C:\OOFSOL\server\middleware\errorHandler.ts:35:17)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at param (C:\OOFSOL\node_modules\express\lib\router\index.js:365:14)
+    at param (C:\OOFSOL\node_modules\express\lib\router\index.js:376:14)
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:421:3)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:646:15
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:265:14)
+    at Function.handle (C:\OOFSOL\node_modules\express\lib\router\index.js:175:3)
+    at router (C:\OOFSOL\node_modules\express\lib\router\index.js:47:12)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:346:12)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at <anonymous> (C:\OOFSOL\server\index.ts:125:3)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:346:12)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at file:///C:/OOFSOL/node_modules/express-rate-limit/dist/index.mjs:794:7
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///C:/OOFSOL/node_modules/express-rate-limit/dist/index.mjs:676:5
+🚨 Error: HTTP 500 - GET /api/oof-moments/public
+[2025-06-19T01:35:31.545Z] 5c2c1c9b-2cf2-47de-8716-64677b4a0451 500 - 33ms
+🚨 GET /api/oof-moments/public 500 23ms 127.0.0.1 {
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined,
+  query: {}
+}
+[2025-06-19T01:35:36.600Z] 36043d79-cfc9-44a8-bd3c-c96e91dd1d17 GET /api/oof-moments/public {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+🚨 Error: Route /api/oof-moments/public not found - GET /api/oof-moments/public
+Error: Route /api/oof-moments/public not found
+    at createError (C:\OOFSOL\server\middleware\errorHandler.ts:25:10)
+    at notFound (C:\OOFSOL\server\middleware\errorHandler.ts:35:17)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at param (C:\OOFSOL\node_modules\express\lib\router\index.js:365:14)
+    at param (C:\OOFSOL\node_modules\express\lib\router\index.js:376:14)
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:421:3)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:646:15
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:265:14)
+    at Function.handle (C:\OOFSOL\node_modules\express\lib\router\index.js:175:3)
+    at router (C:\OOFSOL\node_modules\express\lib\router\index.js:47:12)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:346:12)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at <anonymous> (C:\OOFSOL\server\index.ts:125:3)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:346:12)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at file:///C:/OOFSOL/node_modules/express-rate-limit/dist/index.mjs:794:7
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///C:/OOFSOL/node_modules/express-rate-limit/dist/index.mjs:676:5
+🚨 Error: HTTP 500 - GET /api/oof-moments/public
+[2025-06-19T01:35:36.643Z] 36043d79-cfc9-44a8-bd3c-c96e91dd1d17 500 - 43ms
+🚨 GET /api/oof-moments/public 500 21ms 127.0.0.1 {
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined,
+  query: {}
+}
+[2025-06-19T01:35:41.977Z] 8dcba392-8124-4791-b649-52a6f5b25207 GET /api/oof-moments/public {
+  ip: '127.0.0.1',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined
+}
+🚨 Error: Route /api/oof-moments/public not found - GET /api/oof-moments/public
+Error: Route /api/oof-moments/public not found
+    at createError (C:\OOFSOL\server\middleware\errorHandler.ts:25:10)
+    at notFound (C:\OOFSOL\server\middleware\errorHandler.ts:35:17)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at param (C:\OOFSOL\node_modules\express\lib\router\index.js:365:14)
+    at param (C:\OOFSOL\node_modules\express\lib\router\index.js:376:14)
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:421:3)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:646:15
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:265:14)
+    at Function.handle (C:\OOFSOL\node_modules\express\lib\router\index.js:175:3)
+    at router (C:\OOFSOL\node_modules\express\lib\router\index.js:47:12)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:346:12)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at <anonymous> (C:\OOFSOL\server\index.ts:125:3)
+    at Layer.handle [as handle_request] (C:\OOFSOL\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\OOFSOL\node_modules\express\lib\router\index.js:328:13)
+    at C:\OOFSOL\node_modules\express\lib\router\index.js:286:9
+    at Function.process_params (C:\OOFSOL\node_modules\express\lib\router\index.js:346:12)
+    at next (C:\OOFSOL\node_modules\express\lib\router\index.js:280:10)
+    at file:///C:/OOFSOL/node_modules/express-rate-limit/dist/index.mjs:794:7
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///C:/OOFSOL/node_modules/express-rate-limit/dist/index.mjs:676:5
+🚨 Error: HTTP 500 - GET /api/oof-moments/public
+[2025-06-19T01:35:42.021Z] 8dcba392-8124-4791-b649-52a6f5b25207 500 - 44ms
+🚨 GET /api/oof-moments/public 500 32ms 127.0.0.1 {
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+  body: undefined,
+  query: {}
+}
+📊 Received SIGINT, starting graceful shutdown...
+📊 Final Stats - Uptime: 383s, Memory: 128MB
+📊 Total Requests: 140
+📊 Total Errors: 32
+PS C:\OOFSOL> o

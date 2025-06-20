@@ -3,8 +3,17 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { solanaService } from "./services/solanaService";
 import { rugDetectionService } from "./services/rugDetectionService";
+import { createSimpleRoutes } from "./routes/simple";
+import { WebSocketManager } from "./websocket/websocketManager";
 
-export async function registerRoutes(app: Express): Promise<Server> {
+export async function registerRoutes(app: Express, wsManager?: WebSocketManager): Promise<Server> {
+  
+  // Register simple working routes
+  const simpleRoutes = createSimpleRoutes();
+  app.use('/api', simpleRoutes);
+  console.log('✅ Simple routes registered');
+
+  // Legacy routes for backward compatibility
   // Simple wallet-based authentication - no middleware needed
   
   // Wallet management endpoint

@@ -1,0 +1,285 @@
+import React, { useState, useEffect } from 'react';
+import { Trophy, Sword, Shield, Timer, Crown, Star, Rocket, Target, Users, Heart, Award, Gift } from 'lucide-react';
+
+const OOFBattleRoyale = () => {
+  const [gameState, setGameState] = useState({
+    seasonNumber: 1,
+    timeRemaining: "23:45:12",
+    activePlayers: 1234,
+    prizePool: 100000
+  });
+
+  const [playerStats, setPlayerStats] = useState({
+    rank: 42,
+    score: 7500,
+    paper_hands_rating: 85,
+    trades_made: 23,
+    worst_exit: "-95%",
+    badges_earned: []
+  });
+
+  const [leaderboard, setLeaderboard] = useState([
+    {
+      rank: 1,
+      username: "PaperHandsKing",
+      score: 25000,
+      badge: "👑",
+      signature_move: "The FOMO Master"
+    },
+    {
+      rank: 2,
+      username: "FOMOlord",
+      score: 22000,
+      badge: "🥈",
+      signature_move: "Peak Buyer"
+    }
+  ]);
+
+  // Live Challenges that appear during gameplay
+  const [activeChallenge, setActiveChallenge] = useState({
+    type: "MEGA_DUMP",
+    description: "Sell within 5% of the absolute bottom",
+    reward: 1000,
+    timeLeft: "5:00",
+    participants: 156
+  });
+
+  const [powerups, setPowerups] = useState([
+    {
+      id: "double_paper",
+      name: "Double Paper Hands",
+      description: "2x points for panic sells",
+      cost: 100,
+      duration: "30 seconds"
+    },
+    {
+      id: "fomo_shield",
+      name: "FOMO Shield",
+      description: "Immune to pump FOMO for 1 minute",
+      cost: 250,
+      duration: "1 minute"
+    }
+  ]);
+
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-purple-50 to-purple-100 p-8">
+      <div className="max-w-7xl mx-auto">
+        {/* Header with Season Info */}
+        <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
+          <div className="flex justify-between items-center">
+            <div>
+              <h1 className="text-3xl font-bold text-purple-900">
+                OOF Battle Royale
+              </h1>
+              <p className="text-purple-600">
+                Season {gameState.seasonNumber} - The Great Paper Hands Tournament
+              </p>
+            </div>
+            <div className="flex items-center space-x-6">
+              <div className="text-center">
+                <div className="text-sm text-purple-600">Time Remaining</div>
+                <div className="text-2xl font-bold text-purple-900">
+                  {gameState.timeRemaining}
+                </div>
+              </div>
+              <div className="text-center">
+                <div className="text-sm text-purple-600">Active Players</div>
+                <div className="text-2xl font-bold text-purple-900">
+                  {gameState.activePlayers}
+                </div>
+              </div>
+              <div className="text-center">
+                <div className="text-sm text-purple-600">Prize Pool</div>
+                <div className="text-2xl font-bold text-green-600">
+                  {gameState.prizePool} $OOF
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-3 gap-8">
+          {/* Live Trading Arena */}
+          <div className="col-span-2 space-y-6">
+            {/* Active Challenge */}
+            <div className="bg-gradient-to-br from-purple-600 to-purple-800 rounded-xl p-6 text-white">
+              <div className="flex justify-between items-start mb-4">
+                <div>
+                  <h2 className="text-xl font-bold mb-2">Live Challenge</h2>
+                  <p className="text-lg">{activeChallenge.description}</p>
+                </div>
+                <div className="bg-white text-purple-900 px-4 py-2 rounded-full font-bold">
+                  {activeChallenge.reward} $OOF
+                </div>
+              </div>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-4">
+                  <Timer className="animate-pulse" />
+                  <span>{activeChallenge.timeLeft}</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Users size={18} />
+                  <span>{activeChallenge.participants} participating</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Trading Simulation */}
+            <div className="bg-white rounded-xl shadow-lg p-6">
+              <h2 className="text-xl font-bold text-purple-900 mb-4">
+                Live Trading Arena
+              </h2>
+              <div className="grid grid-cols-2 gap-4 mb-6">
+                {powerups.map(powerup => (
+                  <div key={powerup.id} className="bg-purple-50 rounded-lg p-4">
+                    <div className="flex justify-between items-start mb-2">
+                      <h3 className="font-bold text-purple-900">{powerup.name}</h3>
+                      <button className="bg-purple-600 text-white px-3 py-1 rounded-full text-sm">
+                        {powerup.cost} $OOF
+                      </button>
+                    </div>
+                    <p className="text-sm text-purple-600 mb-2">
+                      {powerup.description}
+                    </p>
+                    <div className="text-xs text-purple-500">
+                      Duration: {powerup.duration}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Achievement Progress */}
+            <div className="bg-white rounded-xl shadow-lg p-6">
+              <h2 className="text-xl font-bold text-purple-900 mb-4">
+                Paper Hands Progress
+              </h2>
+              <div className="space-y-4">
+                <div>
+                  <div className="flex justify-between mb-2">
+                    <span className="text-purple-600">Master FOMO</span>
+                    <span className="text-purple-900 font-bold">75%</span>
+                  </div>
+                  <div className="w-full bg-purple-100 rounded-full h-2">
+                    <div className="bg-purple-600 h-2 rounded-full" style={{width: '75%'}} />
+                  </div>
+                </div>
+                <div>
+                  <div className="flex justify-between mb-2">
+                    <span className="text-purple-600">Panic Sell Expert</span>
+                    <span className="text-purple-900 font-bold">90%</span>
+                  </div>
+                  <div className="w-full bg-purple-100 rounded-full h-2">
+                    <div className="bg-purple-600 h-2 rounded-full" style={{width: '90%'}} />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Right Column */}
+          <div className="space-y-6">
+            {/* Player Stats */}
+            <div className="bg-white rounded-xl shadow-lg p-6">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-xl font-bold text-purple-900">Your Stats</h2>
+                <div className="bg-purple-100 px-3 py-1 rounded-full text-purple-600">
+                  Rank #{playerStats.rank}
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="bg-purple-50 p-3 rounded-lg">
+                  <div className="text-sm text-purple-600">Score</div>
+                  <div className="text-xl font-bold text-purple-900">
+                    {playerStats.score}
+                  </div>
+                </div>
+                <div className="bg-purple-50 p-3 rounded-lg">
+                  <div className="text-sm text-purple-600">Paper Hands Rating</div>
+                  <div className="text-xl font-bold text-purple-900">
+                    {playerStats.paper_hands_rating}%
+                  </div>
+                </div>
+                <div className="bg-purple-50 p-3 rounded-lg">
+                  <div className="text-sm text-purple-600">Trades Made</div>
+                  <div className="text-xl font-bold text-purple-900">
+                    {playerStats.trades_made}
+                  </div>
+                </div>
+                <div className="bg-purple-50 p-3 rounded-lg">
+                  <div className="text-sm text-purple-600">Worst Exit</div>
+                  <div className="text-xl font-bold text-red-600">
+                    {playerStats.worst_exit}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Leaderboard */}
+            <div className="bg-white rounded-xl shadow-lg p-6">
+              <h2 className="text-xl font-bold text-purple-900 mb-4">
+                Top Paper Hands
+              </h2>
+              <div className="space-y-4">
+                {leaderboard.map((player) => (
+                  <div 
+                    key={player.rank}
+                    className="bg-purple-50 p-4 rounded-lg flex items-center justify-between"
+                  >
+                    <div className="flex items-center space-x-3">
+                      <div className="text-2xl">{player.badge}</div>
+                      <div>
+                        <div className="font-bold text-purple-900">
+                          {player.username}
+                        </div>
+                        <div className="text-sm text-purple-600">
+                          {player.signature_move}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="text-xl font-bold text-purple-900">
+                      {player.score}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Season Rewards */}
+            <div className="bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-xl p-6 text-white">
+              <h2 className="text-xl font-bold mb-4">Season Rewards</h2>
+              <div className="space-y-4">
+                <div className="bg-white bg-opacity-20 rounded-lg p-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center space-x-2">
+                      <Crown />
+                      <span>1st Place</span>
+                    </div>
+                    <div className="font-bold">50,000 $OOF</div>
+                  </div>
+                  <div className="text-sm opacity-75">
+                    + Legendary Paper Hands NFT
+                  </div>
+                </div>
+                <div className="bg-white bg-opacity-20 rounded-lg p-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center space-x-2">
+                      <Award />
+                      <span>Top 10</span>
+                    </div>
+                    <div className="font-bold">10,000 $OOF</div>
+                  </div>
+                  <div className="text-sm opacity-75">
+                    + Epic Paper Hands NFT
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default OOFBattleRoyale;

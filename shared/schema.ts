@@ -44,6 +44,9 @@ export const users = pgTable("users", {
   correctPredictions: integer("correct_predictions").default(0),
   ranking: integer("ranking").default(0),
   oofScore: integer("oof_score").default(0),
+  totalMoments: integer("total_moments").default(0),
+  totalEarned: decimal("total_earned", { precision: 20, scale: 2 }).default("0"),
+  username: varchar("username").unique(),
 });
 
 export const tokens = pgTable("tokens", {
@@ -141,6 +144,10 @@ export const oofMoments = pgTable("oof_moments", {
   cardMetadata: jsonb("card_metadata").notNull(), // Card design and styling
   socialStats: jsonb("social_stats").default({}),
   tags: text("tags").array().default([]),
+  hashtags: text("hashtags").array().default([]),
+  likes: integer("likes").default(0),
+  shares: integer("shares").default(0),
+  comments: integer("comments").default(0),
   mintedOnPhantom: boolean("minted_on_phantom").default(false),
   mintedOnZora: boolean("minted_on_zora").default(false),
   phantomMintHash: varchar("phantom_mint_hash"),
@@ -164,6 +171,8 @@ export const walletAnalysis = pgTable("wallet_analysis", {
   paperHandsMoments: jsonb("paper_hands_moments").default([]), // Array of missed opportunities
   profitableTokens: jsonb("profitable_tokens").default([]), // Array of profitable trades
   analysisMetrics: jsonb("analysis_metrics").default({}),
+  analysisData: jsonb("analysis_data").default({}),
+  expiresAt: timestamp("expires_at"),
   status: varchar("status").default("pending"), // "pending", "analyzing", "completed", "error"
   errorMessage: text("error_message"),
 });
@@ -174,6 +183,7 @@ export const momentInteractions = pgTable("moment_interactions", {
   userId: varchar("user_id").references(() => users.id),
   interactionType: varchar("interaction_type").notNull(), // "like", "share", "comment"
   comment: text("comment"), // For comment interactions
+  metadata: jsonb("metadata").default({}),
   createdAt: timestamp("created_at").defaultNow(),
 });
 
@@ -282,11 +292,13 @@ export const tokenAds = pgTable("token_ads", {
   paymentAmount: decimal("payment_amount", { precision: 20, scale: 8 }).notNull(),
   paymentTokenSymbol: varchar("payment_token_symbol").notNull(),
   slotNumber: integer("slot_number").notNull(), // 0-5 for 6 slots
+  slotPosition: integer("slot_position").default(0),
   cycleNumber: bigint("cycle_number", { mode: "number" }).notNull(),
   startTime: timestamp("start_time").notNull(),
   endTime: timestamp("end_time").notNull(),
   views: integer("views").default(0),
   clicks: integer("clicks").default(0),
+  impressions: integer("impressions").default(0),
   isActive: boolean("is_active").default(true),
   verified: boolean("verified").default(false),
   createdAt: timestamp("created_at").defaultNow(),
@@ -458,4 +470,67 @@ export const insertCampaignParticipationSchema = createInsertSchema(campaignPart
   paidAt: true,
   totalReward: true,
   oofPointsEarned: true,
+});
+
+// Additional Zod schemas for missing exports
+export const insertOOFMomentSchema = createInsertSchema(oofMoments).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertMomentInteractionSchema = createInsertSchema(momentInteractions).omit({
+  id: true,
+  createdAt: true,
+});
+
+export const insertWalletAnalysisSchema = createInsertSchema(walletAnalysis).omit({
+  id: true,
+  lastAnalyzed: true,
+});
+
+export const insertTokenAdSchema = createInsertSchema(tokenAds).omit({
+  id: true,
+  createdAt: true,
+  views: true,
+  clicks: true,
+  impressions: true,
+});
+
+// Validation schemas
+export const walletAddressSchema = z.object({
+  walletAddress: z.string().min(32).max(44),
+});
+
+export const userCreateSchema = z.object({
+  walletAddress: z.string().min(32).max(44),
+  email: z.string().email().optional(),
+  firstName: z.string().optional(),
+  lastName: z.string().optional(),
+});
+
+export const oofMomentCreateSchema = z.object({
+  walletAddress: z.string().min(32).max(44),
+  momentType: z.enum(["paper_hands", "dust_collector", "gains_master"]),
+  tokenAddress: z.string().min(32).max(44),
+});
+
+export const momentInteractionSchema = z.object({
+  interactionType: z.enum(["like", "share", "comment"]),
+  comment: z.string().optional(),
+});
+
+export const tokenAdCreateSchema = z.object({
+  tokenAddress: z.string().min(32).max(44),
+  tokenName: z.string().min(1),
+  tokenSymbol: z.string().min(1),
+  buyLink: z.string().url(),
+  description: z.string().min(10),
+  paymentTxId: z.string(),
+  paymentAmount: z.string(),
+});
+
+export const paginationSchema = z.object({
+  limit: z.string().transform(Number).refine(n => n > 0 && n <= 100).default("20"),
+  offset: z.string().transform(Number).refine(n => n >= 0).default("0"),
 });

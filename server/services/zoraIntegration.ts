@@ -45,6 +45,22 @@ interface CrossChainBridgeResult {
   transactionHash: string;
 }
 
+interface ZoraMintRequest {
+  momentId: number;
+  walletAddress: string;
+  cardImageUrl: string;
+  metadata: any;
+}
+
+interface ZoraMintResponse {
+  success: boolean;
+  tokenId?: string;
+  contractAddress?: string;
+  transactionHash?: string;
+  zoraUrl?: string;
+  error?: string;
+}
+
 export class ZoraIntegrationService {
   private publicClient;
   private baseUrl: string;
@@ -355,6 +371,15 @@ export class ZoraIntegrationService {
       return { totalSupply: 0, owners: 0, floorPrice: 0, volume: 0 };
     }
   }
+
+  // Main function to mint OOF Moment as NFT on Zora
+  async mintOOFMoment(moment: OOFMoment, userWalletAddress: string): Promise<ZoraMintResponse> {
+    try {
+      // Generate card image
+      const cardImageUrl = await this.generateCardImage(moment);
+      
+      // Create metadata
+      const metadata = this.createNFTMetadata(moment, cardImageUrl);
       
       // Mint on Zora
       const mintResult = await this.createZoraMint({

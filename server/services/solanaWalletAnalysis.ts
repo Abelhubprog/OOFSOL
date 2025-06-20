@@ -1,5 +1,7 @@
 import { Connection, PublicKey, ParsedTransactionWithMeta } from '@solana/web3.js';
 import { TOKEN_PROGRAM_ID } from '@solana/spl-token';
+import { WalletAnalysisResult, Transaction, TokenHolding, TradingPattern, TradingPersonality } from '../ai/types';
+import { DatabaseUtils } from '../db/utils';
 
 interface TokenAccount {
   mint: string;

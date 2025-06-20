@@ -81,6 +81,11 @@ export default function TokenAdvertisingSpaces() {
   // Fetch current active ads
   const { data: activeAds = [], isLoading } = useQuery({
     queryKey: ['/api/token-ads/current'],
+    queryFn: async () => {
+      const response = await fetch('/api/token-ads/current');
+      if (!response.ok) throw new Error('Failed to fetch ads');
+      return response.json();
+    },
     refetchInterval: 30000, // Refresh every 30 seconds
   });
 
