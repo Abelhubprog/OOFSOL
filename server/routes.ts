@@ -1,8 +1,12 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
-import { storage } from "./storage";
-// Removed Replit auth - using Dynamic.xyz for wallet authentication
-import { authenticateUser } from "./middleware/auth";
+import { storage } from "./storage"; // To be replaced with DatabaseUtils
+import {
+  authenticateUser,
+  optionalAuth, // Added
+  generalRateLimit, // Added
+  oofMomentsRateLimit // Added
+} from "./middleware/auth";
 import { solanaService } from "./services/solanaService";
 import { rugDetectionService } from "./services/rugDetectionService";
 import { solanaWalletAnalysis } from "./services/solanaWalletAnalysis";
@@ -15,24 +19,70 @@ import {
   insertPredictionSchema, 
   insertMissedOpportunitySchema, 
   insertSlotSpinSchema,
-  insertOOFMomentSchema,
-  insertMomentInteractionSchema 
+  // insertOOFMomentSchema, // Will use specific Zod schemas from shared/schema.ts
+  insertMomentInteractionSchema,
+  paginationSchema, // Added
+  oofMomentAnalysisRequestSchema, // Added
+  tokenAdSubmitRequestSchema, // Added
+  confirmAdPaymentSchema, // Added
+  adInteractionTrackSchema // Added
 } from "@shared/schema";
-import { z } from "zod";
+import { z } from "zod"; // Keep z for extending schemas if needed
+import { DatabaseUtils } from './db/utils'; // Added
+import { AuthService } from "./services/authService";
+import { asyncHandler } from "./middleware/errorHandler";
+import { validateRequest } from "./middleware/validation"; // Added
 
-export async function registerRoutes(app: Express): Promise<Server> {
-  // No auth middleware needed - Dynamic.xyz handles authentication client-side
-
-  // User routes (no authentication required - using Dynamic.xyz wallet addresses)
-  app.get('/api/auth/user', async (req: any, res) => {
-    try {
-      // Return empty user for now - wallet authentication handled by Dynamic.xyz
-      res.json({ message: "Using Dynamic.xyz wallet authentication" });
-    } catch (error) {
-      console.error("Error:", error);
-      res.status(500).json({ message: "Error" });
+// User routes (no authentication required - using Dynamic.xyz wallet addresses)
+  // This endpoint should be protected and use the token from Dynamic.xyz
+  // to get/create a user in our system and return our user profile.
+  app.get('/api/auth/user', authenticateUser, asyncHandler(async (req: AuthenticatedRequest, res) => {
+    // authenticateUser middleware now populates req.user if token is valid
+    if (!req.user || !req.user.id) {
+      // This should ideally not be reached if authenticateUser is correctly implemented
+      return res.status(401).json({ error: 'Unauthorized', message: 'User not authenticated or token invalid.' });
     }
-  });
+
+    const userProfile = await AuthService.getUserProfile(req.user.id);
+
+    if (!userProfile) {
+      // This case might happen if a user was deleted after token issuance, or DB issue.
+      return res.status(404).json({ error: 'Not Found', message: 'User profile not found.' });
+    }
+    res.json(userProfile);
+  }));
+
+  // Example of a route that might be called by Dynamic.xyz webhook or client after successful Dynamic auth
+  // to ensure user exists in our DB and to get our app-specific JWT.
+  app.post('/api/auth/dynamic-callback', asyncHandler(async (req, res) => {
+    const { dynamicAuthToken } = req.body; // This would be a token from Dynamic.xyz
+
+    if (!dynamicAuthToken) {
+      return res.status(400).json({ error: 'Bad Request', message: 'Dynamic authentication token is required.' });
+    }
+
+    // HERE: You would typically verify the dynamicAuthToken with Dynamic.xyz SDK/API
+    // For this example, let's assume it's verified and gives us a payload:
+    const mockDynamicPayload = {
+      // This is MOCK data. In reality, this comes from verifying dynamicAuthToken.
+      verified_credentials: [{ address: req.body.walletAddress || `mockWallet${Date.now()}` }],
+      email: req.body.email || `mock${Date.now()}@example.com`
+    };
+    // --- END OF MOCK ---
+
+    const authResult = await AuthService.handleDynamicAuth(mockDynamicPayload);
+
+    if (!authResult) {
+      return res.status(500).json({ error: 'Internal Server Error', message: 'Failed to process dynamic authentication.' });
+    }
+
+    res.json({
+      message: "User authenticated and profile managed successfully.",
+      user: authResult.userProfile,
+      token: authResult.appToken // This is our application's JWT
+    });
+  }));
+
 
   // Token routes
   app.get('/api/tokens', async (req, res) => {
@@ -633,120 +683,92 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+import { tokenAdvertisingService, TokenAdRequest } from './services/tokenAdvertisingService';
+import { insertTokenAdSchema as tokenAdCreateValidationSchema } from '@shared/schema'; // Zod schema
+
   // Token Advertising API Routes
-  app.get('/api/token-ads/current', async (req, res) => {
-    try {
-      const ads = await storage.getActiveTokenAds();
-      // Add time remaining for each ad
-      const now = Date.now();
-      const adsWithTimeRemaining = ads.map(ad => ({
-        ...ad,
-        timeRemaining: Math.max(0, new Date(ad.endTime).getTime() - now)
-      }));
-      res.json(adsWithTimeRemaining);
-    } catch (error) {
-      console.error("Error fetching token ads:", error);
-      // Return empty array as fallback instead of 500 error
-      res.json([]);
-    }
-  });
+  app.get('/api/token-ads/current', generalRateLimit, asyncHandler(async (req, res) => {
+    const activeAds = await tokenAdvertisingService.getCurrentActiveAds();
+    res.json(activeAds);
+  }));
 
-  app.post('/api/token-ads/submit', async (req, res) => {
-    try {
-      const {
-        tokenAddress,
-        tokenName,
-        tokenSymbol,
-        buyLink,
-        description,
-        telegram,
-        twitter,
-        website,
-        slotNumber,
-        adminWallet
-      } = req.body;
+  app.post(
+    '/api/token-ads/submit',
+    authenticateUser,
+    generalRateLimit,
+    validateRequest(tokenAdSubmitRequestSchema, 'body'),
+    asyncHandler(async (req: AuthenticatedRequest, res) => {
+      const adRequestData = req.body as Omit<TokenAdRequest, 'creatorWallet'>; // creatorWallet will be added
 
-      if (!tokenAddress || !tokenName || !tokenSymbol || !buyLink || !slotNumber) {
-        return res.status(400).json({ message: "Missing required fields" });
+      if (!req.user?.walletAddress) {
+          return res.status(403).json({error: "Forbidden", message: "User wallet address is required to create an ad."})
       }
-
-      // Calculate slot timing
-      const now = new Date();
-      const SLOT_DURATION = 30 * 60 * 1000; // 30 minutes
-      const cycleNumber = Math.floor(now.getTime() / (SLOT_DURATION * 6));
-      const startTime = new Date(now.getTime() + 60000); // Start 1 minute from now
-      const endTime = new Date(startTime.getTime() + SLOT_DURATION);
-
-      // Create the ad entry (pending payment verification)
-      const adData = {
-        tokenAddress,
-        tokenName,
-        tokenSymbol,
-        advertiserWallet: adminWallet || 'PENDING',
-        buyLink,
-        description: description || '',
-        telegram: telegram || null,
-        twitter: twitter || null,
-        website: website || null,
-        paymentTxId: 'PENDING',
-        paymentAmount: '10.00',
-        paymentTokenSymbol: 'USD',
-        slotNumber: parseInt(slotNumber),
-        cycleNumber,
-        startTime,
-        endTime,
-        verified: false,
-        isActive: false // Will be activated after payment confirmation
+      const fullAdRequest: TokenAdRequest = {
+        ...adRequestData,
+        creatorWallet: req.user.walletAddress
       };
 
-      const createdAd = await storage.createTokenAd(adData);
-      res.json({ 
-        message: "Ad listing submitted successfully. Payment verification pending.",
-        adId: createdAd.id,
-        paymentInstructions: {
-          amount: "$10 USD equivalent",
-          wallet: adminWallet,
-          note: "Send payment confirmation to activate your listing"
-        }
+      const campaignResult = await tokenAdvertisingService.createAdCampaign(fullAdRequest);
+
+      res.status(201).json({
+        message: "Ad campaign submitted successfully. Payment pending.",
+        campaignId: campaignResult.campaignId,
+        paymentIntentId: campaignResult.paymentIntentId,
+        totalCost: campaignResult.totalCost,
+        estimatedSlots: campaignResult.estimatedSlots,
+        paymentInstructions: `Please complete payment of $${campaignResult.totalCost} USDC. Details will be provided.`,
       });
-    } catch (error) {
-      console.error("Error submitting token ad:", error);
-      res.status(500).json({ message: "Failed to submit token ad" });
     }
-  });
+  ));
 
-  app.post('/api/token-ads/track', async (req, res) => {
-    try {
-      const { adId, interactionType } = req.body;
-
-      if (!adId || !interactionType) {
-        return res.status(400).json({ message: "Missing required fields" });
+  app.post(
+    '/api/token-ads/confirm-payment',
+    generalRateLimit, // Consider if this needs auth (e.g. webhook secret or admin auth)
+    validateRequest(confirmAdPaymentSchema, 'body'),
+    asyncHandler(async (req, res) => {
+      const { paymentIntentId } = req.body;
+      const result = await tokenAdvertisingService.processPaymentConfirmation(paymentIntentId);
+      if (result.success) {
+        res.json({ message: "Payment confirmed, ad campaign activated.", campaignId: result.campaignId, activatedSlots: result.activatedSlots });
+      } else {
+        res.status(400).json({ error: "Payment Failed", message: "Could not confirm payment or activate campaign." });
       }
-
-      const interaction = await storage.trackAdInteraction({
-        adId: parseInt(adId),
-        interactionType,
-        userWallet: null, // Could be populated with user wallet if available
-        metadata: {}
-      });
-
-      res.json(interaction);
-    } catch (error) {
-      console.error("Error tracking ad interaction:", error);
-      res.status(500).json({ message: "Failed to track interaction" });
     }
-  });
+  ));
 
-  app.get('/api/token-ads/:id/stats', async (req, res) => {
-    try {
-      const adId = parseInt(req.params.id);
-      const stats = await storage.getAdStats(adId);
-      res.json(stats);
-    } catch (error) {
-      console.error("Error fetching ad stats:", error);
-      res.status(500).json({ message: "Failed to fetch ad stats" });
+  app.post(
+    '/api/token-ads/:adId/track',
+    optionalAuth, // Changed from just generalRateLimit
+    generalRateLimit,
+    validateRequest(adInteractionTrackSchema, 'body'),
+    asyncHandler(async (req: AuthenticatedRequest, res) => {
+      const { adId } = req.params; // TODO: Add Zod validation for adId param if not universally covered
+      const { interactionType } = req.body;
+      const userWallet = req.user?.walletAddress;
+
+      await tokenAdvertisingService.trackAdInteraction(adId, interactionType, userWallet);
+      res.status(202).json({ message: `Ad interaction '${interactionType}' tracked for ad ${adId}.` });
     }
-  });
+  ));
+
+  app.get(
+    '/api/token-ads/:campaignId/stats',
+    authenticateUser,
+    generalRateLimit,
+    // TODO: Add Zod validation for campaignId param
+    asyncHandler(async (req: AuthenticatedRequest, res) => {
+    const { campaignId } = req.params;
+    // Optional: Add check to ensure only ad creator can view stats
+    const ad = await DatabaseUtils.getTokenAdById(campaignId);
+    if (!ad) {
+        return res.status(404).json({ error: "Not Found", message: "Ad campaign not found."});
+    }
+    // if (ad.creatorWallet !== req.user?.walletAddress) {
+    //     return res.status(403).json({ error: "Forbidden", message: "You are not authorized to view these stats."});
+    // }
+    const stats = await tokenAdvertisingService.getAdAnalytics(campaignId);
+    res.json(stats);
+  }));
 
   // Newsletter and Support API Routes
   app.post('/api/newsletter/subscribe', async (req, res) => {
@@ -1195,73 +1217,57 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // OOF MOMENTS API ROUTES
   // ========================
 
+import { oofMomentsService, OOFMomentRequest } from "./services/oofMomentsService";
+import { AuthenticatedRequest } from './middleware/auth'; // Ensure this is imported if not already
+import { insertOOFMomentSchema as oofMomentCreateValidationSchema } from '@shared/schema'; // Zod schema for validation
+
   // AI-Powered OOF Moments Analysis
-  app.post('/api/oof-moments/ai-analyze', async (req, res) => {
-    try {
-      const { walletAddress, userId } = req.body;
-
-      if (!walletAddress) {
-        return res.status(400).json({ message: "Wallet address is required" });
-      }
-
-      // Check if AI analysis already exists and is recent (cache for 1 hour)
-      const existingAnalysis = await storage.getWalletAnalysis(walletAddress);
-      const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000);
+  app.post(
+    '/api/oof-moments/ai-analyze',
+    authenticateUser,
+    oofMomentsRateLimit,
+    validateRequest(oofMomentAnalysisRequestSchema, 'body'), // Added Zod validation for request body
+    asyncHandler(async (req: AuthenticatedRequest, res) => {
+      // req.body is now validated and typed by oofMomentAnalysisRequestSchema
+      const { walletAddress, momentType, customPrompt, isPublic } = req.body;
+      const userId = req.user!.id; // authenticateUser ensures req.user and req.user.id exist
       
-      if (existingAnalysis && existingAnalysis.lastAnalyzed && existingAnalysis.lastAnalyzed > oneHourAgo) {
-        const moments = await storage.getOOFMomentsByWallet(walletAddress);
-        return res.json({
-          analysis: existingAnalysis,
-          moments,
-          fromCache: true,
-          aiGenerated: true
-        });
+      let finalWalletAddress = walletAddress;
+      if (!finalWalletAddress) {
+        const user = await DatabaseUtils.getUserById(userId);
+        if (user?.walletAddress) {
+          finalWalletAddress = user.walletAddress;
+        } else {
+          // This case should be rare if frontend ensures walletAddress is present or user has one linked
+          return res.status(400).json({ error: 'Bad Request', message: 'Wallet address is required and could not be determined for the user.' });
+        }
       }
-
-      // Generate AI-powered OOF Moments using Perplexity
-      const aiMoments = await aiOOFGenerator.generateOOFMoments(walletAddress);
       
-      // Store AI-generated moments in database
-      const savedMoments = [];
-      for (const card of aiMoments) {
-        const momentData = {
-          walletAddress,
-          userId: userId || null,
-          title: card.title,
-          description: card.description,
-          tokenAddress: card.tokenAddress,
-          tokenName: card.tokenName,
-          tokenSymbol: card.tokenSymbol,
-          cardType: card.type,
-          amount: card.amount,
-          currentValue: card.currentValue,
-          percentage: card.percentage,
-          story: card.story,
-          isPublic: true,
-          aiGenerated: true,
-          uniqueHash: card.uniqueHash
-        };
+      const momentRequest: OOFMomentRequest = {
+        userId,
+        walletAddress: finalWalletAddress,
+        momentType,
+        customPrompt,
+        isPublic,
+      };
 
-        const savedMoment = await storage.createOOFMoment(momentData);
-        savedMoments.push(savedMoment);
-      }
+      const result = await oofMomentsService.generateOOFMoment(momentRequest);
 
       res.json({
         success: true,
-        moments: savedMoments,
-        aiGenerated: true,
-        walletAddress,
-        totalCards: aiMoments.length
+        message: "OOF Moment generation process started.",
+        moment: result.moment,
+        analysisData: result.analysisData,
+        generationTime: result.generationTime,
+        cost: result.cost,
+        shareUrl: result.shareUrl,
       });
-
-    } catch (error) {
-      console.error("AI OOF Moments generation error:", error);
-      res.status(500).json({ message: "Failed to generate AI OOF moments" });
     }
-  });
+  ));
 
   // Cross-chain bridge for purchasing with OOF tokens
-  app.post('/api/oof-moments/cross-chain-purchase', async (req, res) => {
+  app.post('/api/oof-moments/cross-chain-purchase', authenticateUser, generalRateLimit, asyncHandler(async (req: AuthenticatedRequest, res) => {
+    // TODO: Add Zod validation for req.body (walletAddress, oofAmount, cardDistribution)
     try {
       const { walletAddress, oofAmount, cardDistribution } = req.body;
 
@@ -1401,42 +1407,85 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+import { paginationSchema } from '@shared/schema'; // Assuming you'll add this to shared/schema.ts
+
   // Get public OOF Moments feed
-  app.get('/api/oof-moments/public', async (req, res) => {
-    try {
-      const limit = parseInt(req.query.limit as string) || 20;
-      const offset = parseInt(req.query.offset as string) || 0;
-      
-      const moments = await storage.getPublicOOFMoments(limit, offset);
+  app.get(
+    '/api/oof-moments/public',
+    optionalAuth,
+    generalRateLimit,
+    validateRequest(paginationSchema.extend({ // extend directly for route-specific needs
+      sortBy: z.enum(['newest', 'popular', 'trending']).optional().default('newest'),
+    }), 'query'),
+    asyncHandler(async (req: AuthenticatedRequest, res) => {
+      const { limit, offset, sortBy } = req.query as any; // Data already validated and transformed
+      const moments = await oofMomentsService.getPublicMoments({ limit, offset, sortBy });
       res.json(moments);
-    } catch (error) {
-      console.error("Error fetching public OOF Moments:", error);
-      res.status(500).json({ message: "Failed to fetch OOF Moments" });
     }
-  });
+  ));
 
-  // Get specific OOF Moment
-  app.get('/api/oof-moments/:id', async (req, res) => {
-    try {
-      const id = parseInt(req.params.id);
-      const moment = await storage.getOOFMoment(id);
-      
-      if (!moment) {
-        return res.status(404).json({ message: "OOF Moment not found" });
-      }
-
-      // Get interactions for this moment
-      const interactions = await storage.getMomentInteractions(id);
-      
-      res.json({
-        moment,
-        interactions
-      });
-    } catch (error) {
-      console.error("Error fetching OOF Moment:", error);
-      res.status(500).json({ message: "Failed to fetch OOF Moment" });
+  // Get user's OOF Moments (requires authentication to know which user)
+  app.get(
+    '/api/oof-moments/my-moments',
+    authenticateUser,
+    generalRateLimit,
+    validateRequest(paginationSchema, 'query'),
+    asyncHandler(async (req: AuthenticatedRequest, res) => {
+      const userId = req.user!.id;
+      const { limit, offset } = req.query as any; // Data already validated
+      const moments = await oofMomentsService.getUserMoments(userId, { limit, offset });
+      res.json(moments);
     }
-  });
+  ));
+
+  // Get OOF Moments for a specific user (publicly viewable profile)
+  app.get(
+    '/api/oof-moments/user/:userId',
+    optionalAuth,
+    generalRateLimit,
+    validateRequest(paginationSchema, 'query'), // Path params validated separately if needed
+    asyncHandler(async (req: AuthenticatedRequest, res) => {
+      const { userId } = req.params; // TODO: Add path param validation for userId if necessary
+      const { limit, offset } = req.query as any;
+
+    // Fetch only public moments for another user
+    const momentsFromDb = await DatabaseUtils.getUserMoments(userId, limit, offset, false); // includePrivate = false
+     const moments = momentsFromDb.map(moment => ({ // TODO: Refactor this mapping into a utility or service method
+        id: moment.id.toString(),
+        type: moment.momentType,
+        title: moment.title,
+        description: moment.description || "",
+        narrative: (moment.analysisData as any)?.narrative || moment.description || "",
+        rarity: moment.rarity as any,
+        metrics: (moment.analysisData as any)?.metrics || { missedGains: 0, timeframe: 'N/A', regretLevel: 0 },
+        socialText: (moment.analysisData as any)?.socialText || "",
+        hashtags: (moment.analysisData as any)?.hashtags || [],
+        imageUrl: moment.imageUrl || undefined,
+        user: moment.user ? { username: moment.user.username, profileImageUrl: moment.user.profileImageUrl } : undefined,
+      }));
+    res.json(moments);
+  }));
+
+  // Get specific OOF Moment by ID
+  app.get('/api/oof-moments/:id', optionalAuth, generalRateLimit, asyncHandler(async (req: AuthenticatedRequest, res) => {
+    const momentId = req.params.id;
+    // The service method getMomentById should handle parsing ID to number if needed
+    const moment = await oofMomentsService.getMomentById(momentId);
+
+    if (!moment) {
+      return res.status(404).json({ error: 'Not Found', message: "OOF Moment not found" });
+    }
+
+    // If the moment is not public, only owner should see it (or admins)
+    if (!moment.isPublic && (!req.user || req.user.id !== moment.userId)) {
+        return res.status(403).json({ error: 'Forbidden', message: 'You do not have permission to view this moment.' });
+    }
+
+    // TODO: Fetch and add interactions if needed, similar to old endpoint
+    // const interactions = await DatabaseUtils.getMomentInteractions(moment.id);
+
+    res.json({ moment /*, interactions */ });
+  }));
 
   // Social interactions - Like/Unlike
   app.post('/api/oof-moments/:id/like', async (req, res) => {

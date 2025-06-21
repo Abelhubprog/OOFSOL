@@ -531,6 +531,42 @@ export const tokenAdCreateSchema = z.object({
 });
 
 export const paginationSchema = z.object({
-  limit: z.string().transform(Number).refine(n => n > 0 && n <= 100).default("20"),
-  offset: z.string().transform(Number).refine(n => n >= 0).default("0"),
+  limit: z.preprocess((val) => Number(val), z.number().int().min(1).max(100)).optional().default(20),
+  offset: z.preprocess((val) => Number(val), z.number().int().min(0)).optional().default(0),
+});
+
+// Schema for validating OOF Moment creation/analysis request
+export const oofMomentAnalysisRequestSchema = z.object({
+  walletAddress: walletAddressSchema.shape.walletAddress.optional(), // Wallet address can be optional if user's primary wallet is used
+  momentType: z.enum(['PAPER_HANDS', 'DIAMOND_HANDS', 'RUGPULL_SURVIVOR', 'WHALE_WATCHER', 'DUST_COLLECTOR']).optional(),
+  customPrompt: z.string().max(500).optional(),
+  isPublic: z.boolean().optional().default(true),
+});
+
+// Schema for validating Token Ad submission request
+export const tokenAdSubmitRequestSchema = z.object({
+  tokenAddress: z.string().min(32).max(44, "Invalid token address length"),
+  tokenName: z.string().min(1, "Token name is required").max(50),
+  tokenSymbol: z.string().min(1, "Token symbol is required").max(10),
+  buyLink: z.string().url("Invalid URL for buy link"),
+  description: z.string().min(10, "Description must be at least 10 characters").max(500),
+  logoUrl: z.string().url("Invalid URL for logo").optional(), // Made optional as per service
+  websiteUrl: z.string().url("Invalid URL for website").optional(),
+  twitterUrl: z.string().url("Invalid URL for Twitter").optional(),
+  telegramUrl: z.string().url("Invalid URL for Telegram").optional(),
+  slotDuration: z.number().int().min(30, "Slot duration must be at least 30 minutes"), // Assuming service expects number
+  paymentAmount: z.number().positive("Payment amount must be positive"), // Assuming service expects number
+  // creatorWallet is added by the backend from authenticated user
+});
+
+// Schema for validating Ad Interaction tracking
+export const adInteractionTrackSchema = z.object({
+  interactionType: z.enum(['impression', 'click']),
+  // adId will come from path params, userWallet from req.user
+});
+
+// Schema for confirming ad payment
+export const confirmAdPaymentSchema = z.object({
+  paymentIntentId: z.string().min(1, "Payment Intent ID is required."),
+  // campaignId might also be useful here for verification
 });

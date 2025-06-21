@@ -194,17 +194,31 @@ export class OOFMomentsService {
     options: {
       limit?: number;
       offset?: number;
-      includePrivate?: boolean;
+      // includePrivate is true by default when fetching for a specific user
     } = {}
-  ): Promise<any[]> {
-    const { limit = 20, offset = 0, includePrivate = false } = options;
+  ): Promise<OOFMomentData[]> { // Return type updated
+    const { limit = 20, offset = 0 } = options;
 
     try {
-      const whereClause = includePrivate 
-        ? eq(oofMoments.userId, userId)
-        : and(eq(oofMoments.userId, userId), eq(oofMoments.isPublic, true));
+      // When fetching for a specific user, we assume they can see their own private moments.
+      // The DatabaseUtils method should handle this logic or be specific.
+      // For now, this service method implies fetching all moments for the user.
+      const momentsFromDb = await DatabaseUtils.getUserMoments(userId, limit, offset, true); // Assuming true for includePrivate
 
-      return await DatabaseUtils.getUserMoments(userId, limit, offset);
+      // Transform to OOFMomentData if necessary, or ensure DatabaseUtils.getUserMoments returns compatible type
+      return momentsFromDb.map(moment => ({
+        id: moment.id.toString(), // Ensure ID is string
+        type: moment.momentType,
+        title: moment.title,
+        description: moment.description || "",
+        narrative: (moment.analysisData as any)?.narrative || moment.description || "", // Example, adjust based on actual structure
+        rarity: moment.rarity as OOFMomentData['rarity'],
+        metrics: (moment.analysisData as any)?.metrics || { missedGains: 0, timeframe: 'N/A', regretLevel: 0 },
+        socialText: (moment.analysisData as any)?.socialText || "",
+        hashtags: (moment.analysisData as any)?.hashtags || [],
+        imageUrl: moment.imageUrl || undefined,
+        // Add other necessary fields from OOFMomentData
+      }));
     } catch (error) {
       console.error('Error fetching user moments:', error);
       throw error;
@@ -216,38 +230,64 @@ export class OOFMomentsService {
     limit?: number;
     offset?: number;
     sortBy?: 'newest' | 'popular' | 'trending';
-  } = {}): Promise<any[]> {
+  } = {}): Promise<OOFMomentData[]> { // Return type updated
     const { limit = 20, offset = 0, sortBy = 'newest' } = options;
 
     try {
-      let orderBy;
+      // This method should ideally call a DatabaseUtils method
+      // e.g., return await DatabaseUtils.getPublicOOFMoments(limit, offset, sortBy);
+      // For now, keeping the direct DB query here as it was.
+      let orderByClauses: any[] = [desc(oofMoments.createdAt)]; // Default
+
       switch (sortBy) {
         case 'popular':
-          orderBy = [desc(oofMoments.likes), desc(oofMoments.shares)];
+          // Example: popularity = likes + (shares * 2) + (comments * 1.5)
+          // This requires a raw SQL or more complex Drizzle query if not directly supported
+          // For simplicity, using likes and shares as an approximation.
+          orderByClauses = [desc(sql`(${oofMoments.likes} + ${oofMoments.shares} * 2)`), desc(oofMoments.createdAt)];
           break;
         case 'trending':
-          // Trending = high engagement in last 24 hours
-          orderBy = [desc(sql`${oofMoments.likes} + ${oofMoments.shares} + ${oofMoments.comments}`)];
+          // Trending could be recent high engagement. E.g., popular in last 7 days.
+          // This might involve filtering by createdAt and then ordering by popularity.
+          // For now, let's use a simple proxy for trending (e.g. recent and highly liked)
+           const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+           orderByClauses = [desc(oofMoments.likes), desc(oofMoments.createdAt)]; // Simplified
+          // More complex: Filter for `createdAt > sevenDaysAgo` then order by popularity.
           break;
-        default:
-          orderBy = desc(oofMoments.createdAt);
+        default: // newest
+          orderByClauses = [desc(oofMoments.createdAt)];
       }
 
-      return await db.query.oofMoments.findMany({
+      const momentsFromDb = await db.query.oofMoments.findMany({
         where: eq(oofMoments.isPublic, true),
-        orderBy,
+        orderBy: orderByClauses,
         limit,
         offset,
         with: {
-          user: {
+          user: { // Assuming you want some user info for public moments
             columns: {
               username: true,
-              avatarUrl: true,
-              isVerified: true
+              profileImageUrl: true, // Changed from avatarUrl to match schema
+              // id: true, // if needed for linking
             }
           }
         }
       });
+
+      return momentsFromDb.map(moment => ({
+        id: moment.id.toString(),
+        type: moment.momentType,
+        title: moment.title,
+        description: moment.description || "",
+        narrative: (moment.analysisData as any)?.narrative || moment.description || "",
+        rarity: moment.rarity as OOFMomentData['rarity'],
+        metrics: (moment.analysisData as any)?.metrics || { missedGains: 0, timeframe: 'N/A', regretLevel: 0 },
+        socialText: (moment.analysisData as any)?.socialText || "",
+        hashtags: (moment.analysisData as any)?.hashtags || [],
+        imageUrl: moment.imageUrl || undefined,
+        // Include user data if fetched
+        user: moment.user ? { username: moment.user.username, profileImageUrl: moment.user.profileImageUrl } : undefined,
+      }));
     } catch (error) {
       console.error('Error fetching public moments:', error);
       throw error;
