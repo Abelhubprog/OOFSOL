@@ -37,45 +37,110 @@ export class OOFMomentsService {
       // Validate rate limits
       await this.validateRateLimit(request.userId);
 
+// Import productionSolanaService, assuming it's the one with up-to-date analysis logic
+import { productionSolanaService } from './productionSolanaService';
+// Remove direct import of walletAnalysisService if productionSolanaService replaces it for analysis
+// import { walletAnalysisService } from './walletAnalysisService';
+
+
       // Get or validate wallet address
       const walletAddress = await this.resolveWalletAddress(request);
 
-      // Generate the OOF moment using AI orchestrator
-      const oofMoment = await aiOrchestrator.generateOOFMoment(walletAddress, {
-        momentType: request.momentType,
-        customPrompt: request.customPrompt,
-        userId: request.userId
-      });
+      // Step 1: Get real wallet analysis including OOF precursors
+      const analysisResult = await productionSolanaService.analyzeWallet(walletAddress);
 
-      // Get the analysis data for storage
-      const analysisData = await walletAnalysisService.analyzeWallet(walletAddress);
+      if (!analysisResult) {
+        throw new Error(`Wallet analysis failed for ${walletAddress}. Cannot generate OOF moment.`);
+      }
 
-      // Save to database
-      const savedMoment = await this.saveOOFMoment({
-        ...request,
+      const precursors = analysisResult.oofPrecursors || [];
+      if (precursors.length === 0) {
+        console.warn(`No OOF precursors found for wallet ${walletAddress}. Generating a generic 'All Clear' moment.`);
+        // AI Orchestrator's generateSimpleOOFDetails handles this by returning a default moment.
+      }
+
+      // Step 2: Generate OOF moment details using simplified AI processing
+      const aiGeneratedDetails = await aiOrchestrator.generateSimpleOOFDetails(
         walletAddress,
-        moment: oofMoment,
-        analysisData
-      });
+        precursors // Pass the identified precursors to the AI
+      );
 
-      // Update user statistics
+      // Step 3: Combine data and save to database
+      const primaryPrecursor = precursors.length > 0 ? precursors[0] : null;
+
+      // Construct the data for database insertion, ensuring all required fields for `oofMoments` are met
+      const dbMomentData: typeof oofMoments.$inferInsert = {
+        userId: request.userId,
+        walletAddress: walletAddress,
+        momentType: primaryPrecursor?.type || request.momentType || aiGeneratedDetails.type || 'GENERAL_OOF',
+        title: aiGeneratedDetails.title!,
+        description: aiGeneratedDetails.description,
+        quote: aiGeneratedDetails.narrative,
+        rarity: aiGeneratedDetails.rarity!,
+        tokenAddress: primaryPrecursor?.tokenAddress || 'N/A',
+        tokenSymbol: primaryPrecursor?.tokenSymbol || 'N/A',
+        tokenName: primaryPrecursor?.tokenSymbol || 'Unknown',
+        analysisData: {
+            sourcePrecursor: primaryPrecursor,
+            fullWalletAnalysisSummary: {
+                oofScore: analysisResult.oofScore,
+                tradingStyle: analysisResult.tradingStyle,
+                totalTransactions: analysisResult.totalTransactions,
+            },
+            aiPromptUsed: request.customPrompt,
+        },
+        cardMetadata: {
+            emoji: (aiGeneratedDetails as any).emoji || '💸',
+            template: 'default_v1',
+        },
+        socialStats: { likes: 0, shares: 0, comments: 0, views: 0 },
+        hashtags: aiGeneratedDetails.hashtags,
+        isPublic: request.isPublic !== undefined ? request.isPublic : true,
+        imageUrl: undefined,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
+
+      const savedMoment = await DatabaseUtils.createOOFMoment(dbMomentData);
+      if (!savedMoment) {
+        throw new Error("Failed to save OOF moment to database.");
+      }
+
       await this.updateUserStats(request.userId);
 
       const generationTime = Date.now() - startTime;
-      console.log(`✅ OOF moment generated successfully in ${generationTime}ms`);
+      console.log(`✅ OOF moment (ID: ${savedMoment.id}) generated with real data/simple AI in ${generationTime}ms`);
+
+      // Construct the OOFMomentData response type
+      const responseMomentData: OOFMomentData = {
+        id: savedMoment.id.toString(),
+        type: savedMoment.momentType,
+        title: savedMoment.title,
+        description: savedMoment.description || "",
+        narrative: savedMoment.quote || "",
+        rarity: savedMoment.rarity as OOFMomentData['rarity'],
+        metrics: (savedMoment.analysisData as any)?.sourcePrecursor?.data?.metrics ||
+                 (savedMoment.analysisData as any)?.fullWalletAnalysisSummary?.oofScore ?
+                 { regretLevel: (savedMoment.analysisData as any)?.fullWalletAnalysisSummary?.oofScore, missedGains: (savedMoment.analysisData as any)?.sourcePrecursor?.data?.profitMissedUSD || 0, timeframe: 'N/A'} :
+                 { missedGains: 0, timeframe: 'N/A', regretLevel: 0 },
+        socialText: `Check out my OOF Moment with ${savedMoment.tokenSymbol}! Created via OOF Platform.`,
+        hashtags: savedMoment.hashtags || [],
+        imageUrl: `/api/oof-moments/card-image/${savedMoment.id}`, // Dynamic image URL
+      };
 
       return {
-        id: savedMoment.id,
-        moment: oofMoment,
-        analysisData,
+        id: savedMoment.id.toString(),
+        moment: responseMomentData,
+        analysisData: savedMoment.analysisData,
         generationTime,
-        cost: 0.05, // Estimated cost
-        shareUrl: this.generateShareUrl(savedMoment.id)
+        cost: 0.01, // Simplified cost for now
+        shareUrl: this.generateShareUrl(savedMoment.id.toString())
       };
 
     } catch (error) {
       console.error(`❌ OOF moment generation failed:`, error);
-      throw new Error(`Failed to generate OOF moment: ${error.message}`);
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      throw new Error(`Failed to generate OOF moment: ${errorMessage}`);
     }
   }
 

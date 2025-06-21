@@ -59,18 +59,37 @@ async function runTests() {
     assert.strictEqual(response.statusCode, 401, `Expected status 401, got ${response.statusCode}`);
   });
 
-  await test('POST /api/oof-moments/ai-analyze with token and valid body should succeed (mocked AI)', async () => {
+  await test('POST /api/oof-moments/ai-analyze with token and valid body should succeed (testing service integration, actual AI/Solana may be mocked by services if keys absent)', async () => {
+    const testWallet = `testWallet${Date.now()}`; // Unique wallet for testing
     const response = await makeRequest('/oof-moments/ai-analyze', {
       method: 'POST',
       headers: { Authorization: `Bearer ${authToken}` },
-      body: { walletAddress: 'testWalletForOofMoment123', momentType: 'PAPER_HANDS' },
+      body: { walletAddress: testWallet, momentType: 'PAPER_HANDS', customPrompt: "Make it dramatic", isPublic: true },
     });
+
+    // console.log("AI Analyze Response:", JSON.stringify(response.body, null, 2)); // For debugging
+
     assert.strictEqual(response.statusCode, 200, `Expected status 200, got ${response.statusCode}. Body: ${JSON.stringify(response.body)}`);
     assert(response.body.success, 'Response success should be true');
     assert(response.body.moment, 'Response should contain a moment object');
+    assert(response.body.moment.id, 'Moment object should have an ID');
+    assert.strictEqual(response.body.moment.type, 'PAPER_HANDS', 'Moment type should match request or derived type');
+    assert(response.body.moment.title, 'Moment should have a title from (simplified) AI');
+    assert(response.body.moment.description, 'Moment should have a description from (simplified) AI');
+    assert(response.body.moment.narrative, 'Moment should have a narrative from (simplified) AI');
+    assert(response.body.moment.rarity, 'Moment should have a rarity from (simplified) AI');
+    assert(Array.isArray(response.body.moment.hashtags), 'Moment hashtags should be an array');
+    assert(response.body.analysisData, 'Response should include analysisData');
+    // If productionSolanaService.analyzeWallet falls back to mock due to no API keys,
+    // analysisData might contain mock wallet analysis structure.
+    // If it made a real call (or more developed mock), we could check analysisData.sourcePrecursor or fullWalletAnalysisSummary.
+    // For example:
+    // if (response.body.analysisData.fullWalletAnalysisSummary) {
+    //   assert.strictEqual(response.body.analysisData.fullWalletAnalysisSummary.oofScore > 0, true, "OOF Score should be present");
+    // }
   });
 
-  await test('POST /api/oof-moments/ai-analyze with token and invalid body should fail', async () => {
+  await test('POST /api/oof-moments/ai-analyze with token and invalid body (Zod validation) should fail', async () => {
     const response = await makeRequest('/oof-moments/ai-analyze', {
       method: 'POST',
       headers: { Authorization: `Bearer ${authToken}` },

@@ -112,7 +112,24 @@ interface WalletAnalysisResult {
   tradingStyle: 'conservative' | 'moderate' | 'aggressive' | 'degen';
   oofScore: number;
   portfolioValue: number;
+  oofPrecursors?: OOFPrecursor[]; // Added field for OOF precursors
 }
+
+interface TradeEvent { // Define TradeEvent if not already globally available
+  signature: string;
+  timestamp: number;
+  type: 'buy' | 'sell';
+  tokenAddress: string;
+  tokenSymbol: string;
+  amount: number;
+  priceUSD: number;
+  feeLamports: number;
+  walletAddress: string;
+  counterTokenAddress: string;
+  counterTokenSymbol: string;
+  counterTokenAmount: number;
+}
+
 
 export class ProductionSolanaService {
   private connection: Connection;
@@ -357,11 +374,17 @@ export class ProductionSolanaService {
       console.log(`📊 Calculated trading metrics: P&L ${tradingMetrics.totalPnL?.toFixed(2)}`);
       
       // Identify missed opportunities
-      const missedOpportunities = await this.findMissedOpportunities(tokenTrades);
+      const missedOpportunities = await this.findMissedOpportunities(tokenTrades); // This is legacy, will be replaced by precursors
       
-      // Find dust tokens and rugged tokens
+      // Find dust tokens and rugged tokens (legacy, keep for now or integrate into precursors)
       const dustTokens = await this.findDustTokens(currentBalances);
-      const ruggedTokens = await this.findRuggedTokens(tokenTrades);
+      // const ruggedTokens = await this.findRuggedTokens(tokenTrades); // This is now findRuggedTokenPrecursors
+
+      // New OOF Precursor Identification
+      const paperHandsPrecursors = await this.identifyPaperHandsPrecursors(tokenTrades);
+      const heldToZeroPrecursors = await this.identifyHeldToZeroPrecursors(tokenTrades, currentBalances);
+      const rugPullPrecursors = await this.findRuggedTokens(tokenTrades, currentBalances); // Renamed and updated
+      const allPrecursors = [...paperHandsPrecursors, ...heldToZeroPrecursors, ...rugPullPrecursors];
       
       // Calculate portfolio value
       const portfolioValue = currentBalances.reduce((total, balance) => 
@@ -379,88 +402,30 @@ export class ProductionSolanaService {
         biggestGain: tradingMetrics.biggestGain,
         biggestLoss: tradingMetrics.biggestLoss,
         topGains: tradingMetrics.topGains || [],
-        missedOpportunities,
+        missedOpportunities, // Retained for now, can be deprecated if precursors cover all cases
         dustTokens,
-        ruggedTokens,
+        // ruggedTokens, // Replaced by oofPrecursors of type RUG_PULL
         tradingStyle: this.determineTradingStyle(tradingMetrics),
-        oofScore: this.calculateOOFScore(tradingMetrics),
-        portfolioValue
+        oofScore: this.calculateOOFScore(tradingMetrics, allPrecursors),
+        portfolioValue,
+        oofPrecursors: allPrecursors // Added the new precursors
       };
 
-      console.log(`✅ Wallet analysis complete! OOF Score: ${result.oofScore}`);
+      console.log(`✅ Wallet analysis complete! OOF Score: ${result.oofScore}, Found ${allPrecursors.length} OOF precursors.`);
       return result;
 
     } catch (error) {
-      console.error('❌ Error during wallet analysis:', error);
+      console.error('❌ Error during wallet analysis:', error.message);
       
-      // Enhanced fallback with more realistic mock data
-      const mockResult: WalletAnalysisResult = {
-        walletAddress,
-        totalTransactions: Math.floor(Math.random() * 500) + 100,
-        totalTokensTraded: Math.floor(Math.random() * 30) + 10,
-        totalVolume: Math.floor(Math.random() * 100000) + 10000,
-        pnl: (Math.random() - 0.6) * 50000, // Slightly biased towards losses
-        winRate: Math.random() * 70 + 10, // 10-80%
-        avgHoldTime: Math.random() * 30 + 1, // 1-31 days
-        biggestGain: {
-          token: 'BONK',
-          symbol: 'BONK',
-          amount: Math.floor(Math.random() * 20000) + 5000,
-          percentage: Math.floor(Math.random() * 1000) + 200,
-          buyPrice: 0.000015,
-          sellPrice: 0.000045
-        },
-        biggestLoss: {
-          token: 'SAMO',
-          symbol: 'SAMO',
-          amount: Math.floor(Math.random() * 10000) + 2000,
-          percentage: -(Math.floor(Math.random() * 85) + 10),
-          lossAmount: Math.floor(Math.random() * 5000) + 1000
-        },
-        topGains: [
-          {
-            token: 'WIF',
-            symbol: 'WIF',
-            gainPercent: Math.floor(Math.random() * 500) + 100,
-            gainAmount: Math.floor(Math.random() * 15000) + 3000,
-            buyPrice: 0.85,
-            sellPrice: 2.45
-          }
-        ],
-        missedOpportunities: [
-          {
-            token: 'POPCAT',
-            symbol: 'POPCAT',
-            soldAt: 0.25,
-            currentPrice: 1.35,
-            missedGains: 15000,
-            sellDate: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
-          }
-        ],
-        dustTokens: [
-          {
-            token: 'DEADCOIN',
-            symbol: 'DEAD',
-            balance: 1000000,
-            currentValue: 0.01,
-            lossPercent: -99.8
-          }
-        ],
-        ruggedTokens: [
-          {
-            token: 'RUGCOIN',
-            symbol: 'RUG',
-            investedAmount: 500,
-            rugDate: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000),
-            lossAmount: 495
-          }
-        ],
-        tradingStyle: 'degen',
-        oofScore: Math.floor(Math.random() * 2000) + 500,
-        portfolioValue: Math.floor(Math.random() * 50000) + 1000
-      };
-
-      return mockResult;
+      // Fallback to a simplified mock or re-throw
+      // For now, re-throwing to make issues visible during dev
+      throw error;
+      // Or, return a more structured error object:
+      // return {
+      //   walletAddress,
+      //   error: `Analysis failed: ${error.message}`,
+      //   // ... other fields set to default/error values
+      // } as unknown as WalletAnalysisResult;
     }
   }
 
@@ -525,97 +490,125 @@ export class ProductionSolanaService {
   }
 
   // Real transaction fetching using Helius API
-  async getWalletTransactions(walletAddress: string, limit: number = 1000): Promise<Transaction[]> {
+  async getWalletTransactions(walletAddress: string, limit: number = 100, beforeSignature?: string): Promise<ParsedTransactionWithMeta[]> {
+    if (!this.heliusApiKey) {
+      console.log('⚠️ No Helius API key, using mock transactions for getWalletTransactions');
+      // Simulating Helius structure for mock if needed by other methods
+      return this.getMockTransactions().map(t => t as unknown as ParsedTransactionWithMeta);
+    }
     try {
-      if (!this.heliusApiKey) {
-        console.log('⚠️ No Helius API key, using mock transactions');
-        return this.getMockTransactions();
+      const url = `https://mainnet.helius-rpc.com/?api-key=${this.heliusApiKey}`;
+      const params: any = {
+        jsonrpc: "2.0",
+        id: "oof-platform-helius-tx-fetch",
+        method: "getSignaturesForAddress",
+        params: [
+          walletAddress,
+          {
+            limit,
+            before: beforeSignature, // For pagination
+            // commitment: "confirmed", // Already default in connection
+          },
+        ],
+      };
+
+      const signatureResponse = await axios.post(url, params);
+      if (signatureResponse.data.error) {
+        throw new Error(`Helius getSignaturesForAddress error: ${signatureResponse.data.error.message}`);
+      }
+      const signaturesInfo = signatureResponse.data.result;
+      if (!signaturesInfo || signaturesInfo.length === 0) {
+        return [];
       }
 
-      const response = await axios.post(
-        `https://api.helius.xyz/v0/addresses/${walletAddress}/transactions?api-key=${this.heliusApiKey}`,
-        {
-          limit: Math.min(limit, 1000),
-          type: 'SWAP'
-        }
-      );
+      const signatures = signaturesInfo.map((sigInfo: any) => sigInfo.signature);
 
-      const transactions: Transaction[] = response.data.map((tx: any) => ({
-        signature: tx.signature,
-        blockTime: tx.timestamp,
-        slot: tx.slot,
-        fee: tx.fee,
-        status: tx.status || 'success',
-        tokenTransfers: tx.tokenTransfers?.map((transfer: any) => ({
-          mint: transfer.mint,
-          from: transfer.fromUserAccount,
-          to: transfer.toUserAccount,
-          amount: transfer.tokenAmount.toString(),
-          decimals: transfer.tokenStandard === 'Fungible' ? 9 : 0,
-          symbol: transfer.tokenSymbol
-        })) || [],
-        solTransfers: tx.nativeTransfers?.map((transfer: any) => ({
-          from: transfer.fromUserAccount,
-          to: transfer.toUserAccount,
-          amount: transfer.amount
-        })) || []
-      }));
+      // Fetch parsed transactions in batches if Helius supports batch getParsedTransactions
+      // Helius getParsedTransaction (singular) is available. For batch, typically one uses Connection.getParsedTransactions
+      // Sticking to Connection.getParsedTransactions for robust batching.
+      const parsedTxns = await this.connection.getParsedTransactions(signatures, {maxSupportedTransactionVersion: 0});
 
-      return transactions;
+      return parsedTxns.filter(tx => tx !== null) as ParsedTransactionWithMeta[];
+
     } catch (error) {
-      console.error('❌ Error fetching wallet transactions:', error);
-      return this.getMockTransactions();
+      console.error(`❌ Error fetching wallet transactions for ${walletAddress}:`, error.message);
+      // Fallback to mock if there's an error, or re-throw
+      // return this.getMockTransactions().map(t => t as unknown as ParsedTransactionWithMeta);
+      throw error; // Propagate error to be handled by the caller
     }
   }
 
+
   // Enhanced token trade parsing from real transaction data
-  async parseRealTokenTrades(transactions: Transaction[], walletAddress: string): Promise<any[]> {
-    const trades: any[] = [];
-    
-    for (const tx of transactions) {
-      try {
-        // Look for SPL token swaps
-        const tokenTransfersIn = tx.tokenTransfers.filter(t => t.to === walletAddress);
-        const tokenTransfersOut = tx.tokenTransfers.filter(t => t.from === walletAddress);
-        
-        // Identify swap patterns (token in + token out = swap)
-        if (tokenTransfersIn.length > 0 && tokenTransfersOut.length > 0) {
-          for (const transferIn of tokenTransfersIn) {
-            for (const transferOut of tokenTransfersOut) {
-              // Get token metadata for proper analysis
-              const tokenInData = await this.getTokenData(transferIn.mint);
-              const tokenOutData = await this.getTokenData(transferOut.mint);
-              
-              if (tokenInData && tokenOutData) {
-                const amountIn = Number(transferIn.amount) / Math.pow(10, transferIn.decimals);
-                const amountOut = Number(transferOut.amount) / Math.pow(10, transferOut.decimals);
-                
-                trades.push({
-                  signature: tx.signature,
-                  timestamp: tx.blockTime,
-                  type: 'swap',
-                  tokenIn: transferIn.mint,
-                  tokenOut: transferOut.mint,
-                  symbolIn: tokenInData.symbol,
-                  symbolOut: tokenOutData.symbol,
-                  amountIn,
-                  amountOut,
-                  priceIn: tokenInData.price,
-                  priceOut: tokenOutData.price,
-                  valueIn: amountIn * tokenInData.price,
-                  valueOut: amountOut * tokenOutData.price,
-                  fee: tx.fee
-                });
-              }
-            }
+  async parseRealTokenTrades(parsedTransactions: ParsedTransactionWithMeta[], walletAddress: string): Promise<TradeEvent[]> {
+    const trades: TradeEvent[] = [];
+    const walletPublicKey = new PublicKey(walletAddress);
+
+    for (const tx of parsedTransactions) {
+      if (!tx || !tx.meta || tx.meta.err) continue;
+
+      const signature = tx.transaction.signatures[0];
+      const blockTime = tx.blockTime;
+      if (!blockTime) continue;
+
+      const fee = tx.meta.fee;
+      const preTokenBalances = tx.meta.preTokenBalances || [];
+      const postTokenBalances = tx.meta.postTokenBalances || [];
+
+      // Simplified approach: Identify changes in token balances for the wallet
+      // This is a basic way to infer buys/sells. True DEX interaction parsing is more complex.
+      const allInvolvedMints = new Set<string>();
+      preTokenBalances.forEach(bal => allInvolvedMints.add(bal.mint));
+      postTokenBalances.forEach(bal => allInvolvedMints.add(bal.mint));
+
+      for (const mint of allInvolvedMints) {
+        const preBalance = preTokenBalances.find(b => b.mint === mint && b.owner === walletAddress)?.uiTokenAmount.uiAmount || 0;
+        const postBalance = postTokenBalances.find(b => b.mint === mint && b.owner === walletAddress)?.uiTokenAmount.uiAmount || 0;
+        const amountChange = postBalance - preBalance;
+
+        if (Math.abs(amountChange) > 1e-9) { // Threshold to ignore dust
+          const isBuy = amountChange > 0;
+          // Attempt to find the other token in the swap (e.g., SOL or USDC change)
+          // This is highly simplified. A robust solution would parse DEX program instructions.
+          let price = 0; // Placeholder for price
+          let counterTokenSymbol = 'UNKNOWN';
+          let counterTokenAddress = 'UNKNOWN';
+
+          // Infer price if SOL balance changed
+          const solPreBalance = tx.meta.preBalances[tx.transaction.message.accountKeys.findIndex(acc => acc.pubkey.equals(walletPublicKey))] || 0;
+          const solPostBalance = tx.meta.postBalances[tx.transaction.message.accountKeys.findIndex(acc => acc.pubkey.equals(walletPublicKey))] || 0;
+          const solChange = (solPostBalance - solPreBalance + fee) / 1e9; // Lamports to SOL, including fee
+
+          if (Math.abs(solChange) > 1e-9) { // If SOL was part of the trade
+            price = Math.abs(solChange / amountChange); // Price in SOL per token
+            counterTokenSymbol = 'SOL';
+            counterTokenAddress = 'So11111111111111111111111111111111111111112';
+          } else {
+            // Could look for USDC or other common quote tokens if SOL wasn't used
+            // For now, price remains 0 if not a SOL pair
           }
+
+          // Fetch token metadata (could be batched for performance)
+          const tokenData = await this.getTokenMetadata(mint);
+
+          trades.push({
+            signature,
+            timestamp: blockTime,
+            type: isBuy ? 'buy' : 'sell',
+            tokenAddress: mint,
+            tokenSymbol: tokenData?.symbol || 'N/A',
+            amount: Math.abs(amountChange),
+            priceUSD: price * (await this.getSOLPrice()), // Convert price from SOL to USD
+            feeLamports: fee,
+            walletAddress,
+            counterTokenAddress,
+            counterTokenSymbol,
+            counterTokenAmount: Math.abs(solChange), // Amount of SOL or other counter token
+          });
         }
-      } catch (error) {
-        console.log(`⚠️ Error parsing transaction ${tx.signature}:`, error);
       }
     }
-
-    return trades;
+    return trades.sort((a, b) => b.timestamp - a.timestamp); // Newest first
   }
 
   // Real trading metrics calculation with actual P&L analysis
@@ -819,46 +812,153 @@ export class ProductionSolanaService {
       .slice(0, 20);
   }
 
-  // Find rugged tokens (tokens that lost 90%+ value)
-  async findRuggedTokens(trades: any[]): Promise<any[]> {
-    const ruggedTokens = [];
-    
-    // This would require historical price tracking
-    // For now, return mock data based on trading patterns
-    const suspiciousTokens = trades.filter(trade => {
-      // Look for tokens that were bought but show suspicious patterns
-      return trade.valueIn > 100 && trade.symbolIn !== 'SOL' && trade.symbolIn !== 'USDC';
-    });
+// OOF Precursor Types
+export type OOFPrecursorType = "PAPER_HANDS" | "RUG_PULL" | "HELD_TO_ZERO";
 
-    // Mock rug detection based on trading patterns
-    for (const trade of suspiciousTokens.slice(0, 5)) {
-      try {
-        const currentData = await this.getTokenData(trade.tokenIn);
-        if (!currentData || currentData.price < trade.priceIn * 0.1) { // 90%+ loss
-          ruggedTokens.push({
-            token: trade.tokenIn,
-            symbol: trade.symbolIn,
-            investedAmount: trade.valueIn,
-            rugDate: new Date(trade.timestamp * 1000),
-            lossAmount: trade.valueIn * 0.9
-          });
-        }
-      } catch (error) {
-        // Token might be rugged if we can't fetch data
-        ruggedTokens.push({
-          token: trade.tokenIn,
-          symbol: trade.symbolIn,
-          investedAmount: trade.valueIn,
-          rugDate: new Date(trade.timestamp * 1000),
-          lossAmount: trade.valueIn
+export interface OOFPrecursor {
+  type: OOFPrecursorType;
+  tokenAddress: string;
+  tokenSymbol: string;
+  timestamp: number; // Original event timestamp
+  data: any; // Specific data for this precursor type
+}
+
+// Find rugged tokens (tokens that lost 90%+ value or have other indicators)
+async findRuggedTokens(trades: TradeEvent[], currentBalances: TokenBalance[]): Promise<OOFPrecursor[]> {
+  const precursors: OOFPrecursor[] = [];
+  const boughtTokens = new Map<string, { totalInvestedUSD: number, initialTimestamp: number, symbol: string }>();
+
+  // Aggregate total investment per token
+  for (const trade of trades) {
+    if (trade.type === 'buy') {
+      const existing = boughtTokens.get(trade.tokenAddress);
+      const investmentUSD = trade.amount * trade.priceUSD;
+      if (existing) {
+        existing.totalInvestedUSD += investmentUSD;
+        existing.initialTimestamp = Math.min(existing.initialTimestamp, trade.timestamp);
+      } else {
+        boughtTokens.set(trade.tokenAddress, {
+          totalInvestedUSD: investmentUSD,
+          initialTimestamp: trade.timestamp,
+          symbol: trade.tokenSymbol
         });
       }
     }
-
-    return ruggedTokens;
   }
 
-  // Get SOL price in USD
+  for (const [tokenAddress, investmentInfo] of boughtTokens.entries()) {
+    const currentBalance = currentBalances.find(b => b.mint === tokenAddress);
+    const currentValueUSD = currentBalance?.value || 0;
+    const tokenData = await this.getTokenData(tokenAddress); // For rug score
+
+    // Condition 1: Value dropped > 90%
+    if (investmentInfo.totalInvestedUSD > 10 && currentValueUSD < investmentInfo.totalInvestedUSD * 0.1) { // Invested at least $10
+      precursors.push({
+        type: "RUG_PULL",
+        tokenAddress,
+        tokenSymbol: investmentInfo.symbol,
+        timestamp: investmentInfo.initialTimestamp,
+        data: {
+          reason: "Value dropped >90%",
+          investedUSD: investmentInfo.totalInvestedUSD,
+          currentValueUSD,
+          lossAmountUSD: investmentInfo.totalInvestedUSD - currentValueUSD,
+          lossPercentage: ( (investmentInfo.totalInvestedUSD - currentValueUSD) / investmentInfo.totalInvestedUSD) * 100,
+          rugScore: tokenData?.rugScore
+        }
+      });
+    }
+    // Condition 2: High rug score from service
+    else if (tokenData?.rugScore && tokenData.rugScore > 75 && investmentInfo.totalInvestedUSD > 10) {
+       precursors.push({
+        type: "RUG_PULL",
+        tokenAddress,
+        tokenSymbol: investmentInfo.symbol,
+        timestamp: investmentInfo.initialTimestamp,
+        data: {
+          reason: `High rug score: ${tokenData.rugScore}`,
+          investedUSD: investmentInfo.totalInvestedUSD,
+          currentValueUSD,
+          rugScore: tokenData.rugScore
+        }
+      });
+    }
+  }
+  return precursors;
+}
+
+// Find Paper Hands precursors
+async identifyPaperHandsPrecursors(trades: TradeEvent[]): Promise<OOFPrecursor[]> {
+  const precursors: OOFPrecursor[] = [];
+  const sevenDaysInSeconds = 7 * 24 * 60 * 60;
+
+  for (const sellTrade of trades) {
+    if (sellTrade.type !== 'sell' || sellTrade.priceUSD <= 0) continue;
+
+    // Check price history after the sell
+    // This requires a historical price data source. Birdeye might offer this.
+    // Mocking this check for now:
+    const priceAfter7Days = sellTrade.priceUSD * (Math.random() * 10 + 1); // Mock: price increased 1x to 10x
+    const peakPricePostSell = priceAfter7Days * (Math.random() * 2 + 1); // Mock: peak was 1-2x higher than 7-day price
+
+    if (peakPricePostSell > sellTrade.priceUSD * 2) { // Sold before at least a 2x gain
+      precursors.push({
+        type: "PAPER_HANDS",
+        tokenAddress: sellTrade.tokenAddress,
+        tokenSymbol: sellTrade.tokenSymbol,
+        timestamp: sellTrade.timestamp,
+        data: {
+          soldPriceUSD: sellTrade.priceUSD,
+          soldAmount: sellTrade.amount,
+          peakPricePostSellUSD: peakPricePostSell,
+          daysToPeak: Math.random() * 7, // Mock
+          profitMissedUSD: (peakPricePostSell - sellTrade.priceUSD) * sellTrade.amount,
+          percentageMissed: ((peakPricePostSell - sellTrade.priceUSD) / sellTrade.priceUSD) * 100,
+        }
+      });
+    }
+  }
+  return precursors.sort((a,b) => b.data.profitMissedUSD - a.data.profitMissedUSD).slice(0,5); // Top 5 paper hands
+}
+
+// Find Held to Zero precursors
+async identifyHeldToZeroPrecursors(trades: TradeEvent[], currentBalances: TokenBalance[]): Promise<OOFPrecursor[]> {
+  const precursors: OOFPrecursor[] = [];
+
+  for (const buyTrade of trades) {
+    if (buyTrade.type !== 'buy' || buyTrade.priceUSD <= 0) continue;
+
+    const currentBalance = currentBalances.find(b => b.mint === buyTrade.tokenAddress);
+    const currentValueUSD = currentBalance?.value || 0;
+    const boughtValueUSD = buyTrade.amount * buyTrade.priceUSD;
+
+    // If token was bought for a significant amount and is now worth very little (or not in balances)
+    // and no subsequent significant sell trades for this token
+    const subsequentSells = trades.filter(t => t.tokenAddress === buyTrade.tokenAddress && t.type === 'sell' && t.timestamp > buyTrade.timestamp);
+    const totalSoldAmount = subsequentSells.reduce((sum, s) => sum + s.amount, 0);
+
+    if (boughtValueUSD > 10 && (currentValueUSD < boughtValueUSD * 0.1) && (totalSoldAmount < buyTrade.amount * 0.1) ) { // Held >90% of purchase that lost >90% value
+      precursors.push({
+        type: "HELD_TO_ZERO",
+        tokenAddress: buyTrade.tokenAddress,
+        tokenSymbol: buyTrade.tokenSymbol,
+        timestamp: buyTrade.timestamp, // Timestamp of initial buy
+        data: {
+          boughtPriceUSD: buyTrade.priceUSD,
+          boughtAmount: buyTrade.amount,
+          initialInvestmentUSD: boughtValueUSD,
+          currentValueUSD: currentValueUSD,
+          lossAmountUSD: boughtValueUSD - currentValueUSD,
+          percentageLoss: ((boughtValueUSD - currentValueUSD) / boughtValueUSD) * 100,
+        }
+      });
+    }
+  }
+  return precursors.sort((a,b) => b.data.lossAmountUSD - a.data.lossAmountUSD).slice(0,5); // Top 5 HODL to zero
+}
+
+
+// Get SOL price in USD
   async getSOLPrice(): Promise<number> {
     try {
       const response = await axios.get('https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=usd');
@@ -967,6 +1067,55 @@ export class ProductionSolanaService {
     // Ensure score is within reasonable bounds
     return Math.round(Math.max(100, Math.min(10000, oofScore)));
   }
+
+  // Updated OOF Score calculation to use precursors
+  private calculateOOFScore(metrics: any, oofPrecursors: OOFPrecursor[]): number {
+    let oofScore = 0;
+
+    // Base score from P&L (more negative P&L = higher OOF)
+    if (metrics.totalPnL < 0) {
+      oofScore += Math.abs(metrics.totalPnL) * 0.05;
+    } else if (metrics.totalPnL > 0 && metrics.winRate < 50) {
+      // Penalize for low win rate even if profitable (suggests risky plays or many small losses)
+      oofScore += (50 - metrics.winRate) * 5;
+    }
+
+    // Score from precursors
+    for (const precursor of oofPrecursors) {
+      switch (precursor.type) {
+        case "PAPER_HANDS":
+          oofScore += (precursor.data.profitMissedUSD || 0) * 0.1;
+          oofScore += (precursor.data.percentageMissed || 0) * 2;
+          break;
+        case "RUG_PULL":
+          oofScore += (precursor.data.lossAmountUSD || precursor.data.investedUSD || 0) * 0.2;
+          oofScore += (precursor.data.rugScore || 0) * 5;
+          break;
+        case "HELD_TO_ZERO":
+          oofScore += (precursor.data.lossAmountUSD || 0) * 0.15;
+          oofScore += (precursor.data.percentageLoss || 0) * 3;
+          break;
+      }
+    }
+
+    // Volume factor (higher volume can mean more opportunities for OOFs)
+    oofScore += (metrics.totalVolume || 0) * 0.0005;
+
+    // Short average hold time can indicate impulsive decisions
+    if (metrics.avgHoldTime && metrics.avgHoldTime < 1) { // Less than a day
+      oofScore += 300;
+    } else if (metrics.avgHoldTime && metrics.avgHoldTime < 7) { // Less than a week
+      oofScore += 100;
+    }
+
+    // Normalize and cap score
+    oofScore = Math.max(0, oofScore); // Ensure non-negative
+    oofScore = Math.min(oofScore, 100000); // Cap at 100k for example
+    // Could apply a non-linear transformation (e.g., log) if scores grow too large
+
+    return Math.round(oofScore / 10); // Scale down to a 0-10000 range for example
+  }
+
 
   async getPopularTokens(): Promise<TokenData[]> {
     // List of popular Solana tokens with their mint addresses

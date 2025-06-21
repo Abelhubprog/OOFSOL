@@ -99,6 +99,87 @@ export class AIOrchestrator {
     }
   }
 
+  // New method for simplified OOF details generation
+  async generateSimpleOOFDetails(
+    walletAddress: string,
+    precursors: any[] // Using any[] for now, should be OOFPrecursor[] from productionSolanaService
+  ): Promise<Partial<OOFMomentData>> {
+    if (!precursors || precursors.length === 0) {
+      // Return a default "nothing interesting found" moment
+      return {
+        title: "All Quiet on the Wallet Front",
+        description: "No major OOFs detected recently. Keep trading (or not)!",
+        narrative: "Sometimes, the biggest OOF is not having an OOF. Or maybe you're just a trading genius? Time will tell.",
+        rarity: 'COMMON',
+        hashtags: ['#NoOOFs', '#CryptoLife', '#KeepItSteady'],
+        // emoji: '🧘' // Example, could be part of OOFMomentData or cardMetadata
+      };
+    }
+
+    // For simplicity, pick the first precursor. A more complex logic could pick the "biggest" OOF.
+    const precursor = precursors[0];
+    const { type, tokenSymbol, data } = precursor;
+
+    let precursorSummary = `User experienced a "${type}" moment with token ${tokenSymbol}. `;
+    if (type === "PAPER_HANDS") {
+      precursorSummary += `Sold for $${data.soldPriceUSD?.toFixed(2)}, missed out on a peak price of $${data.peakPricePostSellUSD?.toFixed(2)}, potentially missing $${data.profitMissedUSD?.toFixed(2)} (${data.percentageMissed?.toFixed(2)}%).`;
+    } else if (type === "RUG_PULL") {
+      precursorSummary += `Invested $${data.investedUSD?.toFixed(2)}, current value $${data.currentValueUSD?.toFixed(2)}. Reason: ${data.reason}. Rug score: ${data.rugScore}.`;
+    } else if (type === "HELD_TO_ZERO") {
+      precursorSummary += `Initial investment $${data.initialInvestmentUSD?.toFixed(2)}, current value $${data.currentValueUSD?.toFixed(2)}, resulting in a ${data.percentageLoss?.toFixed(2)}% loss.`;
+    }
+
+    const prompt = `
+      Based on the following crypto trading event:
+      ${precursorSummary}
+
+      Please generate the following for an "OOF Moment" card, keeping it concise, engaging, and slightly humorous/relatable for a crypto audience:
+      1. Title: A catchy title (max 10 words).
+      2. Description: A short, engaging summary of the OOF moment (1-2 sentences, max 150 chars).
+      3. Narrative: A brief, relatable story or reflection about this event (1-3 sentences, max 300 chars).
+      4. Rarity: Assign a rarity based on the severity (COMMON, RARE, EPIC, LEGENDARY). Consider impact like dollar amount or percentage.
+      5. Hashtags: Suggest 3-5 relevant and witty hashtags (e.g., #CryptoFacepalm, #NGMI, #PaperHandsPercy).
+      6. Emoji: Suggest a single emoji that captures the essence of this OOF moment.
+
+      Format your response as a JSON object with keys: "title", "description", "narrative", "rarity", "hashtags", "emoji".
+      Example Rarity Logic: Missed $10 or 100% = RARE, Missed $100 or 500% = EPIC, Missed $1000 or 1000%+ = LEGENDARY. Default to COMMON or RARE.
+    `;
+
+    const model = getOptimalModel('creative', 0.005); // Use a model good for creative text
+    const state: AgentState = { // Minimal state for callAI
+        messages: [],
+        retryCount: 0,
+        metadata: {}
+    };
+
+    try {
+      const aiResponseString = await this.callAI(model, prompt, state);
+      const aiResponse = JSON.parse(aiResponseString); // Assuming AI returns valid JSON
+
+      return {
+        title: aiResponse.title || `An OOF Moment with ${tokenSymbol}`,
+        description: aiResponse.description || precursorSummary.substring(0,150),
+        narrative: aiResponse.narrative || "Well, that happened.",
+        rarity: (aiResponse.rarity?.toUpperCase() as OOFMomentData['rarity']) || 'COMMON',
+        hashtags: aiResponse.hashtags || [`#${tokenSymbol}`, '#OOF'],
+        // The 'emoji' could be stored in cardMetadata or a similar place, not directly in OOFMomentData root.
+        // For now, just logging it.
+        // cardMetadata: { emoji: aiResponse.emoji }
+      };
+    } catch (error) {
+      console.error("Error in generateSimpleOOFDetails during AI call or parsing:", error);
+      // Fallback if AI fails
+      return {
+        title: `OOF with ${tokenSymbol}!`,
+        description: `A notable event occurred with ${tokenSymbol}.`,
+        narrative: `Wallet interaction with ${tokenSymbol} led to this outcome: ${precursorSummary.substring(0,100)}...`,
+        rarity: 'COMMON',
+        hashtags: [`#${tokenSymbol}`, '#CryptoOOF'],
+      };
+    }
+  }
+
+
   // Individual agent execution
   private async executeAgent(agentType: string, state: AgentState): Promise<AgentResponse> {
     try {
